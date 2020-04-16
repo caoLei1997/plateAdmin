@@ -1,5 +1,5 @@
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'umi';
 import DealerSelect from '@/components/DealerSelect';
 import { SUPER_UNIQUE } from '@/globalConstant';
@@ -48,12 +48,13 @@ const tabMenu = ({ getMeansList, getDistributeList }) => [
 
 const CarManage = (props) => {
   const { dispatch, means, meansListState, userInfo, distributeListState } = props;
+  const [tabKey, setTabKey] = useState('1');
 
   const getMeansList = (current, firstId) => {
     dispatch({
       type: 'meansList/getList',
       payload: {
-        "agentOutletsId": firstId ? '' : userInfo.firstId,
+        "agentOutletsId": firstId || userInfo.firstId,
         "account": userInfo.phone,
         "pageIndex": current,
         "pageSize": meansListState.pageSize
@@ -61,11 +62,11 @@ const CarManage = (props) => {
     })
   }
 
-  const getDistributeList = (current) => {
+  const getDistributeList = (current, firstId) => {
     dispatch({
       type: 'distributeList/getList',
       payload: {
-        "agentOutletsId": userInfo.firstId,
+        "agentOutletsId": firstId || userInfo.firstId,
         "account": userInfo.phone,
         "pageIndex": current,
         "pageSize": distributeListState.pageSize,
@@ -82,36 +83,40 @@ const CarManage = (props) => {
       type: 'distributeList/getCensus',
       payload: {
         account: userInfo.phone,
-        agentOutletsId: userInfo.firstId
+        agentOutletsId: firstId || userInfo.firstId
       }
     })
   }
 
   useEffect(() => {
-    if (userInfo.id === SUPER_UNIQUE) {
-      getMeansList(1, 'all');
-    } else {
-      getMeansList(1);
-    }
-
+    getMeansList(1);
   }, []);
 
-  const tabsChange = (key) => {
+  const tabKeyChange = (key, agentOutletsId) => {
     switch (key) {
       case '1':
-        getMeansList(meansListState.current);
+        getMeansList(meansListState.current, agentOutletsId);
         break;
       case '2':
-        getDistributeList(distributeListState.current);
+        getDistributeList(distributeListState.current, agentOutletsId);
         break;
       default:
         return false;
     }
   }
 
+  const tabsChange = (key) => {
+    setTabKey(key);
+    tabKeyChange(key);
+  }
+
+  const dealerChange = (agentOutletsId) => {
+    tabKeyChange(tabKey, agentOutletsId);
+  }
+
   return (
     <PageHeaderWrapper className={styles.main}>
-      <DealerSelect />
+      <DealerSelect changeCallBack={dealerChange} />
       <TabsBasic
         tabData={tabMenu({
           means,

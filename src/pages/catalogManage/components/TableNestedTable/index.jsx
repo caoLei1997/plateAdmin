@@ -166,12 +166,7 @@ const NestedTable = (props) => {
   }
 
   useEffect(() => {
-    if (userInfo.id === SUPER_UNIQUE) {
-      getList(1, 'all');
-    } else {
-      getList(1);
-    }
-
+    getList(1);
   }, []);
 
   const expandable = expandedRows => {

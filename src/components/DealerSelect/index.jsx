@@ -6,7 +6,7 @@ import styles from './index.less';
 
 const { Option } = Select;
 
-const DealerSelect = ({ dispatch, userInfo, selectLoading, dealerList }) => {
+const DealerSelect = ({ dispatch, userInfo, selectLoading, dealerList, changeCallBack = null }) => {
 
   useEffect(() => {
     if (userInfo.id === SUPER_UNIQUE) {
@@ -36,8 +36,10 @@ const DealerSelect = ({ dispatch, userInfo, selectLoading, dealerList }) => {
 
     dispatch({
       type: 'login/setFirstId',
-      payload: { value }
+      payload: { value: value === 'all' ? '' : value }
     })
+
+    if (changeCallBack) { changeCallBack(value); }
   }
 
   return (

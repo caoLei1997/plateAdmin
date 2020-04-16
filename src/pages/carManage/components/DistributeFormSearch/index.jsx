@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'umi';
 import { Form, Row, Col, Input, Button, Select, DatePicker } from 'antd';
 import styles from './index.less';
@@ -10,20 +10,20 @@ const DistributeFormSearch = (props) => {
 
   const { dispatch, distributeListState, userInfo, subDealerList, platePrefixList } = props;
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch({
       type: 'platePrefix/getList'
     })
-  },[])
+  }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch({
       type: 'subDealer/getList',
       payload: {
         "agentOutletsId": userInfo.firstId
       }
     })
-  },[])
+  }, [])
 
   const getFields = () => (<Row gutter={24}>
     <Col span={8}>
@@ -62,6 +62,7 @@ const DistributeFormSearch = (props) => {
       type: 'distributeList/getList',
       payload: {
         "agentOutletsId": userInfo.firstId,
+        "account": userInfo.phone,
         "pageIndex": 1,
         "pageSize": distributeListState.pageSize,
         "secondaryAgentOutletsId": values.secondDealer,
