@@ -85,5 +85,5 @@ const AuditNotPass = ({ dispatch, userInfo, loading, auditInfo, params, callBack
 export default connect(({ meansDetailAudit, login, loading }) => ({
     auditInfo: meansDetailAudit.plateAndName,
     userInfo: login,
-    loading: loading.effects['meansDetailAudit/notPass']
+    loading: loading.effects['meansDetailAudit/pass']
 }))(AuditNotPass);

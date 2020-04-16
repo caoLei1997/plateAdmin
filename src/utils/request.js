@@ -69,8 +69,12 @@ request.interceptors.request.use((url, options = {}) => {
     queryUrl = `/cjj-api${url}`;
     // queryUrl = `/vehicle-pre${url}`;
   }
-  if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_ENV === 'buildtest') {
-    queryUrl = `/vehicle-pre${url}`;
+  if (process.env.NODE_ENV === 'production') {
+    if(process.env.REACT_APP_ENV === 'buildtest'){
+      queryUrl = `/vehicle-pre${url}`;
+    }else{
+      queryUrl = `/api${url}`;
+    }
   }
   return {
     url: queryUrl,
