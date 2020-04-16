@@ -1,4 +1,3 @@
-import { Row, Col } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { useEffect } from 'react';
 import { connect } from 'umi';
@@ -9,12 +8,14 @@ import TableNestedTable from './components/TableNestedTable';
 import AddBrand from './components/AddBrand';
 import ImportSN from './components/ImportSN';
 
-const catalogIndex = ({ catalogList, dispatch }) => {
+const catalogIndex = ({ dispatch }) => {
+
   useEffect(() => {
-    dispatch({
-      type: 'catalogList/getList',
-    });
-  }, []);
+    return () => {
+      dispatch({ type: 'catalogList/resetState' });
+    }
+  }, [])
+
   return (
     <PageHeaderWrapper className={styles.main}>
       <DealerSelect />
@@ -28,33 +29,9 @@ const catalogIndex = ({ catalogList, dispatch }) => {
           <AddBrand />
           <ImportSN />
         </div>
-        <TableNestedTable data={catalogList} />
+        <TableNestedTable />
       </FormSearch>
-      {/* <Row>
-        <Col
-          span={12}
-          style={{
-            minHeight: 400,
-            padding: 16,
-            borderRight: '1px solid #DDD',
-          }}
-        >
-          INSERT_BLOCK_PLACEHOLDER:Col 12
-        </Col>
-        <Col
-          span={12}
-          style={{
-            minHeight: 400,
-            padding: 16,
-          }}
-        >
-          INSERT_BLOCK_PLACEHOLDER:Col 12
-        </Col>
-      </Row> */}
     </PageHeaderWrapper>
   );
-};
-
-export default connect(({ catalogList }) => ({
-  catalogList,
-}))(catalogIndex);
+}
+export default connect()(catalogIndex);

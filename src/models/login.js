@@ -1,11 +1,11 @@
-import { LOCALUSERKEY } from '@/globalConstant';
+import { RETCODESUCCESS, SUPER_UNIQUE } from '@/globalConstant';
 import { stringify } from 'querystring';
 import { history } from 'umi';
 import { fakeAccountLogin } from '@/services/login';
-import { setAuthority } from '@/utils/authority';
+import { setAuthority, getAuthority2 } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 
-const initialUser = JSON.parse(sessionStorage.getItem(LOCALUSERKEY)) || {};
+const initialUser = getAuthority2() || {};
 
 const Model = {
   namespace: 'login',
@@ -14,14 +14,15 @@ const Model = {
     status: undefined
   },
   effects: {
-    *login({ payload }, { call, put }) {
+    *login({ payload, onFail }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
+
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       }); // Login successfully
 
-      if (response.status === 'ok') {
+      if (response.retCode === RETCODESUCCESS) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
@@ -42,32 +43,37 @@ const Model = {
         }
 
         history.replace(redirect || '/');
+      } else {
+        onFail();
       }
     },
 
-    *logout(action, { call, put }) {
+    *logout(action, { put }) {
       yield put({
-        type: 'changeLoginStatus',
-        payload: { currentAuthority: null },
+        type: 'changeLoginStatus'
       });
-
-      const { redirect } = getPageQuery(); // Note: There may be security issues, please note
-
-      if (window.location.pathname !== '/user/login' && !redirect) {
-        history.replace({
-          pathname: '/user/login',
-          search: stringify({
-            redirect: window.location.href,
-          }),
-        });
-      }
     },
   },
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.content);
-      return { ...state, ...payload.content, status: payload.status, type: payload.type };
+      if (!payload) { setAuthority(null); return { status: 'fail' } }
+      const userInfo = {
+        ...payload.data,
+        phone: payload.data.account,
+        firstId: payload.data.id === SUPER_UNIQUE ? '' : payload.data.id
+      };
+      setAuthority(userInfo);
+
+      return {
+        ...state,
+        ...userInfo,
+        status: payload.retCode,
+        type: payload.type
+      };
     },
+    setFirstId(state, { payload }) {
+      return { ...state, firstId: payload.value }
+    }
   },
 };
 export default Model;

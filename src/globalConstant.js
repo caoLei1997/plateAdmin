@@ -1,6 +1,38 @@
-export const EXAMINEAll = 0;
-export const EXAMINENOT = 1;
-export const EXAMINEFINISH = 2;
-export const EXAMINEWAIT = 3;
+export const EXAMINE = {
+    ALL: 'all',
+    WAIT: '3',
+    WAIT2: '0',
+    NOT: '2',
+    FINISH: '1'
+}
+
+export const STANDARDS = {
+    NEW: '01',
+    OLD: '02'
+}
+
+export const CAR_USE = {
+    SELF: '0',
+    EXPRESS: '1',
+    TAKEOUT: '2',
+    OTHER: '3'
+}
+
+export const PLATE_CLASS = {
+    ORDINARY: '01',
+    OTHER: '02'
+}
+
+export const PLATE_TYPE = {
+    TEMPORARY: 0,
+    FORMAL: 1
+}
 
 export const LOCALUSERKEY = 'bike_user';
+export const LOCAL_MEANS_IDS_KEY = 'means_ids';
+
+export const SUPER_UNIQUE = 999999999;
+export const RETCODESUCCESS = '0000';
+export const RETCODE_TOKEN_ERR = 'token_error';
+
+export const PAGESIZE = '3';

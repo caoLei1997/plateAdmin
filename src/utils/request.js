@@ -2,8 +2,11 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
+import { LOCALUSERKEY, RETCODESUCCESS, RETCODE_TOKEN_ERR } from '@/globalConstant';
 import { extend } from 'umi-request';
+import { setAuthority, getAuthority2 } from '@/utils/authority';
 import { notification } from 'antd';
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -21,12 +24,13 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
+
+
 /**
  * 异常处理程序
  */
-
 const errorHandler = error => {
-  const { response } = error;
+  const { response, message } = error;
 
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
@@ -37,12 +41,12 @@ const errorHandler = error => {
     });
   } else if (!response) {
     notification.error({
-      description: '您的网络发生异常，无法连接服务器',
-      message: '网络异常',
+      description: message || '您的网络发生异常，无法连接服务器',
+      message: message ? '请求错误' : '网络异常',
     });
   }
 
-  return response;
+  return response || '';
 };
 /**
  * 配置request请求时的默认参数
@@ -53,4 +57,51 @@ const request = extend({
   // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
 });
+
+request.interceptors.request.use((url, options = {}) => {
+  const { isToken = true } = options;
+  const headers = {};
+  const sessionData = getAuthority2() || {};
+  if (isToken) headers.token = sessionData.token;
+
+  let queryUrl = url;
+  if (process.env.NODE_ENV === 'development') {
+    queryUrl = `/cjj-api${url}`;
+    // queryUrl = `/vehicle-pre${url}`;
+  }
+  if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_ENV === 'buildtest') {
+    queryUrl = `/vehicle-pre${url}`;
+  }
+  return {
+    url: queryUrl,
+    options: {
+      ...options,
+      headers
+    }
+  }
+})
+
+request.interceptors.response.use((response) => {
+  return response.json().then((data = {}) => {
+    if (data.retCode !== RETCODESUCCESS) {
+      if (data.retCode === RETCODE_TOKEN_ERR) {
+        notification.error({
+          description: '登录信息过期，请重新登录',
+          message: '登录信息过期',
+          onClose: () => {
+            setAuthority(null);
+            window.location.href = '/';
+          }
+        });
+      } else {
+        notification.error({
+          description: data.retMsg || '您的网络发生异常，无法连接服务器',
+          message: data.retMsg ? '请求错误' : '网络异常',
+        });
+      }
+    }
+    return data;
+  });
+})
+
 export default request;

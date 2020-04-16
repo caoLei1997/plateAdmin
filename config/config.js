@@ -9,11 +9,18 @@ const { winPath } = utils; // preview.pro.ant.design only do not use in your pro
 const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION, REACT_APP_ENV, GA_KEY } = process.env;
 export default defineConfig({
   hash: true,
+  history: { type: 'hash' },
+  runtimePublicPath: true,
+  devServer: {
+    prot: 4200
+  },
+  publicPath: '/plateSale/',
+  outputPath: '/plateSale',
   antd: {},
   analytics: GA_KEY
     ? {
-        ga: GA_KEY,
-      }
+      ga: GA_KEY,
+    }
     : false,
   dva: {
     hmr: true,
@@ -60,7 +67,7 @@ export default defineConfig({
             {
               name: '基础详情页',
               icon: 'smile',
-              path: '/carmanage/details',
+              path: '/carmanage/details/:id',
               component: './carManage/details',
               hideInMenu: true
             },

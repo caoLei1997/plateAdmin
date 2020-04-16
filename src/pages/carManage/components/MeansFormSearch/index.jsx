@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'umi';
 import { examineArr } from '@/globalData';
 import { Form, Row, Col, Input, Button, Select, DatePicker } from 'antd';
 import styles from './index.less';
@@ -6,7 +7,15 @@ import styles from './index.less';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-const AdvancedSearchForm = () => {
+const MeansFormSearch = ({ dispatch, meansListState, userInfo, subDealerList }) => {
+  useEffect(() => {
+    dispatch({
+      type: 'subDealer/getList',
+      payload: {
+        "agentOutletsId": userInfo.firstId
+      }
+    })
+  }, [])
 
   const getFields = () => (<Row gutter={24}>
     <Col span={8}>
@@ -27,14 +36,14 @@ const AdvancedSearchForm = () => {
     <Col span={8}>
       <Form.Item label='审核状态' name='status'>
         <Select placeholder="审核状态">
-          {examineArr.map(item => <Option key={item.key} value={item.key}>{item.val}</Option>)}
+          {examineArr.map(item => item.key !== '3' && <Option key={item.key} value={item.key}>{item.val}</Option>)}
         </Select>
       </Form.Item>
     </Col>
     <Col span={8}>
       <Form.Item label='次级经销商' name='secondDealer'>
         <Select placeholder="次级经销商">
-          {examineArr.map(item => <Option key={item.key} value={item.key}>{item.val}</Option>)}
+          {subDealerList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
         </Select>
       </Form.Item>
     </Col>
@@ -51,7 +60,24 @@ const AdvancedSearchForm = () => {
   </Row>)
 
   const handleFinish = values => {
-    console.log('success', values);
+    dispatch({
+      type: 'meansList/getList',
+      payload: {
+        "agentOutletsId": userInfo.firstId,
+        "account": userInfo.phone,
+        "pageIndex": 1,
+        "pageSize": meansListState.pageSize,
+        "electrombileNumber": values.SNCode,
+        "brandName": values.carBrand,
+        modelName: values.carModel,
+        auditStatus: values.status,
+        secondaryAgentOutletsId: values.secondDealer,
+        startApplicationDate: values.applyDate ? values.applyDate[0].format('YYYY-MM-DD') : '',
+        endApplicationDate: values.applyDate ? values.applyDate[1].format('YYYY-MM-DD') : '',
+        startAuditedAt: values.date ? values.date[0].format('YYYY-MM-DD') : '',
+        endAuditedAt: values.date ? values.date[1].format('YYYY-MM-DD') : '',
+      }
+    })
   }
 
   const handleFinishFailed = errorInfo => {
@@ -75,11 +101,17 @@ const AdvancedSearchForm = () => {
   )
 }
 
+const WrappedSearchForm = connect(({ meansList, login, subDealer }) => ({
+  meansListState: meansList,
+  userInfo: login,
+  subDealerList: subDealer.list
+}))(MeansFormSearch)
+
 export default ({ children }) => (
   <div className={styles.container}>
     <div id="components-form-demo-advanced-search">
       <div>
-        <AdvancedSearchForm />
+        <WrappedSearchForm />
         <div className="search-result-list">{children}</div>
       </div>
     </div>

@@ -1,10 +1,11 @@
 import { Alert } from 'antd';
-import React, { useState } from 'react';
+import { SyncOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'umi';
 import LoginFrom from './components/Login';
 import styles from './style.less';
 
-const { Tab, UserName, Password, Submit } = LoginFrom;
+const { Tab, Mobile, Submit, Captcha, PicCode } = LoginFrom;
 
 const LoginMessage = ({ content }) => (
   <Alert
@@ -18,43 +19,73 @@ const LoginMessage = ({ content }) => (
 );
 
 const Login = props => {
-  const { userLogin = {}, submitting } = props;
+  const { userLogin = {}, submitting, picCode, dispatch, picCodeLoading } = props;
   const { status, type: loginType } = userLogin;
-  const [type, setType] = useState('account');
+  const [type, setType] = useState('mobile');
+
+  const getPicCode = () => {
+    dispatch({
+      type: 'code/getPicCode'
+    });
+  }
+
+  useEffect(() => {
+    getPicCode();
+  }, []);
 
   const handleSubmit = values => {
-    const { dispatch } = props;
     dispatch({
       type: 'login/login',
-      payload: { ...values, type },
+      payload: { ...values, type: 7 },
+      onFail: () => {
+        getPicCode();
+      }
     });
   };
 
   return (
     <div className={styles.main}>
       <LoginFrom activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
-        <Tab key="account" tab="用户登录">
-          {status === 'error' && loginType === 'account' && !submitting && (
-            <LoginMessage content="账户或密码错误（admin/ant.design）" />
+        <Tab key="mobile" tab="用户登录">
+          {status === 'error' && loginType === 'mobile' && !submitting && (
+            <LoginMessage content="验证码错误" />
           )}
-
-          <UserName
-            name="userName"
-            placeholder="用户名"
+          <Mobile
+            name="mobile"
+            placeholder="手机号"
             rules={[
               {
                 required: true,
-                message: '请输入用户名!',
+                message: '请输入手机号！',
+              },
+              {
+                pattern: /^1\d{10}$/,
+                message: '手机号格式错误！',
               },
             ]}
           />
-          <Password
-            name="password"
-            placeholder="密码"
+          <PicCode name="picCode">
+            <div className='inline'>
+              {picCodeLoading
+                ?
+                <SyncOutlined spin />
+                :
+                <img src={picCode.pic} alt='' onClick={getPicCode} style={{cursor: 'pointer'}} />
+              }
+            </div>
+          </PicCode>
+          <Captcha
+            name="captcha"
+            placeholder="验证码"
+            countDown={120}
+            getCaptchaButtonText=""
+            getCaptchaSecondText="秒"
+            checkId={picCode.checkId}
+            getPicCode={() => { getPicCode() }}
             rules={[
               {
                 required: true,
-                message: '请输入密码！',
+                message: '请输入验证码！',
               },
             ]}
           />
@@ -65,7 +96,9 @@ const Login = props => {
   );
 };
 
-export default connect(({ login, loading }) => ({
+export default connect(({ login, loading, code }) => ({
   userLogin: login,
   submitting: loading.effects['login/login'],
+  picCode: code.picCode,
+  picCodeLoading: loading.effects['code/getPicCode']
 }))(Login);

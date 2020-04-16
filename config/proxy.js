@@ -7,8 +7,15 @@
  */
 export default {
   dev: {
-    '/api/': {
-      target: 'https://preview.pro.ant.design',
+    '/cjj-api/': {
+      target: 'http://wechat.sxeccellentdriving.com',
+      changeOrigin: true,
+      pathRewrite: {
+        '^': '',
+      },
+    },
+    '/vehicle-pre/': {
+      target: 'http://wechat.sxeccellentdriving.com',
       changeOrigin: true,
       pathRewrite: {
         '^': '',

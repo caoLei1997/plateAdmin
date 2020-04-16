@@ -1,6 +1,7 @@
-import { LockTwoTone, MailTwoTone, MobileTwoTone, UserOutlined } from '@ant-design/icons';
+import { LockTwoTone, MailTwoTone, MobileTwoTone, UserOutlined, PictureTwoTone } from '@ant-design/icons';
 import React from 'react';
 import styles from './index.less';
+
 export default {
   UserName: {
     props: {
@@ -54,6 +55,23 @@ export default {
         message: 'Wrong mobile number format!',
       },
     ],
+  },
+  PicCode: {
+    props: {
+      size: 'large',
+      prefix: <PictureTwoTone className={styles.prefixIcon} />,
+      placeholder: '图片验证码',
+    },
+    rules: [
+      {
+        required: true,
+        message: '请输入图片验证码！',
+      },
+      {
+        pattern: /^[\d\w]{4}$/,
+        message: '图片验证码格式错误！',
+      },
+    ]
   },
   Captcha: {
     props: {

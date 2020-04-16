@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'umi';
 import { Select } from 'antd';
+import { SUPER_UNIQUE } from '@/globalConstant';
 import styles from './index.less';
 
 const { Option } = Select;
 
-const DealerSelect = ({ list = [], isLoading, dispatch, status, getVal }) => {
+const DealerSelect = ({ dispatch, userInfo, selectLoading, dealerList }) => {
+
+  useEffect(() => {
+    if (userInfo.id === SUPER_UNIQUE) {
+      return () => {
+        dispatch({
+          type: 'login/setFirstId',
+          payload: { value: '' }
+        })
+      }
+    }
+  }, [])
 
   const handleDropdown = () => {
-    if (status !== 'done') {
+    if (dealerList.length === 0) {
       dispatch({
         type: 'dealer/getList'
       })
@@ -16,7 +28,16 @@ const DealerSelect = ({ list = [], isLoading, dispatch, status, getVal }) => {
   }
 
   const handleChange = value => {
-    getVal(value);
+    // getVal(value);
+    dispatch({
+      type: 'dealer/setChoiceVal',
+      payload: { value }
+    })
+
+    dispatch({
+      type: 'login/setFirstId',
+      payload: { value }
+    })
   }
 
   return (
@@ -25,9 +46,12 @@ const DealerSelect = ({ list = [], isLoading, dispatch, status, getVal }) => {
         <dl className="inline">
           <dt>经销商：</dt>
           <dd>
-            <Select style={{width: 220}} showSearch loading={isLoading} placeholder="请选择" optionFilterProp="children" onDropdownVisibleChange={handleDropdown} onChange={handleChange} >
-              {list.map(item => <Option key={item.id} value={item.id}>{item.val}</Option>)}
-            </Select>
+            {userInfo.id === SUPER_UNIQUE ?
+              <Select style={{ width: 220 }} showSearch loading={selectLoading} placeholder="请选择" optionFilterProp="children" onDropdownVisibleChange={handleDropdown} onChange={handleChange} >
+                {dealerList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
+              </Select>
+              : userInfo.name
+            }
           </dd>
         </dl>
       </div>
@@ -35,4 +59,8 @@ const DealerSelect = ({ list = [], isLoading, dispatch, status, getVal }) => {
   );
 }
 
-export default connect(({ dealer }) => (dealer))(DealerSelect);
+export default connect(({ login, loading, dealer }) => ({
+  userInfo: login,
+  dealerList: dealer.list,
+  selectLoading: loading.effects['dealer/getList']
+}))(DealerSelect);

@@ -3,7 +3,8 @@ import { Button, Form, Input } from 'antd';
 
 const { TextArea } = Input;
 
-const FormAddBrandModel = ({ toggleVisible, unique }) => {
+const FormAddBrandModel = (props) => {
+    const { toggleVisible, unique, submitFun, brandName } = props;
     const [brandModelName, setBrandModelName] = useState('');
 
     const cancel = () => {
@@ -12,6 +13,7 @@ const FormAddBrandModel = ({ toggleVisible, unique }) => {
 
     const handleFinish = values => {
         console.log('success', values);
+        submitFun(values);
     }
 
     const handleFinishFailed = err => {
@@ -29,7 +31,7 @@ const FormAddBrandModel = ({ toggleVisible, unique }) => {
     }
 
     return (<Form name={`catalog-manage-add-model${unique}`} onFinish={handleFinish} onFinishFailed={handleFinishFailed} onValuesChange={handleValuesChange}>
-        <h4><span>品牌：</span><span>小牛</span></h4>
+        <h4><span>品牌：</span><span>{brandName}</span></h4>
         <Form.Item>
             <Form.Item {...brandModelNameAttr}>
                 <TextArea rows={4} placeholder="输入新增型号，以“，”分隔" maxLength={200} />

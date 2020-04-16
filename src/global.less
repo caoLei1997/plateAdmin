@@ -29,13 +29,17 @@ ol {
   list-style: none;
 }
 
+.text-center{
+  text-align: center !important;
+}
+
 .inline {
   &::before {
     content: '';
     display: inline-block;
     vertical-align: middle;
     height: 100%;
-    width: 1px;
+    width: 0px;
   }
 
   &>div,
@@ -50,6 +54,9 @@ ol {
 
 .inline-block {
   display: inline-block !important;
+  &.top{
+    vertical-align: top !important;
+  }
 }
 
 .font-red {
@@ -58,6 +65,33 @@ ol {
 
 .font-blue {
   color: #1890ff !important;
+}
+.font-size-12{
+  font-size: 12px !important;
+}
+.font-size-16{
+  font-size: 16px !important;
+}
+
+.font-size-18{
+  font-size: 18px !important;
+}
+
+.font-size-20{
+  font-size: 20px !important;
+}
+
+.font-size-22{
+  font-size: 22px !important;
+}
+
+.font-size-24{
+  font-size: 24px !important;
+}
+
+.disabled{
+  cursor: not-allowed !important;
+  color: rgba(0,0,0,.25) !important;
 }
 
 .font-green {
@@ -80,8 +114,24 @@ ol {
   margin-top: 8px !important;
 }
 
+.mt-16 {
+  margin-top: 16px !important;
+}
+
+.mt-32 {
+  margin-top: 32px !important;
+}
+
+.mr-8 {
+  margin-right: 8px !important;
+}
+
 .mr-16 {
   margin-right: 16px !important;
+}
+
+.mb-0 {
+  margin-bottom: 0px !important;
 }
 
 .mb-16 {

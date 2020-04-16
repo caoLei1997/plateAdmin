@@ -1,4 +1,4 @@
-import { LOCALUSERKEY } from '@/globalConstant';
+import { LOCALUSERKEY, SUPER_UNIQUE } from '@/globalConstant';
 import { reloadAuthorized } from './Authorized'; // use localStorage to store the authority info, which might be sent from server in actual project.
 
 export function getAuthority(str) {
@@ -26,9 +26,25 @@ export function getAuthority(str) {
 
   return authority;
 }
+
+export function getAuthority2() {
+  const userInfo = sessionStorage.getItem(LOCALUSERKEY);
+  if (userInfo && userInfo !== "null") {
+    const parseUserInfo = JSON.parse(userInfo) || {};
+    if (parseUserInfo.id === SUPER_UNIQUE) {
+      parseUserInfo.firstId = '';
+      setAuthority(parseUserInfo);
+    }
+    return parseUserInfo;
+  }
+  return null;
+}
+
+
 export function setAuthority(authority) {
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
-  sessionStorage.setItem(LOCALUSERKEY, JSON.stringify(proAuthority))
+  const val = authority ? JSON.stringify(proAuthority) : null;
+  sessionStorage.setItem(LOCALUSERKEY, val)
 
   reloadAuthorized();
 }
