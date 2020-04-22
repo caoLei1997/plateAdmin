@@ -1,5 +1,5 @@
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'umi';
 import DealerSelect from '@/components/DealerSelect';
 import FormSearch from './components/FormAdvancedSearch';
@@ -8,9 +8,41 @@ import TableNestedTable from './components/TableNestedTable';
 import AddBrand from './components/AddBrand';
 import ImportSN from './components/ImportSN';
 
-const catalogIndex = ({ dispatch }) => {
+const catalogIndex = (props) => {
+  const { dispatch, userInfo, catalogList } = props;
+  const [firstDealerId, setFirstDealerId] = useState(userInfo.firstId);
+  const [tableFilter, setTableFilter] = useState({});
+
+  const firstDealerChange = (val) => {
+    setFirstDealerId(val);
+  }
+
+  const getCatalogList = (current = catalogList.current, params) => {
+    if (params) setTableFilter(params);
+    const searchParams = params || tableFilter;
+
+    dispatch({
+      type: 'catalogList/getList',
+      payload: {
+        "agentOutletsId": firstDealerId,
+        "account": userInfo.phone,
+        "pageIndex": current,
+        "pageSize": catalogList.pageSize,
+        "brandName": searchParams.brandName || '',
+        "modelName": searchParams.modelName || ''
+      },
+      onSuccess: (total) => {
+        const maxCurrent = Math.ceil(total / catalogList.pageSize);
+        if (current > maxCurrent) {
+          getCatalogList(maxCurrent > 1 ? maxCurrent : 1);
+        }
+      }
+    })
+  }
 
   useEffect(() => {
+    getCatalogList(1);
+
     return () => {
       dispatch({ type: 'catalogList/resetState' });
     }
@@ -18,20 +50,23 @@ const catalogIndex = ({ dispatch }) => {
 
   return (
     <PageHeaderWrapper className={styles.main}>
-      <DealerSelect />
-      <FormSearch>
+      <DealerSelect changeCallBack={firstDealerChange} />
+      <FormSearch getList={getCatalogList}>
         <div
           className="inline"
           style={{
             textAlign: 'right',
           }}
         >
-          <AddBrand />
-          <ImportSN />
+          <AddBrand getList={getCatalogList} />
+          <ImportSN getList={getCatalogList} />
         </div>
-        <TableNestedTable />
+        <TableNestedTable getList={getCatalogList} />
       </FormSearch>
     </PageHeaderWrapper>
   );
 }
-export default connect()(catalogIndex);
+export default connect(({ login, catalogList }) => ({
+  userInfo: login,
+  catalogList
+}))(catalogIndex);

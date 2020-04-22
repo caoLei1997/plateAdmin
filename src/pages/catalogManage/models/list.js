@@ -1,5 +1,5 @@
 import { requestCatalogList } from '@/services/catalog';
-import { PAGESIZE } from '@/globalConstant';
+import { PAGESIZE, RETCODESUCCESS } from '@/globalConstant';
 
 const resetList = arr => {
     if (arr && arr.length > 0) {
@@ -28,7 +28,7 @@ export default {
     namespace: 'catalogList',
     state: { ...initialState },
     effects: {
-        *getList({ payload }, { call, put }) {
+        *getList({ payload, onSuccess }, { call, put }) {
             yield put({
                 type: 'changeFilter',
                 payload: {
@@ -43,6 +43,10 @@ export default {
                 type: 'changeList',
                 payload: response
             })
+
+            if (response.retCode === RETCODESUCCESS) {
+                onSuccess(response.data.total);
+            }
         }
     },
     reducers: {

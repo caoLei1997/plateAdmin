@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'umi';
 import { Table, Popconfirm, Modal, Typography } from 'antd';
 import { SUPER_UNIQUE } from '@/globalConstant';
@@ -147,27 +147,9 @@ const OperaModelDel = ({ dispatch, id, brandId, successFun, val, loading }) => {
 
 
 const NestedTable = (props) => {
-  const { dispatch, listState, userInfo, tableLoading, delModelLoading, delBrandLoading } = props;
+  const { dispatch, listState, userInfo, tableLoading, delModelLoading, delBrandLoading, getList } = props;
   const { current, pageSize, total, list } = listState;
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-
-  const getList = (pageIndex, firstId) => {
-    dispatch({
-      type: 'catalogList/getList',
-      payload: {
-        "agentOutletsId": firstId ? '' : userInfo.firstId,
-        "account": userInfo.phone,
-        "pageIndex": pageIndex,
-        "pageSize": pageSize,
-        "brandName": "",
-        "modelName": ""
-      }
-    });
-  }
-
-  useEffect(() => {
-    getList(1);
-  }, []);
 
   const expandable = expandedRows => {
     setExpandedRowKeys([expandedRows[expandedRows.length - 1]]);
@@ -194,10 +176,7 @@ const NestedTable = (props) => {
       dataIndex: 'electrombileNumberCount',
       key: 'electrombileNumberCount',
       render: (input, item) => {
-        if (item.pid) {
-          return (<ModalPlateSN brandId={item.pid} modelId={item.id} count={item.electrombileNumberCount} />);
-        }
-        return (<ModalPlateSN brandId={item.id} count={item.electrombileNumberCount} />)
+        return (<ModalPlateSN brandId={item.pid || item.id} count={item.electrombileNumberCount} resetTable={() => getList(current)} />)
       }
     },
     {
@@ -222,29 +201,24 @@ const NestedTable = (props) => {
   ];
 
   return (
-    <Table
-      className="components-table-demo-nested"
-      columns={columns}
-      dataSource={list}
-      rowKey='id'
-      onExpandedRowsChange={expandable}
-      expandedRowKeys={expandedRowKeys}
-      pagination={{ total, current, pageSize, onChange: handlePaginationChange }} loading={tableLoading}
-    />);
+    <div className={styles.container}>
+      <div id='components-catalog-table-wrap'>
+        <Table
+          className="components-table-demo-nested"
+          columns={columns}
+          dataSource={list}
+          rowKey='id'
+          onExpandedRowsChange={expandable}
+          expandedRowKeys={expandedRowKeys}
+          pagination={{ total, current, pageSize, onChange: handlePaginationChange }} loading={tableLoading}
+        /></div>
+    </div>);
 }
 
-const WrappedNestedTable = connect(({ catalogList, login, loading }) => ({
+export default connect(({ catalogList, login, loading }) => ({
   listState: catalogList,
   userInfo: login,
   tableLoading: loading.effects['catalogList/getList'],
   delModelLoading: loading.effects['catalogModel/del'],
   delBrandLoading: loading.effects['catalogBrand/del']
 }))(NestedTable);
-
-export default () => (
-  <div className={styles.container}>
-    <div id="components-catalog-table-wrap">
-      <WrappedNestedTable />
-    </div>
-  </div>
-);

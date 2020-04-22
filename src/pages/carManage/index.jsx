@@ -2,7 +2,6 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'umi';
 import DealerSelect from '@/components/DealerSelect';
-import { SUPER_UNIQUE } from '@/globalConstant';
 import TabsBasic from './components/TabsBasic';
 import MeansTable from './components/MeansTable';
 import DistributeTable from './components/DistributeTable';

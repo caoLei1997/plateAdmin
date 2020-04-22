@@ -5,7 +5,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import FormModalImportSN from '../FormModalImportSN';
 import styles from './index.less';
 
-const ImportSN = ({ dispatch, submitLoading, userInfo, catalogListParams }) => {
+const ImportSN = (props) => {
+    const { dispatch, submitLoading, userInfo, getList } = props;
     const [modalVisible, setModalVisible] = useState(false);
 
     const toggleModalVisible = visible => {
@@ -29,17 +30,7 @@ const ImportSN = ({ dispatch, submitLoading, userInfo, catalogListParams }) => {
                 fileName: file.name
             },
             onSuccess: () => {
-                dispatch({
-                    type: 'catalogList/getList',
-                    payload: {
-                        "agentOutletsId": userInfo.firstId,
-                        "account": userInfo.phone,
-                        "pageIndex": catalogListParams.current,
-                        "pageSize": catalogListParams.pageSize,
-                        "brandName": catalogListParams.brandName || '',
-                        "modelName": catalogListParams.modelName || ''
-                    }
-                })
+                getList();
             }
         })
     }

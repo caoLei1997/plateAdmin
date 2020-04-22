@@ -1,4 +1,4 @@
-import { requestCatalogSNList,requestBatchDelSN,requestSingleDelSN } from '@/services/catalog';
+import { requestCatalogSNList, requestBatchDelSN, requestSingleDelSN } from '@/services/catalog';
 import { PAGESIZE, RETCODESUCCESS } from '@/globalConstant';
 
 export default {
@@ -12,7 +12,7 @@ export default {
         batchDelStatus: ''
     },
     effects: {
-        *getList({ payload }, { call, put }) {
+        *getList({ payload, onSuccess }, { call, put }) {
             yield put({
                 type: 'changeCurrent',
                 payload: { current: payload.pageIndex }
@@ -23,6 +23,10 @@ export default {
                 type: 'changeList',
                 payload: response
             })
+
+            if (response.retCode === RETCODESUCCESS) {
+                onSuccess(response.data.totalElements);
+            }
         },
         *batchDel({ payload, onSuccess }, { call, put }) {
             const response = yield call(requestBatchDelSN, payload);
@@ -31,7 +35,7 @@ export default {
                 payload: response
             })
 
-            if(response.retCode === RETCODESUCCESS){
+            if (response.retCode === RETCODESUCCESS) {
                 onSuccess();
             }
         },
@@ -42,7 +46,7 @@ export default {
                 payload: response
             })
 
-            if(response.retCode === RETCODESUCCESS){
+            if (response.retCode === RETCODESUCCESS) {
                 onSuccess();
             }
         }

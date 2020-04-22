@@ -78,8 +78,15 @@ export default defineConfig({
               component: './carManage',
             },
             {
-              component: './404',
+              name: '车辆管理重构',
+              icon: 'smile',
+              path: '/carManageNew',
+              component: './carManageNew',
+              hideInMenu: true
             },
+            {
+              component: './404',
+            }
           ],
         },
         {

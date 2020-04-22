@@ -6,7 +6,8 @@ import { SUPER_UNIQUE } from '@/globalConstant';
 import WrappedFormAddBrand from '../FormModalBrand';
 import styles from './index.less';
 
-const AddBrand = ({ dispatch, submitting, userInfo }) => {
+const AddBrand = (props) => {
+    const { dispatch, submitting, userInfo, getList } = props;
     const [modalVisible, setModalVisible] = useState(false);
 
     const toggleModalVisible = visible => {
@@ -18,7 +19,10 @@ const AddBrand = ({ dispatch, submitting, userInfo }) => {
         dispatch({
             type: 'catalogBrand/add',
             payload: { brandName, account: userInfo.phone },
-            onSuccess: () => { toggleModalVisible(false) }
+            onSuccess: () => {
+                toggleModalVisible(false);
+                getList();
+            }
         })
     }
 

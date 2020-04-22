@@ -8,7 +8,7 @@ const { Search } = Input;
 
 
 const ModalPlateSN = (props) => {
-    const { dispatch, listState, tableLoading, count, brandId, modelId = '' } = props;
+    const { dispatch, listState, tableLoading, count, brandId, modelId = '', resetTable } = props;
     const { current, pageSize, total, list } = listState;
     const [modalVisible, setModalVisible] = useState(false);
     const [rowKeys, setRowKeys] = useState([]);
@@ -29,6 +29,12 @@ const ModalPlateSN = (props) => {
                 "brandId": brandId,
                 "modelId": modelId,
                 electrombileNumber
+            },
+            onSuccess: (resTotal) => {
+                const maxCurrent = Math.ceil(resTotal / pageSize);
+                if (pageIndex > maxCurrent) {
+                    getList(maxCurrent > 1 ? maxCurrent : 1, keywords);
+                }
             }
         });
     }
@@ -47,9 +53,9 @@ const ModalPlateSN = (props) => {
             type: 'catalogSNList/batchDel',
             payload: { idsStr: rowKeys.join(',') },
             onSuccess: () => {
-                let pageIndex = current;
-                if (current > (total / pageSize)) pageIndex = (total / pageSize);
-                getList(pageIndex, keywords);
+                getList(current, keywords);
+                resetTable();
+                setRowKeys([]);
                 message.success(`批量删除成功`);
             }
         })
@@ -60,9 +66,9 @@ const ModalPlateSN = (props) => {
             type: 'catalogSNList/singleDel',
             payload: { id },
             onSuccess: () => {
-                let pageIndex = current;
-                if (current > (total / pageSize)) pageIndex = Math.ceil(total / pageSize);
-                getList(pageIndex, keywords);
+                getList(current, keywords);
+                resetTable();
+                setRowKeys([]);
                 message.success(`删除成功`);
             }
         })

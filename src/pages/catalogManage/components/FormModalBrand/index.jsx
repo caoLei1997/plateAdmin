@@ -8,7 +8,6 @@ const FormAddOrEidtBrand = (props) => {
     }
 
     const handleFinish = values => {
-        console.log('success', values);
         submitFun(values);
     }
 

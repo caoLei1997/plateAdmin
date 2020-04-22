@@ -1,0 +1,32 @@
+.container {
+  :global {
+    .ant-card {
+      &:not(:last-child) {
+        border-bottom: none;
+      }
+    }
+
+    .ant-card-body {
+      padding: 16px 0;
+    }
+
+    .total {
+      border-right: 1px solid #e8e8e8;
+    }
+
+    .item-wrap {
+      text-align: center;
+    }
+
+    .ant-statistic {
+      display: inline-block;
+      min-width: 100px;
+      text-align: left;
+    }
+
+    .ant-statistic-title {
+      color: rgba(0, 0, 0, 0.8);
+      font-size: 16px;
+    }
+  }
+}
