@@ -31,6 +31,7 @@ const ModalPlateSN = (props) => {
                 electrombileNumber
             },
             onSuccess: (resTotal) => {
+                if (resTotal < 1) { return; }
                 const maxCurrent = Math.ceil(resTotal / pageSize);
                 if (pageIndex > maxCurrent) {
                     getList(maxCurrent > 1 ? maxCurrent : 1, keywords);

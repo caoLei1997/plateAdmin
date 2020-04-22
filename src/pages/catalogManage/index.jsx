@@ -32,6 +32,7 @@ const catalogIndex = (props) => {
         "modelName": searchParams.modelName || ''
       },
       onSuccess: (total) => {
+        if (total < 1) return;
         const maxCurrent = Math.ceil(total / catalogList.pageSize);
         if (current > maxCurrent) {
           getCatalogList(maxCurrent > 1 ? maxCurrent : 1);

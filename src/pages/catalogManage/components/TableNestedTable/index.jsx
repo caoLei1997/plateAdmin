@@ -176,7 +176,10 @@ const NestedTable = (props) => {
       dataIndex: 'electrombileNumberCount',
       key: 'electrombileNumberCount',
       render: (input, item) => {
-        return (<ModalPlateSN brandId={item.pid || item.id} count={item.electrombileNumberCount} resetTable={() => getList(current)} />)
+        if (item.pid) {
+          return (<ModalPlateSN brandId={item.pid} modelId={item.id} count={item.electrombileNumberCount} resetTable={() => getList(current)}/>);
+        }
+        return (<ModalPlateSN brandId={item.id} count={item.electrombileNumberCount} resetTable={() => getList(current)} />)
       }
     },
     {
