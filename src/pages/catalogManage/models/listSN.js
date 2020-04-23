@@ -1,11 +1,11 @@
 import { requestCatalogSNList, requestBatchDelSN, requestSingleDelSN } from '@/services/catalog';
-import { PAGESIZE, RETCODESUCCESS } from '@/globalConstant';
+import { MODAL_PAGESIZE, RETCODESUCCESS } from '@/globalConstant';
 
 export default {
     namespace: 'catalogSNList',
     state: {
         total: 0,
-        pageSize: PAGESIZE,
+        pageSize: MODAL_PAGESIZE,
         current: 1,
         list: [],
         singleDelStatus: '',

@@ -17,7 +17,7 @@ const DealerModel = {
     },
     reducers: {
         changeList(state, { payload }) {
-            return { ...state, list: [{ id: '', name: '全部' }, ...payload.data] || [], choiceVal: '' }
+            return { ...state, list: [{ id: ' ', name: '全部' }, ...payload.data] || [], choiceVal: '' }
         },
         setChoiceVal(state, { payload }) {
             const userInfo = getAuthority2();

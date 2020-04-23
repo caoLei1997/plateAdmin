@@ -70,10 +70,9 @@ request.interceptors.request.use((url, options = {}) => {
     queryUrl = `/vehicle-pre${url}`;
   }
   if (process.env.NODE_ENV === 'production') {
+    queryUrl = `/api${url}`;
     if(process.env.REACT_APP_ENV === 'buildtest'){
       queryUrl = `/vehicle-pre${url}`;
-    }else{
-      queryUrl = `/api${url}`;
     }
   }
   return {

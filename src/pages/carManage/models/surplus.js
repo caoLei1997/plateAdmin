@@ -1,11 +1,11 @@
 import { requestCarDistributeSurplus } from '@/services/car';
-import { PAGESIZE } from '@/globalConstant';
+import { MODAL_PAGESIZE } from '@/globalConstant';
 
 export default {
     namespace: 'surplus',
     state: {
         total: 0,
-        pageSize: PAGESIZE,
+        pageSize: MODAL_PAGESIZE,
         current: 1,
         list: []
     },
