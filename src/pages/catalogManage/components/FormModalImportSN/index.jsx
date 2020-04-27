@@ -14,8 +14,8 @@ const excelColumns = [
         key: 'modelName',
     },{
         title: '整车编码SN',
-        dataIndex: 'electrombileNumber": ',
-        key: 'electrombileNumber": ',
+        dataIndex: 'electrombileNumber',
+        key: 'electrombileNumber',
     },{
         title: '错误原因',
         dataIndex: 'msg',
