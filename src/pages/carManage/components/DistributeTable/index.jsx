@@ -49,9 +49,8 @@ const columns = [
   },
   {
     title: '用途',
-    dataIndex: 'electrombileUsage',
-    key: 'electrombileUsage',
-    render: (item) => (<span>{item && toggleStatusKeyVal('carUseArr', item)}</span>)
+    dataIndex: 'electrombileUsageStr',
+    key: 'electrombileUsageStr'
   },
   {
     title: '分配日期',

@@ -1,5 +1,12 @@
 import { requestCarDistributeList, requestCarDistributeCensus } from '@/services/car';
+import { toggleStatusKeyVal } from '@/commonFun';
 import { PAGESIZE } from '@/globalConstant';
+
+const resetList = arr => {
+    if (!arr) return [];
+    arr.map(item => item.electrombileUsageStr = toggleStatusKeyVal('carUseArr', item.electrombileUsage));
+    return arr;
+}
 
 export default {
     namespace: 'distributeList',
@@ -35,7 +42,7 @@ export default {
         changeList(state, { payload }) {
             const { data } = payload;
             if (!data) return { ...state, list: [], total: 0 };
-            return { ...state, list: data.content, total: data.total };
+            return { ...state, list: resetList(data.content), total: data.total };
         },
         changeCurrent(state, { payload }) {
             return { ...state, current: payload.current }
