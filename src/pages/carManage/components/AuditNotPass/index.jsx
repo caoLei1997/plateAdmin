@@ -30,7 +30,7 @@ const AuditNotPass = ({ dispatch, userInfo, id, loading, callBack }) => {
     const reasonProps = {
         label: '原因：',
         name: 'reason',
-        rules: [{ required: true, message: '请填写审核不通过理由' }]
+        rules: [{ required: true, message: '请填写审核不通过理由' },{ max: 50, message: '审核不通过理由不能超过50字' }]
     }
 
     return (
@@ -39,7 +39,7 @@ const AuditNotPass = ({ dispatch, userInfo, id, loading, callBack }) => {
             <Modal title='确认审核不通过吗' visible={modalVisible} footer={null} onCancel={() => toggleModalVisible(false)}>
                 <Form name='catalog-manage-modal-add' onFinish={handleFinish}>
                     <Form.Item name='brandName' {...reasonProps}>
-                        <TextArea rows={4} placeholder="请填写审核不通过理由" maxLength={200} />
+                        <TextArea rows={4} placeholder="请填写审核不通过理由" maxLength={50} />
                     </Form.Item>
                     <div style={{ textAlign: 'right' }}>
                         <Button loading={loading} type="primary" htmlType="submit" style={{ marginRight: 16 }}>确定</Button>

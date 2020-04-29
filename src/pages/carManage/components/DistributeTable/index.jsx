@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'umi';
-import { toggleStatusKeyVal } from '@/commonFun';
 import ExcelUtil from '@/utils/excel';
 import { Table, Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';

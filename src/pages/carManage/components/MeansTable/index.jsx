@@ -4,7 +4,7 @@ import { examineArr } from '@/globalData';
 import { Table } from 'antd';
 import styles from './index.less';
 
-const scroll = { x: 1200 };
+const scroll = { x: 1600 };
 
 const columns = [
   {
@@ -58,6 +58,7 @@ const columns = [
     title: '不通过原因',
     dataIndex: 'notPassReason',
     key: 'notPassReason',
+    width: 260
   },
   {
     title: '操作',

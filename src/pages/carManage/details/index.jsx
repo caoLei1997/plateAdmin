@@ -36,7 +36,8 @@ const progressColumns = [
   {
     title: '不通过原因',
     dataIndex: 'notPassReason',
-    key: 'notPassReason'
+    key: 'notPassReason',
+    width: 500
   }
 ];
 
