@@ -33,7 +33,7 @@ export default {
   },
   pre: {
     '/api/': {
-      target: 'your pre url',
+      target: 'https://electric.sxwinstar.net',
       changeOrigin: true,
       pathRewrite: {
         '^': '',

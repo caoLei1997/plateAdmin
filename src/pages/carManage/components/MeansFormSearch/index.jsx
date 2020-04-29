@@ -84,17 +84,12 @@ const MeansFormSearch = ({ dispatch, meansListState, userInfo, subDealerList }) 
     console.log('fail', errorInfo);
   }
 
-  const handleReset = () => {
-    // form.resetFields();
-  };
-
   return (
     <Form className="ant-advanced-search-form" name='car-manage-form-search' onFinish={handleFinish} onFinishFailed={handleFinishFailed}>
       {getFields()}
       <Row>
         <Col span={24} style={{ textAlign: 'right', }}>
           <Button type="primary" htmlType="submit">查询</Button>
-          <Button style={{ marginLeft: 8 }} onClick={handleReset}>重置</Button>
         </Col>
       </Row>
     </Form>
