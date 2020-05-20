@@ -5,7 +5,7 @@ import { Table, Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import styles from './index.less';
 
-const scroll = { x: 1200 };
+const scroll = { x: 1000 };
 
 const columns = [
   {
@@ -32,19 +32,16 @@ const columns = [
     title: '整车编码SN',
     dataIndex: 'electrombileNumber',
     key: 'electrombileNumber',
-    width: 180,
   },
   {
     title: '车牌序号',
     dataIndex: 'prefix',
     key: 'prefix',
-    width: 180,
   },
   {
     title: '车牌号',
     dataIndex: 'plateNumberCode',
     key: 'plateNumberCode',
-    width: 180,
   },
   {
     title: '用途',

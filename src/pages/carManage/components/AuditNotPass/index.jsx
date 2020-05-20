@@ -16,7 +16,7 @@ const AuditNotPass = ({ dispatch, userInfo, id, loading, callBack }) => {
             type: 'meansDetailAudit/notPass',
             payload: {
                 id,
-                name: userInfo.name,
+                name: userInfo.employeeName,
                 phone: userInfo.phone,
                 notPassReason: values.reason
             },

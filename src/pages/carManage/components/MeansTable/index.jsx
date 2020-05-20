@@ -4,7 +4,7 @@ import { examineArr } from '@/globalData';
 import { Table } from 'antd';
 import styles from './index.less';
 
-const scroll = { x: 1600 };
+const scroll = { x: 1000 };
 
 const columns = [
   {
@@ -30,14 +30,12 @@ const columns = [
   {
     title: '整车编码SN',
     dataIndex: 'electrombileNumber',
-    key: 'electrombileNumber',
-    width: 180,
+    key: 'electrombileNumber'
   },
   {
     title: 'ccc证书编码',
     dataIndex: 'cccCertificateNumber',
-    key: 'cccCertificateNumber',
-    width: 180,
+    key: 'cccCertificateNumber'
   },
   {
     title: '审核状态',
@@ -57,13 +55,13 @@ const columns = [
   {
     title: '不通过原因',
     dataIndex: 'notPassReason',
-    key: 'notPassReason',
-    width: 260
+    key: 'notPassReason'
   },
   {
     title: '操作',
     dataIndex: 'id',
     key: 'id',
+    fixed: 'right',
     render: id => <Link to={`/carmanage/details/${id}`}>查看详情</Link>,
   },
 ];
