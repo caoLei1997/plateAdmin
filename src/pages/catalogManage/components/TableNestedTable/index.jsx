@@ -186,6 +186,7 @@ const NestedTable = (props) => {
       title: '操作',
       dataIndex: 'opera',
       key: 'opera',
+      fixed: 'right',
       render: (input, item) => {
         if (item.children) {
           return (<div className='inline'>
