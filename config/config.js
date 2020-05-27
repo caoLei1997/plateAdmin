@@ -83,6 +83,11 @@ export default defineConfig({
               path: '/carManageNew',
               component: './carManageNew',
               hideInMenu: true
+            }, {
+              name: '经销商管理',
+              icon: 'smile',
+              path: '/agentManage',
+              component: './agentManage',
             },
             {
               component: './404',
