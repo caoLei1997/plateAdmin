@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'umi';
 import ExcelUtil from '@/utils/excel';
 import { Table, Button, message } from 'antd';
@@ -57,6 +57,7 @@ const columns = [
 
 const MeansTable = ({ distributeListState, tableLoading, paginationChange }) => {
   const { total, current, pageSize, list } = distributeListState;
+  const [nowPageSize, setNowPageSize] = useState([pageSize]);
 
   const handlePaginationChange = (page) => {
     paginationChange(page);
@@ -73,7 +74,17 @@ const MeansTable = ({ distributeListState, tableLoading, paginationChange }) => 
   const tableProps = {
     rowKey: 'id',
     columns,
-    pagination: { total, current, pageSize, onChange: handlePaginationChange },
+    pagination: {
+      total, current,
+      pageSize: nowPageSize, onChange: handlePaginationChange,
+      showTotal: total => `共${total}条`,
+      showSizeChanger: true,
+      showQuickJumper: true,
+      onShowSizeChange: (current, size) => {
+        setNowPageSize(size);
+        paginationChange(current, false, { pageSize: size });
+      }
+    },
     loading: tableLoading,
     scroll,
     dataSource: list

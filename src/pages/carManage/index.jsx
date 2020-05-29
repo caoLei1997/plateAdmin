@@ -49,19 +49,20 @@ const CarManage = (props) => {
   const { dispatch, means, meansListState, userInfo, distributeListState } = props;
   const [tabKey, setTabKey] = useState('1');
 
-  const getMeansList = (current, firstId) => {
+  const getMeansList = (current, firstId, config = {}) => {
     dispatch({
       type: 'meansList/getList',
       payload: {
         "agentOutletsId": firstId || userInfo.firstId,
         "account": userInfo.phone,
         "pageIndex": current,
-        "pageSize": meansListState.pageSize
+        "pageSize": meansListState.pageSize,
+        ...config
       }
     })
   }
 
-  const getDistributeList = (current, firstId) => {
+  const getDistributeList = (current, firstId, config = {}) => {
     dispatch({
       type: 'distributeList/getList',
       payload: {
@@ -74,7 +75,8 @@ const CarManage = (props) => {
         "prefix": "",
         "plateNumberCode": "",
         "startDistributionDate": '',
-        "endDistributionDate": ''
+        "endDistributionDate": '',
+        ...config
       }
     })
 

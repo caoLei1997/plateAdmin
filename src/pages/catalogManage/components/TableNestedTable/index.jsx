@@ -6,6 +6,7 @@ import WrappedFormAddBrand from '../FormModalBrand';
 import WrappedFormAddBrandModel from '../FormModalBrandModel';
 import ModalPlateSN from '../TableSearchSN';
 import styles from './index.less';
+import { get } from 'http';
 
 const { Text } = Typography;
 
@@ -150,6 +151,7 @@ const NestedTable = (props) => {
   const { dispatch, listState, userInfo, tableLoading, delModelLoading, delBrandLoading, getList } = props;
   const { current, pageSize, total, list } = listState;
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
+  const [nowPageSize, setNowPageSize] = useState([pageSize]);
 
   const expandable = expandedRows => {
     setExpandedRowKeys([expandedRows[expandedRows.length - 1]]);
@@ -177,7 +179,7 @@ const NestedTable = (props) => {
       key: 'electrombileNumberCount',
       render: (input, item) => {
         if (item.pid) {
-          return (<ModalPlateSN brandId={item.pid} modelId={item.id} count={item.electrombileNumberCount} resetTable={() => getList(current)}/>);
+          return (<ModalPlateSN brandId={item.pid} modelId={item.id} count={item.electrombileNumberCount} resetTable={() => getList(current)} />);
         }
         return (<ModalPlateSN brandId={item.id} count={item.electrombileNumberCount} resetTable={() => getList(current)} />)
       }
@@ -204,6 +206,20 @@ const NestedTable = (props) => {
     }
   ];
 
+  const pagination = {
+    total,
+    current,
+    pageSize: nowPageSize,
+    onChange: handlePaginationChange,
+    showTotal: total => `共${total}条`,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    onShowSizeChange: (current, size) => {
+      setNowPageSize(size);
+      getList(current, false, { pageSize: size });
+    }
+  }
+
   return (
     <div className={styles.container}>
       <div id='components-catalog-table-wrap'>
@@ -214,7 +230,7 @@ const NestedTable = (props) => {
           rowKey='id'
           onExpandedRowsChange={expandable}
           expandedRowKeys={expandedRowKeys}
-          pagination={{ total, current, pageSize, onChange: handlePaginationChange }} loading={tableLoading}
+          pagination={pagination} loading={tableLoading}
         /></div>
     </div>);
 }

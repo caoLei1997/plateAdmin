@@ -1,5 +1,5 @@
 import { requestCarMeansList } from '@/services/car';
-import { PAGESIZE, LOCAL_MEANS_IDS_KEY, RETCODESUCCESS } from '@/globalConstant';
+import { PAGESIZE, LOCAL_MEANS_IDS_KEY, RETCODESUCCESS, LOCAL_MEANS_FILTER } from '@/globalConstant';
 
 const getIdsArr = arr => {
     const newArr = [];
@@ -23,11 +23,13 @@ export default {
             });
 
             const response = yield call(requestCarMeansList, { ...payload, pageIndex: payload.pageIndex - 1 });
+
             yield put({
                 type: 'changeList',
                 payload: response
             })
             if (response.retCode === RETCODESUCCESS && response.data) {
+                sessionStorage.setItem(LOCAL_MEANS_FILTER, JSON.stringify({ ...payload, totalPage: Math.ceil(response.data.total / Number(payload.pageSize)) }));
                 sessionStorage.setItem(LOCAL_MEANS_IDS_KEY, JSON.stringify(getIdsArr(response.data.content)));
             }
         }
