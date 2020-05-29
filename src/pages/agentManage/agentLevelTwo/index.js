@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './index.less';
 import { Form, Input, Button, Cascader,Table,Modal,Select} from 'antd';
-import Add from "./add/add"
+// import Add from "./add/add"
 const { Option } = Select;
 
 class App extends React.Component {

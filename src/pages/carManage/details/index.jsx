@@ -4,12 +4,11 @@ import React, { useEffect } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect, Link } from 'umi';
 import { examineArr } from '@/globalData';
-import { LOCAL_MEANS_IDS_KEY } from '@/globalConstant';
+import { LOCAL_MEANS_IDS_KEY, LOCAL_MEANS_FILTER } from '@/globalConstant';
 import PicPreview from '@/components/PicPreview';
 import AuditNotPass from '../components/AuditNotPass';
 import AuditPass from '../components/AuditPass';
 import fieldData from './data';
-import { LOCAL_MEANS_FILTER } from '@/globalConstant';
 import styles from './style.less';
 
 const { Text } = Typography;
@@ -41,7 +40,7 @@ const progressColumns = [
   }
 ];
 
-const MeansDetail = ({ dispatch, match, detailState, loading }) => {
+const MeansDetail = ({ dispatch, match, detailState, loading, meansListState,history }) => {
   const listIds = JSON.parse(sessionStorage.getItem(LOCAL_MEANS_IDS_KEY));
 
   const getDetails = (id) => {
@@ -54,6 +53,7 @@ const MeansDetail = ({ dispatch, match, detailState, loading }) => {
   }
 
   useEffect(() => {
+    getMeansList();
     getDetails(match.params.id);
   }, [match.params.id])
 
@@ -76,20 +76,31 @@ const MeansDetail = ({ dispatch, match, detailState, loading }) => {
   }
 
   const judgePageIsDisabled = (type = 'first') => {
-    const pageParam = JSON.parse(sessionStorage.getItem(LOCAL_MEANS_FILTER));
     if (type === 'last') {
-      if (pageParam.pageIndex === pageParam.totalPage) return true;
+      const totalPage = Math.ceil(meansListState.total / Number(meansListState.pageSize));
+      if (meansListState.current >= totalPage) return true;
       return false;
     }
-    if (pageParam.pageIndex === 1) return true;
+    if (meansListState.current === 1) return true;
     return false;
   }
 
-  const getMeansList = (type = 'first') => {
+  const getMeansList = (type) => {
     const pageParam = JSON.parse(sessionStorage.getItem(LOCAL_MEANS_FILTER));
+
+    let { pageIndex } = pageParam;
+
+    if (type === 'first') { pageIndex = pageParam.pageIndex - 1; }
+    if (type === 'last') { pageIndex = pageParam.pageIndex + 1; }
+
     dispatch({
       type: 'meansList/getList',
-      payload: { ...pageParam, pageIndex: type === 'first' ? pageParam.pageIndex - 1 : pageParam.pageIndex + 1 }
+      payload: { ...pageParam, pageIndex },
+      onSuccess: id => {
+        if(type){
+          history.replace(`/carmanage/details/${id}`);
+        }
+      }
     })
   }
 
@@ -144,17 +155,17 @@ const MeansDetail = ({ dispatch, match, detailState, loading }) => {
             <Col span={3}>
               {
                 judgePageIsDisabled() ?
-                  <Text className='font-size-22' disabled><DoubleLeftOutlined />上一页</Text>
+                  <Text className='font-size-20' disabled><DoubleLeftOutlined />上一页</Text>
                   :
-                  <div className='font-size-22' onClick={() => getMeansList()}>
+                  <div className='font-size-20 pointer font-blue' onClick={() => getMeansList('first')}>
                     <DoubleLeftOutlined />上一页</div>
               }
             </Col>
             <Col span={3}>
               {judgeIdIsDisabled() ?
-                <Text className='font-size-22' disabled><LeftOutlined />上一个</Text>
+                <Text className='font-size-20' disabled><LeftOutlined />上一个</Text>
                 :
-                <Link className='font-size-22' to={`/carmanage/details/${prevDetail('prev')}`}>
+                <Link className='font-size-20' to={`/carmanage/details/${prevDetail('prev')}`}>
                   <LeftOutlined />上一个
           </Link>
               }
@@ -167,18 +178,18 @@ const MeansDetail = ({ dispatch, match, detailState, loading }) => {
             </Col>
             <Col span={3} style={{ textAlign: 'right' }}>
               {judgeIdIsDisabled('last') ?
-                <Text className='font-size-22' disabled>下一个<RightOutlined /></Text>
+                <Text className='font-size-20' disabled>下一个<RightOutlined /></Text>
                 :
-                <Link className='font-size-22' to={`/carmanage/details/${prevDetail('next')}`}>
+                <Link className='font-size-20' to={`/carmanage/details/${prevDetail('next')}`}>
                   <span>下一个</span><RightOutlined />
                 </Link>
               }
             </Col>
             <Col span={3} style={{ textAlign: 'right' }}>
               {judgePageIsDisabled('last') ?
-                <Text className='font-size-22' disabled>下一页<DoubleRightOutlined /></Text>
+                <Text className='font-size-20' disabled>下一页<DoubleRightOutlined /></Text>
                 :
-                <div className='font-size-22' onClick={() => getMeansList('last')}>
+                <div className='font-size-20 pointer font-blue' onClick={() => getMeansList('last')}>
                   <span>下一页</span><DoubleRightOutlined />
                 </div>
               }
@@ -190,8 +201,9 @@ const MeansDetail = ({ dispatch, match, detailState, loading }) => {
   );
 }
 
-export default connect(({ meansDetail, loading, login }) => ({
+export default connect(({ meansList, meansDetail, loading, login }) => ({
   detailState: meansDetail.data,
   userInfo: login,
+  meansListState: meansList,
   loading: loading.effects['meansDetail/getDetail']
 }))(MeansDetail);
