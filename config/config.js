@@ -25,7 +25,13 @@ export default defineConfig({
   dva: {
     hmr: true,
   },
-  locale: {},
+  locale: {
+    default: 'zh-CN',
+    antd: true,
+    title: false,
+    baseNavigator: true,
+    baseSeparator: '-'
+  },
   dynamicImport: {
     loading: '@/components/PageLoading/index',
   },

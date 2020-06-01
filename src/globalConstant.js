@@ -30,6 +30,7 @@ export const PLATE_TYPE = {
 
 export const LOCALUSERKEY = 'bike_user';
 export const LOCAL_MEANS_IDS_KEY = 'means_ids';
+export const LOCAL_MEANS_FILTER = 'means_filter';
 
 export const SUPER_UNIQUE = 999999999;
 export const RETCODESUCCESS = '0000';

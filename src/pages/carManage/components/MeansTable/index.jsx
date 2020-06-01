@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect, Link } from 'umi';
 import { examineArr } from '@/globalData';
 import { Table } from 'antd';
@@ -68,6 +68,7 @@ const columns = [
 
 const MeansTable = ({ meansListState, tableLoading, paginationChange }) => {
   const { total, current, pageSize, list } = meansListState;
+  const [nowPageSize, setNowPageSize] = useState([pageSize]);
 
   const handlePaginationChange = (page) => {
     paginationChange(page);
@@ -76,7 +77,18 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange }) => {
   const tableProps = {
     rowKey: 'id',
     columns,
-    pagination: { total, current, pageSize, onChange: handlePaginationChange },
+    pagination: {
+      total, current,
+      pageSize: nowPageSize,
+      onChange: handlePaginationChange,
+      showTotal: total => `共${total}条`,
+      showSizeChanger: true,
+      showQuickJumper: true,
+      onShowSizeChange: (current, size) => {
+        setNowPageSize(size);
+        paginationChange(current, false, { pageSize: size });
+      }
+    },
     loading: tableLoading,
     scroll,
     dataSource: list
