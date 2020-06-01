@@ -82,14 +82,22 @@ class App extends React.Component {
       })
   };
   handleChange = (value1,value2)=> {
+    console.log(value1);
     console.log(value2);
-    let arr = [];
+    let arr =[];
     let arr2 = [];
-    let ppArr = [1,23,121,384132,1,31,431,12,3,999]
+    let ppArr = [1,23,121,384132,1,31,431,12,3,999];
+    let {agentBrand , agentBrandObjArr} = this.state;
+
     value2.forEach((v,k)=>{
-      arr.push(v.value)
-      arr2.push({title:v.value,child:[],allChild:[...ppArr]})
+      if(agentBrand.indexOf(v.value) !== -1){
+        v.value = agentBrand[agentBrand.indexOf(v.value)];
+        v.child = agentBrandObjArr[agentBrand.indexOf(v.value)].child
+      }
+        arr.push(v.value);
+        arr2.push({title:v.value,child:v.child||[],allChild:[...ppArr]})
     });
+
     this.setState({
       agentBrand:arr,
       agentBrandObjArr:arr2
@@ -173,10 +181,10 @@ class App extends React.Component {
                 <Tag color="blue" key={k}>{v.title}</Tag>
                 {
                   v.child.map((i,j)=>{
-                    return <Tag color="blue" key={j}>{i}</Tag>
+                    return <Tag key={j}>{i}</Tag>
                   })
                 }
-                <a href="javascript:;">x</a>
+                <a href="javascript:;" onClick={this.agentBrandDelete}>x</a>
               </div>
             } key={k}>
               {/*<Tag closable onClose={this.deleteBrandClass}>*/}
@@ -199,6 +207,11 @@ class App extends React.Component {
       </Collapse>
 
     };
+  agentBrandDelete = (e)=>{
+    let ev = e || window.event;
+    ev.stopPropagation();
+    ev.cancelBubble
+  };
   agentBrandCollapseChange = (a)=>{
     if(a === undefined){return}
     console.log(a)
@@ -224,8 +237,7 @@ class App extends React.Component {
     // dataSource
     let str = '';
     this.state.agentBrandObjArr.forEach(v=>{
-
-      str+=`<a>${v.title}</a>：`;
+      str+=`${v.title}：`;
       v.child.forEach((i,j)=>{
         if(j!==v.child.length-1){
           str+=i+'，';

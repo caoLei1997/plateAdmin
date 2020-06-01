@@ -1,13 +1,14 @@
 import React from 'react';
 import style from './index.less';
-import { Form, Input, Button, Cascader,Table,Modal,Select} from 'antd';
-// import Add from "./add/add"
+import { Input, Button, Cascader,Table,Modal,Select,Tag ,Collapse ,Checkbox, Row, Col} from 'antd';
+import Add from "./add/add"
 const { Option } = Select;
-
+const { Panel } = Collapse;
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.selectChildren = [];
+        this.collapseIndex = null;
         this.state={
           cityDropdownData:[
             {
@@ -53,13 +54,14 @@ class App extends React.Component {
           editDataCity:[],
           editDataAddress:'',
           editDataBrand:[],
+          editAgentBrandObjArr:[],
         }
     }
 
     componentDidMount() {
       let datas =  [
-        {key: '1', name: '胡彦斌',level:1,city:['西安市'], id: 32, address: '西湖区湖底公园1号',brand:['a10'],personNum:5,status:1,useDate:'2019-01-19',do:null},
-        {key: '2', name: '胡彦祖',level:1,city:['西安市'], id: 42, address: '西湖区湖底公园1号',brand:['a10'],personNum:5,status:1,useDate:'2019-01-19',do:null},
+        {key: '1', name: '胡彦斌',level:1,city:['西安市'], id: 32, address: '西湖区湖底公园1号',brand:['a10'],allBrand:[{title:1,child:[1],allChild:[1]}],personNum:5,status:1,useDate:'2019-01-19',do:null},
+        {key: '2', name: '胡彦祖',level:1,city:['西安市'], id: 42, address: '西湖区湖底公园1号',brand:['a10'],allBrand:[{title:1,child:[1],allChild:[1]}],personNum:5,status:1,useDate:'2019-01-19',do:null},
       ];
       datas.forEach((v,k)=>{
         v.do = <div>
@@ -90,6 +92,7 @@ class App extends React.Component {
         editDataCity:a.city,
         editDataAddress:a.address,
         editDataBrand:a.brand,
+        editAgentBrandObjArr:a.allBrand
       });
     this.currentEditData = a;
   };
@@ -179,6 +182,9 @@ class App extends React.Component {
               >
                 {this.selectChildren}
               </Select>
+              {
+                this.editAgentBrandClassRender()
+              }
             </div>
           </Modal>
         </div>
@@ -187,10 +193,26 @@ class App extends React.Component {
   editAgentNameInp = (e)=>{this.setState({editDataName:e.target.value})};
   editDropDownChange = (e)=>{this.setState({editDataCity:e})};
   editAgentAddressInp = (e)=>{this.setState({editDataAddress:e.target.value})};
-  editHandleChange = (v1,v2)=>{
-    let arr = [];
-    v2.forEach(v=>{arr.push(v.value)});
-    this.setState({editDataBrand:arr})
+  editHandleChange = (value1,value2)=> {
+    console.log(value2);
+    let arr =[];
+    let arr2 = [];
+    let ppArr = [1,23,121,384132,1,31,431,12,3,999];
+    let {editDataBrand , editAgentBrandObjArr} = this.state;
+
+    value2.forEach((v,k)=>{
+      if(editDataBrand.indexOf(v.value) !== -1){
+        v.value = editDataBrand[editDataBrand.indexOf(v.value)];
+        v.child = editAgentBrandObjArr[editDataBrand.indexOf(v.value)].child
+      }
+      arr.push(v.value);
+      arr2.push({title:v.value,child:v.child||[],allChild:[...ppArr]})
+    });
+
+    this.setState({
+      editDataBrand:arr,
+      editAgentBrandObjArr:arr2
+    })
   };
   editHandleCancel = ()=>{this.setState({editVisible:false})};
   editHandleOk = ()=>{this.setState({editVisible:false})};
@@ -230,7 +252,55 @@ class App extends React.Component {
   };
   submitData = ()=>{
      console.log(this.state)
-  }
+  };
+  agentBrandCollapseChange = (a)=>{
+    if(a === undefined){return}
+    console.log(a)
+    this.collapseIndex = a;
+  };
+  editAgentBrandClassRender = ()=>{
+    return <Collapse onChange={this.agentBrandCollapseChange} accordion>
+      {
+        this.state.editAgentBrandObjArr.map((v,k)=>{
+          return <Panel header={
+            <div>
+              <Tag color="blue" key={k}>{v.title}</Tag>
+              {
+                v.child.map((i,j)=>{
+                  return <Tag key={j}>{i}</Tag>
+                })
+              }
+              <a href="javascript:;">x</a>
+            </div>
+          } key={k}>
+            {/*<Tag closable onClose={this.deleteBrandClass}>*/}
+            {/*  Tag 2*/}
+            {/*</Tag>*/}
+            <Checkbox.Group style={{ width: '100%' }} onChange={this.checkboxChange}>
+              <Row>
+                {
+                  v.allChild.map((a,b)=>{
+                    return <Col span={8} key={b}>
+                      <Checkbox value={a} key={b}>{a}</Checkbox>
+                    </Col>
+                  })
+                }
+              </Row>
+            </Checkbox.Group>
+          </Panel>
+        })
+      }
+    </Collapse>
+
+  };
+  checkboxChange = (checkedValues)=> {
+    console.log('checked = ', checkedValues);
+    let arr = this.state.editAgentBrandObjArr;
+    arr[this.collapseIndex].child=[...checkedValues];
+    this.setState({
+      editAgentBrandObjArr:arr
+    })
+  };
 }
 
 export default App;
