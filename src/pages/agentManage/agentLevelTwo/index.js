@@ -206,7 +206,7 @@ class App extends React.Component {
         v.child = editAgentBrandObjArr[editDataBrand.indexOf(v.value)].child
       }
       arr.push(v.value);
-      arr2.push({title:v.value,child:v.child||[],allChild:[...ppArr]})
+      arr2.push({value:v.value,child:v.child||[],allChild:[...ppArr]})
     });
 
     this.setState({
@@ -264,13 +264,13 @@ class App extends React.Component {
         this.state.editAgentBrandObjArr.map((v,k)=>{
           return <Panel header={
             <div>
-              <Tag color="blue" key={k}>{v.title}</Tag>
+              <Tag color="blue" key={k}>{v.value}</Tag>
               {
                 v.child.map((i,j)=>{
                   return <Tag key={j}>{i}</Tag>
                 })
               }
-              <a href="javascript:;">x</a>
+              <a href="javascript:;" onClick={(e)=>{e.stopPropagation();}} onMouseDown={this.agentBrandDelete.bind(this,v,k)}>x</a>
             </div>
           } key={k}>
             {/*<Tag closable onClose={this.deleteBrandClass}>*/}
@@ -292,6 +292,19 @@ class App extends React.Component {
       }
     </Collapse>
 
+  };
+  agentBrandDelete = (a,b,c)=>{
+    console.log(a,b,c);
+    let {editAgentBrandObjArr,editDataBrand} = this.state;
+    editAgentBrandObjArr.splice(b,1);
+    editDataBrand.splice(b,1);
+    console.log(editDataBrand);
+    this.setState({
+      agentBrand:editDataBrand,
+      agentBrandObjArr:editAgentBrandObjArr
+    },()=> {
+      this.editHandleChange(editDataBrand,editAgentBrandObjArr)
+    })
   };
   checkboxChange = (checkedValues)=> {
     console.log('checked = ', checkedValues);

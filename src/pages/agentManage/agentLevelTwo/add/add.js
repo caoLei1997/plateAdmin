@@ -95,7 +95,7 @@ class App extends React.Component {
         v.child = agentBrandObjArr[agentBrand.indexOf(v.value)].child
       }
         arr.push(v.value);
-        arr2.push({title:v.value,child:v.child||[],allChild:[...ppArr]})
+        arr2.push({value:v.value,child:v.child||[],allChild:[...ppArr]})
     });
 
     this.setState({
@@ -178,13 +178,13 @@ class App extends React.Component {
           this.state.agentBrandObjArr.map((v,k)=>{
             return <Panel header={
               <div>
-                <Tag color="blue" key={k}>{v.title}</Tag>
+                <Tag color="blue" key={k}>{v.value}</Tag>
                 {
                   v.child.map((i,j)=>{
                     return <Tag key={j}>{i}</Tag>
                   })
                 }
-                <a href="javascript:;" onClick={this.agentBrandDelete}>x</a>
+                <a href="javascript:;" onClick={(e)=>{e.stopPropagation();}} onMouseDown={this.agentBrandDelete.bind(this,v,k)}>x</a>
               </div>
             } key={k}>
               {/*<Tag closable onClose={this.deleteBrandClass}>*/}
@@ -207,14 +207,22 @@ class App extends React.Component {
       </Collapse>
 
     };
-  agentBrandDelete = (e)=>{
-    let ev = e || window.event;
-    ev.stopPropagation();
-    ev.cancelBubble
+  agentBrandDelete = (a,b,c)=>{
+    console.log(a,b,c);
+    let {agentBrandObjArr,agentBrand} = this.state;
+    agentBrandObjArr.splice(b,1);
+    agentBrand.splice(b,1);
+    console.log(agentBrand);
+    this.setState({
+      agentBrand:agentBrand,
+      agentBrandObjArr:agentBrandObjArr
+    },()=> {
+      this.handleChange(agentBrand,agentBrandObjArr)
+    })
   };
   agentBrandCollapseChange = (a)=>{
     if(a === undefined){return}
-    console.log(a)
+    console.log(a);
     this.collapseIndex = a;
   };
   checkboxChange = (checkedValues)=> {
