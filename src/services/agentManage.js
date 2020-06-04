@@ -1,22 +1,37 @@
 import request from '@/utils/request';
 import { queryJsonToString } from '@/commonFun';
 
-export async function requestCarMeansList(data) {
-  return request('/agent/v1.1/VehicleManageController/vehicleManagePageList', {
-    method: 'POST',
-    data
-  });
-}
-
-export async function requestCarMeansDetail(data) {
-  return request(`/agent/v1.1/VehicleManageController/getVehicleDetail?${queryJsonToString(data)}`, {
-    method: 'GET'
-  });
-}
-
 export async function requestAgentList(data) {
   return request('/agent/v1.1/RelAgentOutletsBrand/pageList', {
     method: 'POST',
     data
   });
 }
+
+export async function requestCityRegion(data) {
+  return request('/agent/v1.1/DealerPersonnel/getCityTree', {
+    method: 'GET',
+  });
+}
+
+export async function requestBrand(data) {
+  return request('/agent/v1.1/RelAgentOutletsBrand/getAllBrands', {
+    method: 'GET',
+    data
+  });
+}
+
+export async function editFirstAgentSave(data) {
+  return request('/agent/v1.1/RelAgentOutletsBrand/editFirstAgent', {
+    method: 'POST',
+    data
+  });
+}
+
+export async function addFirstAgent(data) {
+  return request('/agent/v1.1/RelAgentOutletsBrand/addFirstAgent', {
+    method: 'POST',
+    data
+  });
+}
+
