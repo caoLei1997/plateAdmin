@@ -36,20 +36,7 @@ class App extends React.Component {
             },
           ],
 
-          dropdownData:[
-            {
-              value: 'zhejiang',
-              label: 'Zhejiang',
-              children: [
-                {
-                  value: 'hangzhou',
-                  label: 'Hangzhou',}]
-            },
-            {
-              value: 'jiangsu',
-              label: 'Jiangsu',
-            },
-          ],
+          dropdownData:this.props.cityDropdownData,
           dropdownValue:[],
 
           agentName:'',
@@ -173,12 +160,12 @@ class App extends React.Component {
     }
 
     agentBrandClassRender = ()=>{
-      return <Collapse onChange={this.agentBrandCollapseChange} accordion>
+      return <Collapse size='small' onChange={this.agentBrandCollapseChange} accordion>
         {
           this.state.agentBrandObjArr.map((v,k)=>{
-            return <Panel header={
+            return <Panel size='small' header={
               <div>
-                <Tag color="blue" key={k}>{v.value}</Tag>
+                <Tag size='small' color="blue" key={k}>{v.value}</Tag>
                 {
                   v.child.map((i,j)=>{
                     return <Tag key={j}>{i}</Tag>

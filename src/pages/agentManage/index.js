@@ -21,7 +21,7 @@ class agentManage extends React.Component {
   }
 
   render(){
-    let {level_current} = this.state
+    let {level_current,cItyRegion} = this.state
    return (
       <div className={styles.agentManageMain}>
         <Breadcrumb>
@@ -39,10 +39,16 @@ class agentManage extends React.Component {
           </Menu.Item>
         </Menu>
         {
-          level_current === 'level_one'?<AgentLevelOne></AgentLevelOne>:<AgentLevelTwo></AgentLevelTwo>
+          level_current === 'level_one'?<AgentLevelOne onSubmit={this.getCItyRegion.bind(this)}></AgentLevelOne>:<AgentLevelTwo cityData={cItyRegion}></AgentLevelTwo>
         }
       </div>
     );
+  }
+  getCItyRegion(data){
+    console.log('data:',data);
+    this.setState({
+      cItyRegion:data
+    })
   }
 };
 

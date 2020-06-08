@@ -2,6 +2,7 @@ import React from 'react';
 import style from './index.less';
 import { Input, Button, Cascader,Table,Modal,Select,Tag ,Collapse ,Checkbox, Row, Col} from 'antd';
 import Add from "./add/add"
+import {requestAgentList} from "@/services/agentManage";
 const { Option } = Select;
 const { Panel } = Collapse;
 class App extends React.Component {
@@ -10,20 +11,7 @@ class App extends React.Component {
         this.selectChildren = [];
         this.collapseIndex = null;
         this.state={
-          cityDropdownData:[
-            {
-              value: 'zhejiang',
-              label: 'Zhejiang',
-              children: [
-                {
-                  value: 'hangzhou',
-                  label: 'Hangzhou',}]
-            },
-            {
-              value: 'jiangsu',
-              label: 'Jiangsu',
-            },
-          ],
+          cityDropdownData:this.props.cityData,
           statusDropdownData:[
             {
               value: '0',
@@ -59,6 +47,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+      console.log()
       let datas =  [
         {key: '1', name: '胡彦斌',level:1,city:['西安市'], id: 32, address: '西湖区湖底公园1号',brand:['a10'],allBrand:[{title:1,child:[1],allChild:[1]}],personNum:5,status:1,useDate:'2019-01-19',do:null},
         {key: '2', name: '胡彦祖',level:1,city:['西安市'], id: 42, address: '西湖区湖底公园1号',brand:['a10'],allBrand:[{title:1,child:[1],allChild:[1]}],personNum:5,status:1,useDate:'2019-01-19',do:null},
@@ -83,6 +72,34 @@ class App extends React.Component {
 
     }
 
+    reqTableList = ()=>{
+      requestAgentList(data).then(res=>{
+        if(res&&res.data&&res.data.content){
+          let list = res.data.content;
+          list.forEach((v,k)=>{
+            v.cityRegion = v.city + v.region;
+            v.do = <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>;
+            v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
+            v.personNum = <a href="javascript:;" key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
+            v.brand = [];
+            v.brandList.forEach((i,j)=>{
+              v.brand.push( i.brandName + '\n')
+            })
+          });
+          this.setState({
+            tableDataSource:list,
+            pageIndex:data.pageIndex,
+            total:res.data.total
+          });
+          this.reqBrand();
+        }else{
+          notification.info({
+            description: "暂无数据",
+            message:"暂无数据",
+          });
+        }
+      });
+    };
 
   editData = (a,b) =>{
     console.log(a)
@@ -147,7 +164,7 @@ class App extends React.Component {
             <Table width='100%' dataSource={tableDataSource} columns={tableColumns}/>
           </div>
           {/*添加弹框*/}
-          <Add onRef={this.onRef}></Add>
+          <Add onRef={this.onRef} cityDropdownData={cityDropdownData}></Add>
           {/*编辑弹框*/}
           <Modal
             title="编辑经销商"

@@ -294,6 +294,7 @@ class App extends React.Component {
         this.setState({
           dropdownData:res.data
         });
+        this.props.onSubmit(res.data)
       }else{
         notification.error({
           description: "暂无数据",
