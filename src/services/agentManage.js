@@ -35,3 +35,15 @@ export async function addFirstAgent(data) {
   });
 }
 
+export async function useOrStop(data) {
+  return request('/agent/v1.1/RelAgentOutletsBrand/enableSecondAgent', {
+    method: 'POST',
+    data
+  });
+}
+
+export async function getSecondAgentBrand(data) {
+  return request(`/agent/v1.1/RelAgentOutletsBrand/getSecondAgentSellBrandAndModel?${data&&queryJsonToString(data)}`, {
+    method: 'GET',
+  });
+}

@@ -115,7 +115,7 @@ class App extends React.Component {
         return (
         <div className={style.agentLevelOneMain}>
           <div className={style.searchBox}>
-            <Input onChange={this.inpChange1} className={style.inp} placeholder='姓名' size='small' />
+            <Input onChange={this.inpChange1} className={style.inp} placeholder='经销商名称' size='small' />
 
             <Input onChange={this.inpChange2} className={style.inp} placeholder='品牌名称' size='small' />
 

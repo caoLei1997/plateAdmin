@@ -1,97 +1,143 @@
 import React from 'react';
 import style from './index.less';
-import { Input, Button, Cascader,Table,Modal,Select,Tag ,Collapse ,Checkbox, Row, Col} from 'antd';
+import { Input, Button, Cascader,Table,Modal,Select,Tag ,Collapse ,Checkbox, Row, Col,notification,Spin,Space } from 'antd';
 import Add from "./add/add"
-import {requestAgentList} from "@/services/agentManage";
+import {requestAgentList,useOrStop,getSecondAgentBrand} from "@/services/agentManage";
 const { Option } = Select;
 const { Panel } = Collapse;
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.selectChildren = [];
         this.collapseIndex = null;
+      this.pageIndex = 0;
+      this.pageSize = 10;
+      this.data = {};
+      this.allBrandData = [];
         this.state={
           cityDropdownData:this.props.cityData,
           statusDropdownData:[
             {
-              value: '0',
+              value: '1',
               label: '停用',
             },
             {
-              value: '1',
+              value: '0',
               label: '启用',
             },
           ],
-          dropdownValue:'',
+          agentName:'',
+          cityDropdownValue:[],
+          statusDropdownValue:[],
           tableDataSource: [],
           tableColumns:[
-            {title: '经销商ID', dataIndex: 'id', key: 'id',},
-            {title: '经销商名称', dataIndex: 'name', key: 'name',},
+            {title: '经销商ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId',},
+            {title: '经销商名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName',width:150},
             {title: '级别', dataIndex: 'level', key: 'level',},
-            {title: '市区', dataIndex: 'city', key: 'city',},
-            {title: '地址', dataIndex: 'address', key: 'address',},
-            {title: '销售品牌型号', dataIndex: 'brand', key: 'brand',width:200},
+            {title: '市区', dataIndex: 'cityRegion', key: 'cityRegion',width:100},
+            {title: '地址', dataIndex: 'address', key: 'address',width:200},
+            {title: '销售品牌型号', dataIndex: 'brand', key: 'brand',width:150},
             {title: '人员数', dataIndex: 'personNum', key: 'personNum',},
-            {title: '状态', dataIndex: 'status', key: 'status',},
-            {title: '停用/启用日期', dataIndex: 'useDate', key: 'useDate',},
+            {title: '状态', dataIndex: 'statusTxt', key: 'statusTxt',},
+            {title: '停用/启用日期', dataIndex: 'updateTime', key: 'updateTime',width:150},
             {title: '操作', dataIndex: 'do', key: 'do',width:100},
           ],
-
+        // paginationSeting
+          total:null,
+          pageSize:10,
+          pageIndex:0,
+          onChange:(a,b)=>{
+            console.log(a,b);
+            let {pageSize,cityDropdownValue,statusDropdownValue} = this.state;
+            this.data = {
+              pageIndex: a - 1,
+              pageSize: pageSize,
+              level: 11,
+              brandName:'',
+              agentOutletsName: this.state.agentName,
+              city: cityDropdownValue&&cityDropdownValue[0],
+              region: cityDropdownValue&&cityDropdownValue[1],
+              status:statusDropdownValue[0]
+            };
+            this.reqTableList(this.data)
+          },
+          useOrStopVisible:false,
+          useOrStopTitle:'',
+          useOrStopContent:null,
+          useOrStopId:'',
+          useOrStopStatus:'',
+          allUseCheck:false,
+          //brand list
+          brandModalVisible:false,
+          cBrandList:[],
+          loadStatus:true,
+          //edit
           editVisible:false,
           editDataName:'',
           editDataCity:[],
           editDataAddress:'',
           editDataBrand:[],
           editAgentBrandObjArr:[],
+          selectChildren:[]
         }
     }
-
     componentDidMount() {
-      console.log()
-      let datas =  [
-        {key: '1', name: '胡彦斌',level:1,city:['西安市'], id: 32, address: '西湖区湖底公园1号',brand:['a10'],allBrand:[{title:1,child:[1],allChild:[1]}],personNum:5,status:1,useDate:'2019-01-19',do:null},
-        {key: '2', name: '胡彦祖',level:1,city:['西安市'], id: 42, address: '西湖区湖底公园1号',brand:['a10'],allBrand:[{title:1,child:[1],allChild:[1]}],personNum:5,status:1,useDate:'2019-01-19',do:null},
-      ];
-      datas.forEach((v,k)=>{
-        v.do = <div>
-          <a href="javascript:;" onClick={this.editData.bind('',v,k,this)}>编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
-          <a href="javascript:;" onClick={this.doUse.bind('',v,k,this)}>启用</a>
-        </div>;
-        v.personNum = <a href="javascript:;" onClick={this.personNumClick.bind('',v,k,this)}>{v.personNum}</a>;
-      });
-      this.setState({
-        tableDataSource:datas
-      });
-
-      for (let i = 10; i < 36; i++) {
-        this.selectChildren.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-      }
+      let {agentName, cityDropdownValue, statusDropdownValue,} = this.state;
+      this.data = {
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize,
+        level: 12,
+        brandName: "",
+        agentOutletsName: this.state.agentName,
+        city: cityDropdownValue[0],
+        region:cityDropdownValue[1],
+        status:statusDropdownValue[0]
+      };
+      this.reqTableList(this.data);
+      this.getAllBrand();
     }
 
     componentWillUnmount() {
 
     }
 
-    reqTableList = ()=>{
+  submitData = ()=>{
+      let {agentName, cityDropdownValue, statusDropdownValue,} = this.state;
+    this.data = {
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
+      level: 12,
+      brandName: "",
+      agentOutletsName: this.state.agentName,
+      city: cityDropdownValue[0],
+      region:cityDropdownValue[1],
+      status:statusDropdownValue[0]
+    };
+    this.reqTableList(this.data)
+  };
+
+    reqTableList = (data)=>{
       requestAgentList(data).then(res=>{
         if(res&&res.data&&res.data.content){
           let list = res.data.content;
           list.forEach((v,k)=>{
+            v.key = k;
             v.cityRegion = v.city + v.region;
-            v.do = <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>;
+            v.do = <div key={k}>
+              <p><a href="javascript:;" onClick={this.editData.bind('',v,k,this)}>编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+              {v.status==='1'?<a href="javascript:;" onClick={this.doUse.bind('',v,k,this)}>启用</a>:<a href="javascript:;" onClick={this.doUse.bind('',v,k,this)}>停用</a>}
+            </div>;
             v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
             v.personNum = <a href="javascript:;" key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
-            v.brand = [];
-            v.brandList.forEach((i,j)=>{
-              v.brand.push( i.brandName + '\n')
-            })
+            v.vityRegion = v.city+v.region;
+
+            v.statusTxt = v.status === '0' ? <Tag color="orange">正常</Tag> : <Tag color="red">停用</Tag>;
+            v.brand = <a href="javascript:;" onClick={this.showBrandList.bind('',v,k,this)}>点击查看</a>
           });
           this.setState({
             tableDataSource:list,
             pageIndex:data.pageIndex,
             total:res.data.total
           });
-          this.reqBrand();
         }else{
           notification.info({
             description: "暂无数据",
@@ -100,21 +146,60 @@ class App extends React.Component {
         }
       });
     };
-
+  showBrandList = (a,b)=>{
+    this.setState({
+      cBrandList:a.brandModelVos,
+      loadStatus:false,
+      brandModalVisible:true,
+    });
+  };
   editData = (a,b) =>{
-    console.log(a)
-      this.setState({
+    console.log(a);
+    let brandList = [];
+    let brandClassList = [];
+    let allBrandList = [];
+    a.brandModelVos&&a.brandModelVos.forEach(v=>{
+      brandList.push(v.id);
+      brandClassList.push(v.children);
+    });
+    this.allBrandData.forEach((v,k)=>{
+      if(brandList.indexOf(v.id) !== -1){
+        this.allBrandData[k].allChild = this.allBrandData[k].children;
+        this.allBrandData[k].children = brandClassList[brandList.indexOf(v.id)];
+        this.allBrandData[k].checkedChild = [];
+        brandClassList[brandList.indexOf(v.id)].forEach(i=>{
+          this.allBrandData[k].checkedChild.push(i.id);
+        });
+        allBrandList.push(this.allBrandData[k])
+      }
+    });
+    console.log(allBrandList)
+    this.setState({
         editVisible:true,
-        editDataName:a.name,
-        editDataCity:a.city,
+        editDataName:a.agentOutletsName,
+        editDataCity:[a.city,a.region],
         editDataAddress:a.address,
-        editDataBrand:a.brand,
-        editAgentBrandObjArr:a.allBrand
+        editDataBrand:brandList||[],
+        editAgentBrandObjArr:allBrandList||[]
       });
     this.currentEditData = a;
   };
   doUse = (a,b)=>{
-    console.log(a,b)
+    console.log(a,b);
+    let title = a.status === '0'? "停用":"启用";
+    let content = a.status === '0'? "停用会导致该经销商相关所有业务人员账号停用，不能再处理代牌销售业务，确认要停用吗？":"启用后该经销商将恢复代牌销售业务相关办理权限，确认要启用吗？";
+    let isUse =  a.status === '1'&&<p>
+      <Checkbox onChange={this.onUseOrStopCheck}>同时启用该经销商所有人员账号</Checkbox>
+    </p>
+    this.setState({
+      allUseCheck:false,
+      useOrStopId:a.agentOutletsId,
+      useOrStopVisible:true,
+      useOrStopTitle:title,
+      useOrStopContent:content,
+      useOrStopIsUse:isUse,
+      useOrStopStatus:a.status === '0'?'1':'0'
+    })
   };
 
   personNumClick(a,b){
@@ -129,12 +214,12 @@ class App extends React.Component {
     console.log('Success:', values);
   };
     render() {
-      let {cityDropdownData,statusDropdownData,tableDataSource,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrand} = this.state;
+      let {cityDropdownData,statusDropdownData,tableDataSource,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrand,total,pageSize,pageIndex,onChange,useOrStopVisible,useOrStopTitle,useOrStopContent,useOrStopIsUse,selectChildren} = this.state;
 
         return (
         <div className={style.agentLevelOneMain}>
           <div className={style.searchBox}>
-            <Input onChange={this.inpChange1} className={style.inp} placeholder='姓名' size='small' />
+            <Input onChange={this.inpChange1} className={style.inp} placeholder='经销商名称' size='small' />
             <Cascader
               options={cityDropdownData}
               expandTrigger="hover"
@@ -161,7 +246,12 @@ class App extends React.Component {
           </div>
 
           <div className={style.tableList}>
-            <Table width='100%' dataSource={tableDataSource} columns={tableColumns}/>
+            <Table width='100%' dataSource={tableDataSource} pagination={{
+              total:total,
+              pageSize:pageSize,
+              pageIndex:pageIndex,
+              onChange:onChange
+            }} columns={tableColumns}/>
           </div>
           {/*添加弹框*/}
           <Add onRef={this.onRef} cityDropdownData={cityDropdownData}></Add>
@@ -197,35 +287,93 @@ class App extends React.Component {
                 onChange={this.editHandleChange}
                 value={editDataBrand}
               >
-                {this.selectChildren}
+                {selectChildren}
               </Select>
               {
                 this.editAgentBrandClassRender()
               }
             </div>
           </Modal>
+
+          {/*停用启用弹窗*/}
+          <Modal
+            title={useOrStopTitle}
+            visible={useOrStopVisible}
+            onOk={this.useOrStopHandleOk}
+            onCancel={this.useOrStopHandleCancel}
+          >
+            <p>{useOrStopContent}</p>
+              {
+                useOrStopIsUse
+              }
+          </Modal>
+          {
+            this.brandModal()
+          }
         </div>
         );
     }
+  onUseOrStopCheck = (a,b)=>{
+      console.log(a.target.checked)
+    this.setState({
+      allUseCheck:true
+    })
+  };
+  useOrStopHandleOk = ()=>{
+    let {useOrStopId,useOrStopStatus,allUseCheck} = this.state;
+    useOrStop({
+      agentOutletsId:useOrStopId ,
+      status: useOrStopStatus,
+      isEnableAccount: allUseCheck
+    }).then(res=>{
+      console.log(res);
+      this.reqTableList(this.data);
+      this.setState({
+        useOrStopVisible:false
+      });
+      notification.info({
+        description: "提示",
+        message:"状态更新成功",
+      });
+    });
+
+  };
+  useOrStopHandleCancel = (a)=>{
+    this.setState({
+      useOrStopVisible:false
+    });
+  };
+
   editAgentNameInp = (e)=>{this.setState({editDataName:e.target.value})};
   editDropDownChange = (e)=>{this.setState({editDataCity:e})};
   editAgentAddressInp = (e)=>{this.setState({editDataAddress:e.target.value})};
   editHandleChange = (value1,value2)=> {
-    console.log(value2);
     let arr =[];
     let arr2 = [];
     let ppArr = [1,23,121,384132,1,31,431,12,3,999];
     let {editDataBrand , editAgentBrandObjArr} = this.state;
+    console.log(value1,value2,editDataBrand,editAgentBrandObjArr);
 
     value2.forEach((v,k)=>{
-      if(editDataBrand.indexOf(v.value) !== -1){
-        v.value = editDataBrand[editDataBrand.indexOf(v.value)];
-        v.child = editAgentBrandObjArr[editDataBrand.indexOf(v.value)].child
+      this.allBrandData.forEach((i,j)=>{
+        if(i.id === v.key){
+          v.value = i.name;
+          v.allChild = i.children;
+          v.children = [];
+        }
+      });
+      if(editDataBrand.indexOf(v.key) !== -1){
+        v.children = editAgentBrandObjArr[editDataBrand.indexOf(v.key)].children;
       }
-      arr.push(v.value);
-      arr2.push({value:v.value,child:v.child||[],allChild:[...ppArr]})
-    });
 
+      let checkedChild = [];
+      v.children.forEach(v=>{
+        checkedChild.push(v.id)
+      });
+      arr.push(v.key);
+      arr2.push({id:v.key,name:v.value,children:v.children||[],allChild:[...v.allChild],checkedChild:checkedChild})
+    });
+    console.log(arr,arr2)
     this.setState({
       editDataBrand:arr,
       editAgentBrandObjArr:arr2
@@ -267,24 +415,23 @@ class App extends React.Component {
       statusDropdownValue:a
     })
   };
-  submitData = ()=>{
-     console.log(this.state)
-  };
+
   agentBrandCollapseChange = (a)=>{
     if(a === undefined){return}
     console.log(a)
     this.collapseIndex = a;
   };
   editAgentBrandClassRender = ()=>{
+    let {editAgentBrandObjArr} = this.state;
     return <Collapse onChange={this.agentBrandCollapseChange} accordion>
       {
-        this.state.editAgentBrandObjArr.map((v,k)=>{
+        editAgentBrandObjArr&&editAgentBrandObjArr.map((v,k)=>{
           return <Panel header={
             <div>
-              <Tag color="blue" key={k}>{v.value}</Tag>
+              <Tag color="blue" key={v.id}>{v.name}</Tag>
               {
-                v.child.map((i,j)=>{
-                  return <Tag key={j}>{i}</Tag>
+                v.children.map((i,j)=>{
+                  return <Tag key={i.id}>{i.name}</Tag>
                 })
               }
               <a href="javascript:;" onClick={(e)=>{e.stopPropagation();}} onMouseDown={this.agentBrandDelete.bind(this,v,k)}>x</a>
@@ -293,17 +440,18 @@ class App extends React.Component {
             {/*<Tag closable onClose={this.deleteBrandClass}>*/}
             {/*  Tag 2*/}
             {/*</Tag>*/}
-            <Checkbox.Group style={{ width: '100%' }} onChange={this.checkboxChange}>
+            <Checkbox.Group style={{ width: '100%' }} value={v.checkedChild&&v.checkedChild} onChange={this.checkboxChange}>
               <Row>
                 {
                   v.allChild.map((a,b)=>{
                     return <Col span={8} key={b}>
-                      <Checkbox value={a} key={b}>{a}</Checkbox>
+                      <Checkbox value={a.id} key={a.id}>{a.name}</Checkbox>
                     </Col>
                   })
                 }
               </Row>
             </Checkbox.Group>
+
           </Panel>
         })
       }
@@ -315,7 +463,7 @@ class App extends React.Component {
     let {editAgentBrandObjArr,editDataBrand} = this.state;
     editAgentBrandObjArr.splice(b,1);
     editDataBrand.splice(b,1);
-    console.log(editDataBrand);
+    console.log(editAgentBrandObjArr);
     this.setState({
       agentBrand:editDataBrand,
       agentBrandObjArr:editAgentBrandObjArr
@@ -326,11 +474,75 @@ class App extends React.Component {
   checkboxChange = (checkedValues)=> {
     console.log('checked = ', checkedValues);
     let arr = this.state.editAgentBrandObjArr;
-    arr[this.collapseIndex].child=[...checkedValues];
+    let arr2 = [];
+    let arr3 = [];
+    console.log(arr[this.collapseIndex].children);
+    arr[this.collapseIndex].allChild.forEach(v=>{
+      if(checkedValues.indexOf(v.id) !== -1){
+        arr2.push(v)
+        arr3.push(v.id)
+      }
+    });
+    arr[this.collapseIndex].children=[...arr2];
+    arr[this.collapseIndex].checkedChild=[...arr3];
     this.setState({
       editAgentBrandObjArr:arr
     })
   };
+
+  brandModal = ()=> {
+    let {cBrandList,loadStatus} = this.state;
+    return <Modal
+      title="销售品牌型号"
+      closable
+      visible={this.state.brandModalVisible}
+      footer={null}
+      onCancel={this.brandModalClose}
+    >
+
+      <Collapse onChange={this.lookBrandList} accordion>
+        {
+          cBrandList&&cBrandList.map((v,k)=>{
+            return <Panel header={v.name} key={v.id}>
+              {
+                v.children&&v.children.map((i,j)=>{
+                  return <p key={i.id}>{i.name}</p>
+                })
+              }
+            </Panel>
+          })
+        }
+      </Collapse>
+      {loadStatus&&<Spin size="large" />}
+    </Modal>
+  };
+  brandModalClose = ()=>{
+    this.setState({
+      brandModalVisible:false
+    })
+  };
+
+  getAllBrand = ()=>{
+    getSecondAgentBrand().then(res=>{
+        console.log(res);
+        if(res&&res.data){
+          let {selectChildren} = this.state;
+          this.allBrandData = res.data;
+          let list = res.data;
+          list.forEach((v,k)=>{
+            selectChildren.push(<Option key={v.id} children={v.children}>{v.name}</Option>);
+          });
+          this.setState({
+            selectChildren:selectChildren
+          })
+        }else{
+          notification.error({
+            description: "提示",
+            message:"获取所有品牌型号数据失败",
+          });
+        }
+    })
+  }
 }
 
 export default App;
