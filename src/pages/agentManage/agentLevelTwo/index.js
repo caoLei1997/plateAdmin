@@ -2,7 +2,7 @@ import React from 'react';
 import style from './index.less';
 import { Input, Button, Cascader,Table,Modal,Select,Tag ,Collapse ,Checkbox, Row, Col,notification,Spin,Space } from 'antd';
 import Add from "./add/add"
-import {requestAgentList,useOrStop,getSecondAgentBrand} from "@/services/agentManage";
+import {requestAgentList,useOrStop,getSecondAgentBrand,editSecondAgent} from "@/services/agentManage";
 const { Option } = Select;
 const { Panel } = Collapse;
 class App extends React.Component {
@@ -51,7 +51,7 @@ class App extends React.Component {
             this.data = {
               pageIndex: a - 1,
               pageSize: pageSize,
-              level: 11,
+              level: 12,
               brandName:'',
               agentOutletsName: this.state.agentName,
               city: cityDropdownValue&&cityDropdownValue[0],
@@ -72,6 +72,7 @@ class App extends React.Component {
           loadStatus:true,
           //edit
           editVisible:false,
+          editDataId:null,
           editDataName:'',
           editDataCity:[],
           editDataAddress:'',
@@ -155,33 +156,34 @@ class App extends React.Component {
   };
   editData = (a,b) =>{
     console.log(a);
+    let brandData = this.allBrandData;
+    console.log(this.allBrandData)
     let brandList = [];
-    let brandClassList = [];
     let allBrandList = [];
     a.brandModelVos&&a.brandModelVos.forEach(v=>{
       brandList.push(v.id);
-      brandClassList.push(v.children);
-    });
-    this.allBrandData.forEach((v,k)=>{
-      if(brandList.indexOf(v.id) !== -1){
-        this.allBrandData[k].allChild = this.allBrandData[k].children;
-        this.allBrandData[k].children = brandClassList[brandList.indexOf(v.id)];
-        this.allBrandData[k].checkedChild = [];
-        brandClassList[brandList.indexOf(v.id)].forEach(i=>{
-          this.allBrandData[k].checkedChild.push(i.id);
-        });
-        allBrandList.push(this.allBrandData[k])
-      }
+      brandData.forEach((i,j)=>{
+        if(v.id === i.id){
+          i.allChild = i.children;
+          i.children = v.children;
+          i.checkedChild = [];
+          i.children.forEach(a=>{
+            i.checkedChild.push(a.id)
+          });
+          allBrandList.push(brandData[j])
+        }
+      })
     });
     console.log(allBrandList)
     this.setState({
-        editVisible:true,
-        editDataName:a.agentOutletsName,
-        editDataCity:[a.city,a.region],
-        editDataAddress:a.address,
-        editDataBrand:brandList||[],
-        editAgentBrandObjArr:allBrandList||[]
-      });
+      editDataId:a.agentOutletsId,
+      editDataName:a.agentOutletsName,
+      editDataCity:[a.city,a.region],
+      editDataAddress:a.address,
+      editDataBrand:brandList||[],
+      editAgentBrandObjArr:allBrandList||[],
+      editVisible:true,
+    });
     this.currentEditData = a;
   };
   doUse = (a,b)=>{
@@ -350,12 +352,11 @@ class App extends React.Component {
   editHandleChange = (value1,value2)=> {
     let arr =[];
     let arr2 = [];
-    let ppArr = [1,23,121,384132,1,31,431,12,3,999];
     let {editDataBrand , editAgentBrandObjArr} = this.state;
     console.log(value1,value2,editDataBrand,editAgentBrandObjArr);
-
+    let brandData = this.allBrandData;
     value2.forEach((v,k)=>{
-      this.allBrandData.forEach((i,j)=>{
+      brandData.forEach((i,j)=>{
         if(i.id === v.key){
           v.value = i.name;
           v.allChild = i.children;
@@ -370,8 +371,8 @@ class App extends React.Component {
       v.children.forEach(v=>{
         checkedChild.push(v.id)
       });
-      arr.push(v.key);
-      arr2.push({id:v.key,name:v.value,children:v.children||[],allChild:[...v.allChild],checkedChild:checkedChild})
+      arr.push(v.key||v.id);
+      arr2.push({id:v.key||v.id,name:v.value||v.name,children:v.children||[],allChild:[...v.allChild],checkedChild:checkedChild})
     });
     console.log(arr,arr2)
     this.setState({
@@ -379,8 +380,33 @@ class App extends React.Component {
       editAgentBrandObjArr:arr2
     })
   };
-  editHandleCancel = ()=>{this.setState({editVisible:false})};
-  editHandleOk = ()=>{this.setState({editVisible:false})};
+  editHandleCancel = ()=>{
+    this.allBrandData = JSON.parse(sessionStorage.getItem('allBrandData')).list;
+    this.setState({editVisible:false})
+  };
+  editHandleOk = ()=>{
+    this.allBrandData = JSON.parse(sessionStorage.getItem('allBrandData')).list;
+    let {editAgentBrandObjArr,editDataId,editDataName,editDataCity,editDataAddress} = this.state;
+    let data = {
+      id: editDataId,
+      name: editDataName,
+      city: editDataCity[0],
+      region: editDataCity[1],
+      address: editDataAddress,
+      brandModelVoList:editAgentBrandObjArr
+    };
+    console.log(data)
+    editSecondAgent(data).then(res=>{
+      if(res.retCode === '0000'){
+        this.setState({editVisible:false})
+        notification.success({
+          description: "提示",
+          message:'数据保存成功',
+        });
+        this.reqTableList(this.data)
+      }
+    })
+  };
 
 
   onRef = (ref) => {
@@ -462,8 +488,8 @@ class App extends React.Component {
     console.log(a,b,c);
     let {editAgentBrandObjArr,editDataBrand} = this.state;
     editAgentBrandObjArr.splice(b,1);
-    editDataBrand.splice(b,1);
-    console.log(editAgentBrandObjArr);
+    // editDataBrand.splice(b,1);
+    console.log(editDataBrand,editAgentBrandObjArr);
     this.setState({
       agentBrand:editDataBrand,
       agentBrandObjArr:editAgentBrandObjArr
@@ -528,6 +554,7 @@ class App extends React.Component {
         if(res&&res.data){
           let {selectChildren} = this.state;
           this.allBrandData = res.data;
+          sessionStorage.setItem("allBrandData",JSON.stringify({list:res.data}));
           let list = res.data;
           list.forEach((v,k)=>{
             selectChildren.push(<Option key={v.id} children={v.children}>{v.name}</Option>);

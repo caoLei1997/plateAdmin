@@ -47,3 +47,10 @@ export async function getSecondAgentBrand(data) {
     method: 'GET',
   });
 }
+
+export async function editSecondAgent(data) {
+  return request(`/agent/v1.1/RelAgentOutletsBrand/updateSecondAgent`, {
+    method: 'POST',
+    data
+  });
+}
