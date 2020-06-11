@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './add.less';
-import { Modal, Button, Table ,Input,Select,Cascader ,Tag ,Collapse ,Checkbox, Row, Col } from 'antd';
+import { Modal, Button, Table ,Input,Select,Cascader ,Tag ,Collapse ,Checkbox, Row, Col ,notification} from 'antd';
 const { Option } = Select;
 const { Panel } = Collapse;
 const children = [];
@@ -19,8 +19,7 @@ class App extends React.Component {
         this.state = {
           visible: false,
           dataSource:[
-            {agentName: '胡彦斌', city: 'xianshi', address: '西湖区湖底公园1号',agentBrand:'niu',},
-            {agentName: '胡彦祖', city: 'xianshi', address: '西湖区湖底公园1号',agentBrand:'aima',},
+            {key:1,agentName: '胡彦斌', city: 'xianshi', address: '西湖区湖底公园1号',agentBrand:'niu',},
           ],
           columns: [
             {title: '经销商名称', dataIndex: 'agentName', key: 'agentName',width: 100,},
@@ -48,10 +47,10 @@ class App extends React.Component {
 
     componentDidMount() {
       this.props.onRef(this);
-
-      for (let i = 10; i < 36; i++) {
-        children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-      }
+      this.allBrandData = JSON.parse(sessionStorage.getItem('allBrandData')).list;
+      this.allBrandData.forEach((v,k)=>{
+        children.push(<Option key={v.id}>{v.name}</Option>);
+      })
     }
 
     componentWillUnmount() {
@@ -73,16 +72,26 @@ class App extends React.Component {
     console.log(value2);
     let arr =[];
     let arr2 = [];
-    let ppArr = [1,23,121,384132,1,31,431,12,3,999];
     let {agentBrand , agentBrandObjArr} = this.state;
+    let brandData = JSON.parse(sessionStorage.getItem('allBrandData')).list;
 
     value2.forEach((v,k)=>{
-      if(agentBrand.indexOf(v.value) !== -1){
-        v.value = agentBrand[agentBrand.indexOf(v.value)];
-        v.child = agentBrandObjArr[agentBrand.indexOf(v.value)].child
-      }
-        arr.push(v.value);
-        arr2.push({value:v.value,child:v.child||[],allChild:[...ppArr]})
+      // v.name = v.children;
+      if(!v.id){v.id = v.value}
+      if(!v.name){v.name = v.children}
+      brandData.forEach(i=>{
+        if(v.value === i.id){
+          v.allChild = i.children;
+        }
+      });
+      agentBrandObjArr.forEach(b=>{
+        if(v.value === b.id ){
+            v.checkChildName = b.checkChildName;
+            v.checkChildId = b.checkChildId;
+        }
+      });
+        arr.push(v.id);
+        arr2.push({id:v.id,name:v.name,checkChildName:v.checkChildName||[],checkChildId:v.checkChildId||[],allChild:v.allChild})
     });
 
     this.setState({
@@ -165,9 +174,9 @@ class App extends React.Component {
           this.state.agentBrandObjArr.map((v,k)=>{
             return <Panel size='small' header={
               <div>
-                <Tag size='small' color="blue" key={k}>{v.value}</Tag>
+                <Tag size='small' color="blue" key={k}>{v.name}</Tag>
                 {
-                  v.child.map((i,j)=>{
+                  v.checkChildName.map((i,j)=>{
                     return <Tag key={j}>{i}</Tag>
                   })
                 }
@@ -177,12 +186,12 @@ class App extends React.Component {
               {/*<Tag closable onClose={this.deleteBrandClass}>*/}
               {/*  Tag 2*/}
               {/*</Tag>*/}
-              <Checkbox.Group style={{ width: '100%' }} onChange={this.checkboxChange}>
+              <Checkbox.Group value={v.checkChildId&&v.checkChildId} style={{ width: '100%' }} onChange={this.checkboxChange}>
                 <Row>
                   {
                     v.allChild.map((a,b)=>{
-                     return <Col span={8} key={b}>
-                        <Checkbox value={a} key={b}>{a}</Checkbox>
+                     return <Col span={8} key={a.id}>
+                        <Checkbox value={a.id} key={a.id}>{a.name}</Checkbox>
                       </Col>
                     })
                   }
@@ -199,7 +208,7 @@ class App extends React.Component {
     let {agentBrandObjArr,agentBrand} = this.state;
     agentBrandObjArr.splice(b,1);
     agentBrand.splice(b,1);
-    console.log(agentBrand);
+    console.log(agentBrandObjArr);
     this.setState({
       agentBrand:agentBrand,
       agentBrandObjArr:agentBrandObjArr
@@ -214,8 +223,20 @@ class App extends React.Component {
   };
   checkboxChange = (checkedValues)=> {
     console.log('checked = ', checkedValues);
+    console.log('checked = ', this.collapseIndex);
     let arr = this.state.agentBrandObjArr;
-    arr[this.collapseIndex].child=[...checkedValues];
+    checkedValues.forEach(v=>{
+      arr[this.collapseIndex].allChild.forEach(a=>{
+        if(a.id === v){
+          v = a;
+        }
+      });
+      if( arr[this.collapseIndex].checkChildId.indexOf(v.id) === -1){
+        arr[this.collapseIndex].checkChildName.push(v.name);
+        arr[this.collapseIndex].checkChildId.push(v.id);
+      }
+    });
+    console.log(arr)
     this.setState({
       agentBrandObjArr:arr
     })
@@ -223,7 +244,6 @@ class App extends React.Component {
   deleteBrandClass = (e)=> {
     console.log(e);
   };
-
   addAgentData = ()=>{
     if(!this.state.agentName){alert('请输入经销商名称');return}
     if(!this.state.dropdownValue.join('')){alert('请选择市区');return}
@@ -231,17 +251,26 @@ class App extends React.Component {
     if(this.state.agentBrandObjArr.length === 0){alert('请选择品牌');return}
     // dataSource
     let str = '';
+    let submitStatus = true;
     this.state.agentBrandObjArr.forEach(v=>{
-      str+=`${v.title}：`;
-      v.child.forEach((i,j)=>{
-        if(j!==v.child.length-1){
+      if(v.checkChildName.length === 0){
+        submitStatus = false;
+        notification.error({
+          description: "提示",
+          message:'当前'+v.name+'品牌未选择代理型号',
+        });
+        return false;
+      }
+      str+=`${v.name}：`;
+      v.checkChildName.forEach((i,j)=>{
+        if(j!==v.checkChildName.length-1){
           str+=i+'，';
         }else{
           str+=i+'；\n';
         }
       });
     });
-
+    if(!submitStatus){return false}
     let obj = {
       key:'3',
       agentName: this.state.agentName,
