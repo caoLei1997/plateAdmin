@@ -4,6 +4,9 @@ import { Modal, Button, Table ,Input,Select,Cascader ,Tag ,Collapse ,Checkbox, R
 const { Option } = Select;
 const { Panel } = Collapse;
 const children = [];
+import {addSecondAgent} from "../../../../services/agentManage"
+
+
 import {
   HomeOutlined,
   SettingFilled,
@@ -18,12 +21,10 @@ class App extends React.Component {
         this.collapseIndex = null;
         this.state = {
           visible: false,
-          dataSource:[
-            {key:1,agentName: '胡彦斌', city: 'xianshi', address: '西湖区湖底公园1号',agentBrand:'niu',},
-          ],
+          dataSource:[],
           columns: [
             {title: '经销商名称', dataIndex: 'agentName', key: 'agentName',width: 100,},
-            {title: '市区', dataIndex: 'city', key: 'city',width: 100,},
+            {title: '市区', dataIndex: 'cityRegion', key: 'cityRegion',width: 100,},
             {title: '地址', dataIndex: 'address', key: 'address',width: 200,},
             {title: '销售品牌型号', dataIndex: 'agentBrand', key: 'agentBrand',width: 200,},
             {
@@ -46,6 +47,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+      console.log(this.props)
       this.props.onRef(this);
       this.allBrandData = JSON.parse(sessionStorage.getItem('allBrandData')).list;
       this.allBrandData.forEach((v,k)=>{
@@ -101,9 +103,31 @@ class App extends React.Component {
   };
 
   handleOk = e => {
-    console.log(this.state.dataSource);
-    this.initAddPopup()
-
+    let {dataSource} = this.state;
+    let data = [];
+    dataSource.forEach((v,k)=>{
+      let obj = {
+        name:v.name,
+        city:v.city,
+        region:v.region,
+        address:v.address,
+        brandModelVoList:[]
+      };
+      v.brandModelVoList.forEach((i,j)=>{
+        obj.brandModelVoList.push({
+          id:i.id,
+          name:i.name,
+          children:i.children,
+        })
+      });
+      data.push(obj)
+    });
+    addSecondAgent({list:data}).then(res=>{
+      if(res.retCode === '0000'){
+        this.initAddPopup();
+        this.props.onRefresh(this.props.tableReqData)
+      }
+    })
   };
 
   handleCancel = e => {
@@ -261,6 +285,7 @@ class App extends React.Component {
         });
         return false;
       }
+      v.children = v.allChild;
       str+=`${v.name}：`;
       v.checkChildName.forEach((i,j)=>{
         if(j!==v.checkChildName.length-1){
@@ -274,9 +299,14 @@ class App extends React.Component {
     let obj = {
       key:'3',
       agentName: this.state.agentName,
-      city: this.state.dropdownValue.join(''),
+      cityRegion: this.state.dropdownValue.join(''),
       address: this.state.agentAddress,
-      agentBrand: str
+      agentBrand: str,
+      // submitData
+      name:this.state.agentName,
+      city:this.state.dropdownValue[0],
+      region:this.state.dropdownValue[1],
+      brandModelVoList:this.state.agentBrandObjArr
     };
     let listData = this.state.dataSource;
     listData.push(obj);

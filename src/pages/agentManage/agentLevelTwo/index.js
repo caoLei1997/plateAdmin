@@ -256,7 +256,7 @@ class App extends React.Component {
             }} columns={tableColumns}/>
           </div>
           {/*添加弹框*/}
-          <Add onRef={this.onRef} cityDropdownData={cityDropdownData}></Add>
+          <Add onRef={this.onRef} tableReqData={this.data} onRefresh={this.reqTableList} cityDropdownData={cityDropdownData}></Add>
           {/*编辑弹框*/}
           <Modal
             title="编辑经销商"
