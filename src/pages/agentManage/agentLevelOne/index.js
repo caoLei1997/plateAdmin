@@ -267,7 +267,7 @@ class App extends React.Component {
           v.cityRegion = v.city + v.region;
           v.do = <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>;
           v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
-          v.personNum = <a href="javascript:;" key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
+          v.personNum = <a href={`/#/personal/${v.agentOutletsId}`} key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
           v.brand = [];
           v.brandList.forEach((i,j)=>{
             v.brand.push( i.brandName + '\n')

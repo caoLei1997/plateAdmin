@@ -128,7 +128,7 @@ class App extends React.Component {
               {v.status==='1'?<a href="javascript:;" onClick={this.doUse.bind('',v,k,this)}>启用</a>:<a href="javascript:;" onClick={this.doUse.bind('',v,k,this)}>停用</a>}
             </div>;
             v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
-            v.personNum = <a href="javascript:;" key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
+            v.personNum = <a href={`/#/personal/${v.agentOutletsId}`} key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
             v.vityRegion = v.city+v.region;
 
             v.statusTxt = v.status === '0' ? <Tag color="orange">正常</Tag> : <Tag color="red">停用</Tag>;
