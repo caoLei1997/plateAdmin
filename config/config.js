@@ -9,18 +9,20 @@ const { winPath } = utils; // preview.pro.ant.design only do not use in your pro
 const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION, REACT_APP_ENV, GA_KEY } = process.env;
 export default defineConfig({
   hash: true,
-  history: { type: 'hash' },
+  history: {
+    type: 'hash',
+  },
   runtimePublicPath: true,
   devServer: {
-    prot: 4200
+    prot: 4200,
   },
   publicPath: '/plateSale/',
   outputPath: '/plateSale',
   antd: {},
   analytics: GA_KEY
     ? {
-      ga: GA_KEY,
-    }
+        ga: GA_KEY,
+      }
     : false,
   dva: {
     hmr: true,
@@ -30,7 +32,7 @@ export default defineConfig({
     antd: true,
     title: false,
     baseNavigator: true,
-    baseSeparator: '-'
+    baseSeparator: '-',
   },
   dynamicImport: {
     loading: '@/components/PageLoading/index',
@@ -58,11 +60,17 @@ export default defineConfig({
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
           routes: [
             {
               path: '/',
               redirect: '/catalog',
+            },
+            {
+              name: '人员管理',
+              icon: 'smile',
+              path: '/personal/:index?',
+              component: './personalManage/$index$.jsx',
+              authority: ['admin'],
             },
             {
               name: '目录管理',
@@ -75,7 +83,7 @@ export default defineConfig({
               icon: 'smile',
               path: '/carmanage/details/:id',
               component: './carManage/details',
-              hideInMenu: true
+              hideInMenu: true,
             },
             {
               name: '车辆管理',
@@ -88,8 +96,9 @@ export default defineConfig({
               icon: 'smile',
               path: '/carManageNew',
               component: './carManageNew',
-              hideInMenu: true
-            }, {
+              hideInMenu: true,
+            },
+            {
               name: '经销商管理',
               icon: 'smile',
               path: '/agentManage',
@@ -97,7 +106,7 @@ export default defineConfig({
             },
             {
               component: './404',
-            }
+            },
           ],
         },
         {

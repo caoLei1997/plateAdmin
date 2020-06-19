@@ -1,9 +1,16 @@
 import { LOCALUSERKEY, SUPER_UNIQUE } from '@/globalConstant';
 import { reloadAuthorized } from './Authorized'; // use localStorage to store the authority info, which might be sent from server in actual project.
 
+function getStorageAuthority() {
+  if (sessionStorage.getItem(LOCALUSERKEY)) {
+    return JSON.parse(sessionStorage.getItem(LOCALUSERKEY));
+  }
+  return false;
+}
+
 export function getAuthority(str) {
   const authorityString =
-    typeof str === 'undefined' && localStorage ? localStorage.getItem('antd-pro-authority') : str; // authorityString could be admin, "admin", ["admin"]
+    typeof str === 'undefined' && getStorageAuthority() ? getStorageAuthority()['antd-pro-authority'] : str; // authorityString could be admin, "admin", ["admin"]
 
   let authority;
 

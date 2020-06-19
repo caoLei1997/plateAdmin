@@ -23,6 +23,11 @@ export const PLATE_CLASS = {
     OTHER: '02'
 }
 
+export const PERSONAL_STATUS = {
+    OPEN: '0',
+    CLOSE: '1'
+}
+
 export const PLATE_TYPE = {
     TEMPORARY: 0,
     FORMAL: 1

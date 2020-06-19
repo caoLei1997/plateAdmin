@@ -32,7 +32,9 @@ ol {
 .text-center{
   text-align: center !important;
 }
-
+.text-right{
+  text-align: right !important;
+}
 .inline {
   &::before {
     content: '';
@@ -66,6 +68,7 @@ ol {
 .font-blue {
   color: #1890ff !important;
 }
+
 .font-size-12{
   font-size: 12px !important;
 }
@@ -173,6 +176,14 @@ ol {
 }
 .ant-pro-basicLayout-content .ant-pro-page-header-wrap{
   margin: 0 !important
+}
+
+
+.personal-edit-form{
+  .ant-form-item-label > label{
+    width: 84px;
+    justify-content: flex-end;
+  }
 }
 
 // 兼容IE11

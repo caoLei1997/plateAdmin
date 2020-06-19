@@ -1,4 +1,4 @@
-import { EXAMINE, STANDARDS, CAR_USE, PLATE_CLASS, PLATE_TYPE } from './globalConstant';
+import { EXAMINE, STANDARDS, CAR_USE, PLATE_CLASS, PLATE_TYPE, PERSONAL_STATUS } from './globalConstant';
 
 export const examineArr = [
     { key: EXAMINE.All, val: '全部', color: '' },
@@ -30,11 +30,16 @@ export const plateClassArr = [
     { key: PLATE_CLASS.OTHER, val: '其他电动自行车号牌' },
 ]
 
+export const personalStatus = [
+    { key: PERSONAL_STATUS.OPEN, val: '正常' }, 
+    { key: PERSONAL_STATUS.CLOSE, val: '停用' },
+]
 
 export default {
     examineArr,
     standardsArr,
     carUseArr,
     plateClassArr,
-    plateTypeArr
+    plateTypeArr,
+    personalStatus
 }

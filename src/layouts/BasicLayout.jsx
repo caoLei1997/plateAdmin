@@ -10,6 +10,7 @@ import { Result, Button } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { getAuthorityFromRouter } from '@/utils/utils';
+import {SUPER_UNIQUE} from '@/globalConstant'
 import styles from './BasicLayout.less';
 
 const noMatch = (
@@ -24,15 +25,7 @@ const noMatch = (
     }
   />
 );
-/**
- * use Authorized check all menu item
- */
 
-const menuDataRender = menuList =>
-  menuList.map(item => {
-    const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
-    return Authorized.check(item.authority, localItem, null);
-  });
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -49,6 +42,7 @@ const BasicLayout = props => {
     location = {
       pathname: '/',
     },
+    loginState
   } = props;
   /**
    * constructor
@@ -64,6 +58,16 @@ const BasicLayout = props => {
   /**
    * init variables
    */
+  /**
+   * use Authorized check all menu item
+   */
+
+  const menuDataRender = menuList =>
+    menuList.map(item => {
+      const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
+      console.log(localItem);
+      return Authorized.check(item.authority, localItem, null);
+    });
 
   const handleMenuCollapse = payload => {
     if (dispatch) {
@@ -105,8 +109,8 @@ const BasicLayout = props => {
         return first ? (
           <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
         ) : (
-          <span>{route.breadcrumbName}</span>
-        );
+            <span>{route.breadcrumbName}</span>
+          );
       }}
       footerRender={() => defaultFooterDom}
       menuDataRender={menuDataRender}
@@ -121,7 +125,8 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ global, settings }) => ({
+export default connect(({ login,global, settings }) => ({
   collapsed: global.collapsed,
   settings,
+  loginState: login
 }))(BasicLayout);

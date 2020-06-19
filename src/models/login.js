@@ -40,8 +40,10 @@ const Model = {
             window.location.href = '/';
             return;
           }
+        } else if (response.data.id === SUPER_UNIQUE) {
+          history.replace('/personal');
+          return;
         }
-
         history.replace(redirect || '/');
       } else {
         onFail();
@@ -60,7 +62,8 @@ const Model = {
       const userInfo = {
         ...payload.data,
         phone: payload.data.account,
-        firstId: payload.data.id === SUPER_UNIQUE ? '' : payload.data.id
+        firstId: payload.data.id === SUPER_UNIQUE ? '' : payload.data.id,
+        'antd-pro-authority': payload.data.id === SUPER_UNIQUE ? 'admin' : ''
       };
       setAuthority(userInfo);
 
