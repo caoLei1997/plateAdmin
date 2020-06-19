@@ -1,27 +1,21 @@
 import React from 'react';
 import style from './add.less';
-import { Modal, Button, Table ,Input,Select,Cascader  } from 'antd';
+import { Modal, Button, Table ,Input,Select,Cascader,notification  } from 'antd';
 const { Option } = Select;
 const children = [];
-import {
-  HomeOutlined,
-  SettingFilled,
-  SmileOutlined,
-  CloseOutlined,
-  DeleteOutlined,
-} from '@ant-design/icons';
+import {CloseOutlined} from '@ant-design/icons';
+import {requestBrand,addFirstAgent} from "../../../../services/agentManage"
 
 class App extends React.Component {
     constructor(props) {
         super(props);
+        this.brandsList = [];
+        this.key = 0;
         this.state = {
           visible: false,
-          dataSource:[
-            {agentName: '胡彦斌', city: 'xianshi', address: '西湖区湖底公园1号',agentBrand:'niu',},
-            {agentName: '胡彦祖', city: 'xianshi', address: '西湖区湖底公园1号',agentBrand:'aima',},
-          ],
+          dataSource:[],
           columns: [
-            {title: '经销商名称', dataIndex: 'agentName', key: 'agentName',width: 100,},
+            {title: '经销商名称', dataIndex: 'name', key: 'name',width: 100,},
             {title: '市区', dataIndex: 'city', key: 'city',width: 100,},
             {title: '地址', dataIndex: 'address', key: 'address',width: 200,},
             {title: '代理品牌', dataIndex: 'agentBrand', key: 'agentBrand',width: 200,},
@@ -34,34 +28,21 @@ class App extends React.Component {
             },
           ],
 
-          dropdownData:[
-            {
-              value: 'zhejiang',
-              label: 'Zhejiang',
-              children: [
-                {
-                  value: 'hangzhou',
-                  label: 'Hangzhou',}]
-            },
-            {
-              value: 'jiangsu',
-              label: 'Jiangsu',
-            },
-          ],
+          dropdownData:this.props.cityRegion,
           dropdownValue:[],
 
           agentName:'',
           agentAddress:'',
           agentBrand:[],
+          brandChildren:[],
+          brandIds:[],
         };
     }
 
     componentDidMount() {
+      console.log(this.props);
       this.props.onRef(this);
-
-      for (let i = 10; i < 36; i++) {
-        children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-      }
+      this.reqBrand()
     }
 
     componentWillUnmount() {
@@ -81,18 +62,28 @@ class App extends React.Component {
   handleChange = (value1,value2)=> {
     console.log(value2);
     let arr = [];
+    let arr2 = [];
     value2.forEach(v=>{
-      arr.push(v.value)
+      arr.push(v.children)
+      arr2.push(v.value)
     });
     this.setState({
-      agentBrand:arr
+      agentBrand:arr,
+      brandIds:arr2
     })
   };
 
   handleOk = e => {
-    console.log(this.state.dataSource);
-    this.initAddPopup()
-
+    addFirstAgent({list:this.state.dataSource}).then(res=>{
+      console.log(res);
+      if(res&&res.data){
+        notification.success({
+          description: "提示",
+          message:"添加成功",
+        });
+        this.initAddPopup()
+      }
+    });
   };
 
   handleCancel = e => {
@@ -104,14 +95,15 @@ class App extends React.Component {
       visible: false,
       dataSource:[],
       agentName:'',
-      dropdownValue:[],
+      // dropdownValue:[],
       agentAddress:'',
       agentBrand:[],
+      brandIds:[],
     });
   };
 
     render() {
-      let {dataSource,columns,dropdownData,agentName,agentAddress,dropdownValue,agentBrand} = this.state;
+      let {dataSource,columns,dropdownData,agentName,agentAddress,dropdownValue,agentBrand,brandChildren,brandIds} = this.state;
         return (
           <div>
             <Modal
@@ -122,7 +114,7 @@ class App extends React.Component {
               maskClosable={false}
               width="60%"
             >
-              <Table scroll={{ x: 600 }} dataSource={this.state.dataSource} columns={columns} pagination={false} />
+              <Table scroll={{ x: 600 }} dataSource={dataSource} columns={columns} pagination={false} />
               <div>
                 <div className={style.addInpInLine}>
                   <Input className={style.addInp} value={agentName} onChange={this.agentNameInp} placeholder="经销商名称" />
@@ -137,45 +129,66 @@ class App extends React.Component {
                 </div>
                 <Input className={style.addInpAddress} value={agentAddress} onChange={this.agentAddressInp} placeholder="经销商地址" />
                 <Select
-                  mode="multiple"
-                  style={{ width: '100%' }}
-                  placeholder="选择代理品牌"
-                  onChange={this.handleChange}
-                  className={style.addInpAgentBrand}
-                  value={agentBrand}
-                >
-                  {children}
-                </Select>
+                    mode="multiple"
+                    style={{ width: '100%' }}
+                    placeholder="选择代理品牌"
+                    onChange={this.handleChange}
+                    className={style.addInpAgentBrand}
+                    value={brandIds}
+                  >
+                    {brandChildren}
+                  </Select>
               </div>
-              <Button className={style.addSubBtn} onClick={this.addAgentData} type="primary" block color='#ccc'>+ 添加</Button>
+              <Button className={style.addSubBtn} onClick={this.checkAddData} type="primary" block color='#ccc'>+ 添加</Button>
             </Modal>
           </div>
         );
     }
-  addAgentData = ()=>{
+  checkAddData = ()=>{
     if(!this.state.agentName){alert('请输入经销商名称');return}
     if(!this.state.dropdownValue.join('')){alert('请选择市区');return}
     if(!this.state.agentAddress){alert('请输入地址');return}
     if(this.state.agentBrand.length === 0){alert('请选择品牌');return}
-    // dataSource
-    let obj = {
-      key:'3',
-      agentName: this.state.agentName,
-      city: this.state.dropdownValue.join(''),
+    this.updateAddList()
+  };
+  updateAddList = ()=>{
+    let data = {
+      key: this.key,
+      name: this.state.agentName,
+      city: this.state.dropdownValue[0],
+      region: this.state.dropdownValue[1],
       address: this.state.agentAddress,
-      agentBrand: this.state.agentBrand.join(',')
+      agentBrand: this.state.agentBrand,
+      brandIds:this.state.brandIds
     };
     let listData = this.state.dataSource;
-    listData.push(obj);
-    console.log(listData);
+    listData.push(data);
     this.setState({
       dataSource:[...listData],
       agentName:'',
       dropdownValue:[],
       agentAddress:'',
       agentBrand:[],
-    })
+      brandIds:[],
+    },this.brandsListSet);
+    this.key++;
   };
+  brandsListSet = ()=>{
+    let {dataSource} = this.state;
+    let arr = [];
+    dataSource.forEach((v,k)=>{
+      arr = arr.concat(v.brandIds)
+    });
+    let brandsListArr = []
+    this.brandsList.forEach((v,k)=>{
+      if(arr.indexOf(v.id) !== -1){
+        v.agented = 2
+      }
+      brandsListArr.push(v)
+    });
+    this.selectChildrenRender(brandsListArr)
+  };
+
   agentNameInp = (e)=>{
     this.setState({
       agentName:e.target.value
@@ -198,10 +211,39 @@ class App extends React.Component {
     return label[label.length - 1];
   }
   dropDownChange = (a)=>{
+    console.log(a);
     this.setState({
       dropdownValue:a
     })
   };
+
+  reqBrand = ()=>{
+    requestBrand().then(res=>{
+      console.log(res);
+      if(res&&res.data){
+        this.brandsList = res.data;
+        this.selectChildrenRender(res.data)
+      }else{
+        alert('品牌信息获取失败')
+      }
+    })
+  };
+  selectChildrenRender = (data)=>{
+    console.log(data)
+    let brandChildren = [];
+    data.forEach((v,k)=>{
+      let opt ;
+      if(v.agented === 2){
+        opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
+      }else{
+        opt = <Option key={v.id} disabled={false}>{v.brandName}</Option>
+      }
+      brandChildren.push(opt);
+    });
+    this.setState({
+      brandChildren:brandChildren
+    });
+  }
 }
 
 export default App;

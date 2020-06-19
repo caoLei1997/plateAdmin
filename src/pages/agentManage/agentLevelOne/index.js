@@ -1,6 +1,7 @@
 import React from 'react';
 import style from './index.less';
-import { Form, Input, Button, Cascader,Table,Modal,Select} from 'antd';
+import { Form, Input, Button, Cascader,Table,Modal,Select,notification} from 'antd';
+import {requestAgentList,requestCityRegion,requestBrand,editFirstAgentSave} from "../../../services/agentManage"
 import Add from "./add/add"
 const { Option } = Select;
 
@@ -8,59 +9,64 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.selectChildren = [];
-        this.state={
-          dropdownData:[
-            {
-              value: 'zhejiang',
-              label: 'Zhejiang',
-              children: [
-                {
-                  value: 'hangzhou',
-                  label: 'Hangzhou',}]
-            },
-            {
-              value: 'jiangsu',
-              label: 'Jiangsu',
-            },
-          ],
+        this.brandsList = [];
+        this.agentTableListParams = {};
+      this.state={
+          dropdownData:[],
           dropdownValue:'',
           tableDataSource: [],
           tableColumns:[
-            {title: '经销商ID', dataIndex: 'id', key: 'id',},
-            {title: '经销商名称', dataIndex: 'name', key: 'name',},
+            {title: '经销商ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId',},
+            {title: '经销商名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName',},
             {title: '级别', dataIndex: 'level', key: 'level',},
-            {title: '市区', dataIndex: 'city', key: 'city',},
-            {title: '地址', dataIndex: 'address', key: 'address',},
+            {title: '市区', dataIndex: 'cityRegion', key: 'cityRegion',},
+            {title: '地址', width:160,dataIndex: 'address', key: 'address',},
             {title: '代理品牌', dataIndex: 'brand', key: 'brand',},
             {title: '人员数', dataIndex: 'personNum', key: 'personNum',},
             {title: '操作', dataIndex: 'do', key: 'do',},
           ],
-
+          selectChildren:[],
           editVisible:false,
           editDataName:'',
           editDataCity:[],
           editDataAddress:'',
-          editDataBrand:[],
+          editDataBrandId:[],
+          agentName:'',
+          agentBrand:'',
+        // paginationSeting
+          total:null,
+          pageSize:10,
+          pageIndex:0,
+          onChange:(a,b)=>{
+            console.log(a,b);
+            let {pageSize,dropdownValue} = this.state;
+            this.agentTableListParams = {
+              pageIndex: a - 1,
+              pageSize: pageSize,
+              level: 11,
+              brandName:this.state.agentBrand,
+              agentOutletsName: this.state.agentName,
+              city: dropdownValue&&dropdownValue[0],
+              region: dropdownValue&&dropdownValue[1]
+            };
+            this.tableListReq(this.agentTableListParams)
+          }
+
         }
     }
 
     componentDidMount() {
-      let datas =  [
-        {key: '1', name: '胡彦斌',level:1,city:['西安市'], id: 32, address: '西湖区湖底公园1号',brand:['a10'],personNum:5,do:<a href="javascript:;" onClick={this.editData.bind("2",this)}>编辑</a>},
-        {key: '2', name: '胡彦祖',level:1,city:['西安市'], id: 42, address: '西湖区湖底公园1号',brand:['a10'],personNum:5,do:<a href="javascript:;" onClick={this.editData.bind("2",this)}>编辑</a>},
-      ];
-      datas.forEach((v,k)=>{
-        v.do = <a href="javascript:;" onClick={this.editData.bind('',v,k,this)}>编辑</a>;
-        v.personNum = <a href="javascript:;" onClick={this.personNumClick.bind('',v,k,this)}>{v.personNum}</a>;
-      });
-      this.setState({
-        tableDataSource:datas
-      })
-
-
-      for (let i = 10; i < 36; i++) {
-        this.selectChildren.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-      }
+      this.agentTableListParams = {
+        pageIndex: 0,
+        pageSize: this.state.pageSize,
+        level: 11,
+        brandName:'',
+        agentOutletsName: "",
+        city: "",
+        region: ""
+      };
+      this.tableListReq(this.agentTableListParams);
+      this.reqCityRegion();
     }
 
     componentWillUnmount() {
@@ -69,13 +75,27 @@ class App extends React.Component {
 
 
   editData = (a,b) =>{
-    console.log(a)
-      this.setState({
+    console.log(a,b);
+    let brandId = [];
+    let brandsList = this.brandsList;
+    a.brandList.forEach((v,k)=>{
+      brandId.push(v.id);
+      brandsList.forEach((i,j)=>{
+        if(v.id === i.id){
+          i.agented = 1
+        }
+      })
+    });
+    console.log(brandsList);
+    this.selectChildrenRender(brandsList);
+    this.setState({
         editVisible:true,
-        editDataName:a.name,
-        editDataCity:a.city,
+        editDataName:a.agentOutletsName,
+        editDataCity:[a.city,a.region],
         editDataAddress:a.address,
-        editDataBrand:a.brand,
+        editDataBrandId:brandId,
+        editDataId:a.agentOutletsId,
+        selectChildren:this.selectChildren
       })
   };
   personNumClick(a,b){
@@ -90,12 +110,12 @@ class App extends React.Component {
     console.log('Success:', values);
   };
     render() {
-      let {dropdownData,tableDataSource,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrand} = this.state
+      let {dropdownData,tableDataSource,paginationSeting,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrandId,total,pageSize,pageIndex,onChange,selectChildren} = this.state
 
         return (
         <div className={style.agentLevelOneMain}>
           <div className={style.searchBox}>
-            <Input onChange={this.inpChange1} className={style.inp} placeholder='姓名' size='small' />
+            <Input onChange={this.inpChange1} className={style.inp} placeholder='经销商名称' size='small' />
 
             <Input onChange={this.inpChange2} className={style.inp} placeholder='品牌名称' size='small' />
 
@@ -108,7 +128,7 @@ class App extends React.Component {
               placeholder='市区'
             />
 
-            <Button className={style.sub} onClick={this.submitData} type="primary" htmlType="submit">
+            <Button className={style.sub} onClick={this.submitSearchData} type="primary" htmlType="submit">
               查询
             </Button>
           </div>
@@ -118,10 +138,15 @@ class App extends React.Component {
           </div>
 
           <div className={style.tableList}>
-            <Table dataSource={tableDataSource} columns={tableColumns}/>
+            <Table dataSource={tableDataSource} pagination={{
+                total:total,
+                pageSize:pageSize,
+                pageIndex:pageIndex,
+                onChange:onChange
+              }} columns={tableColumns}/>
           </div>
           {/*添加弹框*/}
-          <Add onRef={this.onRef}></Add>
+          {dropdownData.length>0&&<Add onRef={this.onRef} brandChildren={selectChildren} cityRegion={dropdownData}></Add>}
           {/*编辑弹框*/}
           <Modal
             title="编辑经销商"
@@ -152,9 +177,9 @@ class App extends React.Component {
                 style={{ width: '100%' }}
                 placeholder="选择代理品牌"
                 onChange={this.editHandleChange}
-                value={editDataBrand}
+                value={editDataBrandId}
               >
-                {this.selectChildren}
+                {selectChildren}
               </Select>
             </div>
           </Modal>
@@ -165,12 +190,35 @@ class App extends React.Component {
   editDropDownChange = (e)=>{this.setState({editDataCity:e})};
   editAgentAddressInp = (e)=>{this.setState({editDataAddress:e.target.value})};
   editHandleChange = (v1,v2)=>{
+    console.log(v1,v2);
+    // sendDataBrand
     let arr = [];
-    v2.forEach(v=>{arr.push(v.value)});
-    this.setState({editDataBrand:arr})
+    let arr1 = [];
+    v2.forEach(v=>{
+      arr.push(v.value)
+    });
+    this.setState({
+      editDataBrandId:arr,
+    })
   };
   editHandleCancel = ()=>{this.setState({editVisible:false})};
-  editHandleOk = ()=>{this.setState({editVisible:false})};
+  editHandleOk = ()=>{
+      let {editDataName,editDataCity,editDataAddress,editDataBrandId,editDataId} = this.state;
+    editFirstAgentSave({
+        id: editDataId,
+        name: editDataName,
+        city: editDataCity[0],
+        region: editDataCity[1],
+        address: editDataAddress,
+        brandIds:editDataBrandId,
+      }).then(res=>{
+      this.setState({
+        editVisible:false
+      });
+      this.tableListReq(this.agentTableListParams)
+    });
+
+  };
 
 
   onRef = (ref) => {
@@ -201,9 +249,87 @@ class App extends React.Component {
     })
   };
 
-  submitData = ()=>{
-     console.log(this.state)
+  submitSearchData = ()=>{
+    let {agentName,agentBrand,dropdownValue} = this.state;
+    this.agentTableListParams.brandName = agentBrand;
+    this.agentTableListParams.agentOutletsName = agentName;
+    this.agentTableListParams.city = dropdownValue&&dropdownValue[0];
+    this.agentTableListParams.region = dropdownValue&&dropdownValue[1];
+    this.agentTableListParams.pageIndex = 0;
+    this.tableListReq(this.agentTableListParams)
+  };
+
+  tableListReq = (data)=>{
+    requestAgentList(data).then(res=>{
+      if(res&&res.data&&res.data.content){
+        let list = res.data.content;
+        list.forEach((v,k)=>{
+          v.cityRegion = v.city + v.region;
+          v.do = <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>;
+          v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
+          v.personNum = <a href={`/#/personal/${v.agentOutletsId}`} key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
+          v.brand = [];
+          v.brandList.forEach((i,j)=>{
+            v.brand.push( i.brandName + '\n')
+          })
+        });
+        this.setState({
+          tableDataSource:list,
+          pageIndex:data.pageIndex,
+          total:res.data.total
+        });
+        this.reqBrand();
+      }else{
+        notification.info({
+          description: "暂无数据",
+          message:"暂无数据",
+        });
+      }
+    });
+  };
+  reqCityRegion = ()=>{
+    requestCityRegion().then(res=>{
+      console.log(res)
+      if(res&&res.data){
+        this.setState({
+          dropdownData:res.data
+        });
+        this.props.onSubmit(res.data)
+      }else{
+        notification.error({
+          description: "暂无数据",
+          message:"获取地区数据失败",
+        });
+      }
+    })
+  };
+
+  reqBrand = ()=>{
+    requestBrand().then(res=>{
+      console.log(res)
+      if(res&&res.data){
+        this.brandsList = res.data;
+        this.selectChildrenRender(this.brandsList)
+      }
+    })
+  };
+  selectChildrenRender = (data)=>{
+    this.selectChildren = [];
+    data.forEach((v,k)=>{
+      let opt ;
+      if(v.agented === 2){
+        opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
+      }else{
+        opt = <Option key={v.id} disabled={false}>{v.brandName}</Option>
+      }
+      this.selectChildren.push(opt);
+    });
+    this.setState({
+      selectChildren:this.selectChildren
+    });
+    return data
   }
+
 }
 
 export default App;
