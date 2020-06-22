@@ -4,6 +4,7 @@ import { Form, Input, Button, Cascader,Table,Modal,Select,notification} from 'an
 import {requestAgentList,requestCityRegion,requestBrand,editFirstAgentSave} from "../../../services/agentManage"
 import Add from "./add/add"
 const { Option } = Select;
+import { Link } from 'umi';
 
 class App extends React.Component {
     constructor(props) {
@@ -99,7 +100,7 @@ class App extends React.Component {
       })
   };
   personNumClick(a,b){
-    console.log(a,b)
+    console.log(a,b);
   }
 
 
@@ -267,7 +268,8 @@ class App extends React.Component {
           v.cityRegion = v.city + v.region;
           v.do = <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>;
           v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
-          v.personNum = <a href={`/#/personal/${v.agentOutletsId}`} key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
+          // v.personNum = <a href='javascript:;' key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
+          v.personNum = <Link to={"/personal/"+v.agentOutletsId} key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</Link>;
           v.brand = [];
           v.brandList.forEach((i,j)=>{
             v.brand.push( i.brandName + '\n')
