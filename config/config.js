@@ -103,6 +103,7 @@ export default defineConfig({
               icon: 'smile',
               path: '/agentManage',
               component: './agentManage',
+              authority: ['admin'],
             },
             {
               component: './404',
