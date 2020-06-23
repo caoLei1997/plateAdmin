@@ -66,6 +66,7 @@ class App extends React.Component {
         city: "",
         region: ""
       };
+      console.log(process.env.REACT_APP_ENV);
       this.tableListReq(this.agentTableListParams);
       this.reqCityRegion();
     }
