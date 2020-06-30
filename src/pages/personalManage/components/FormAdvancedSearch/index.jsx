@@ -4,8 +4,6 @@ import { Form, Row, Col, Input, Button, Select } from 'antd';
 import DealerLinkage from '@/components/DealerLinkage'
 import styles from './index.less';
 
-const { Option } = Select;
-
 const AdvancedSearchForm = ({ btnLoading, getList, children, defaultOutlets }) => {
   const [selectVal, setSelectVal] = useState({ city: null, level: '', outlets: defaultOutlets || '' });
 
@@ -50,7 +48,7 @@ const AdvancedSearchForm = ({ btnLoading, getList, children, defaultOutlets }) =
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label='手机号' name='phoneNumber'>
+              <Form.Item label='手机号' name='phone'>
                 <Input placeholder="手机号" />
               </Form.Item>
             </Col>
