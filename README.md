@@ -16,10 +16,31 @@
 #### 路由
 - /config/config.js
 
+
+#### 目录
+- ├── config 
+- &nbsp; &nbsp; └── config.js &nbsp; &nbsp;  // 路由配置等
+- ├── mock &nbsp; &nbsp; // mock数据
+- ├── plateSale  &nbsp; &nbsp; // 打包文件，在/config/config.js中修改publicPath和outputPath
+- ├── models &nbsp; &nbsp;  // 数据访问
+- ├── pages
+- &nbsp; &nbsp; └── carManage &nbsp; &nbsp; // 车辆管理
+- &nbsp; &nbsp; └── catalogManage &nbsp; &nbsp; // 目录管理
+- &nbsp; &nbsp; └── personalManage &nbsp; &nbsp; // 人员管理，正在测试......
+- &nbsp; &nbsp; └── agentManage &nbsp; &nbsp; // 经销商管理，正在测试......
+- ├── services   &nbsp; &nbsp; // 接口访问地址
+- ├── utils   
+- &nbsp; &nbsp; └── authority.js &nbsp; &nbsp; // 处理用户菜单权限
+- &nbsp; &nbsp; └── excel.js &nbsp; &nbsp; // excel导出js
+- &nbsp; &nbsp; └── request.js &nbsp; &nbsp; // 拦截器
+- ├── commonFun.js   &nbsp; &nbsp; // 公共方法
+- ├── globalConstant.js   &nbsp; &nbsp; // 
+- ├── globalData.js   &nbsp; &nbsp; // 
+
 ### 李姣姣-TODO
--    人员管理
--    登录
--    目录管理
--    车辆管理
+- [x] 人员管理
+- [x] 登录
+- [x] 目录管理
+- [x] 车辆管理
 
     
