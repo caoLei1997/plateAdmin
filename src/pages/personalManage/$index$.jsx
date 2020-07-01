@@ -15,7 +15,7 @@ const PersonalIndex = (props) => {
       payload: {
         "agentOutletsId": listParams.outlets || userInfo.firstId,
         "pageIndex": pageIndex,
-        "pageSize": pageSize,
+        "pageSize": listParams.pageSize || pageSize,
         "name": listParams.name || "",
         "phoneNumber": listParams.phone || "",
         "city": listParams.city || "",

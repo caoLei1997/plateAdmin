@@ -2,8 +2,12 @@
 
 ### 部署
 *   环境域名在 /src/utils/request.js 中区分
-*   yarn build:test  测试环境
-*   yarn build       正式环境
+*   yarn build:test  测试环境，部署方式： 
+**        1、将打包好的项目部署到gogs;
+**        2、登录jenkins,http://113.142.56.124:20051/job/PlateAdmin/
+**        3、build now成功以后测试环境更新成功
+*   yarn build       正式环境, 地址： https://electric.sxwinstar.net/plateSale/
+*  
 
 ### 项目说明
 #### 登录
