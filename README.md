@@ -2,7 +2,9 @@
 
 ### 部署
 -   环境域名在 /src/utils/request.js 中区分
--   yarn build:test  测试环境，部署方式： 
+-   yarn build:test  测试环境，
+    - 地址：http://wechat.sxeccellentdriving.com/plateSale
+    - #### 部署方式： 
     - 将打包好的项目部署到gogs，直接git提交;
     - 登录jenkins,http://113.142.56.124:20051/job/PlateAdmin/
     - build now成功以后测试环境更新成功
