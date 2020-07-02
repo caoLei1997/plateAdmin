@@ -6,7 +6,7 @@ import { connect } from 'umi';
 
 import styles from './index.less';
 
-const AddPersonal = ({ dispatch, onGetList,addLoading }) => {
+const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [formVisible, setFormVisible] = useState(false);
     const [selectVal, setSelectVal] = useState({ city: null, level: '', outlets: '' });
@@ -40,7 +40,6 @@ const AddPersonal = ({ dispatch, onGetList,addLoading }) => {
     const add = (values) => {
         if (!checkSelect(values)) return false;
         toggleShowForm(false);
-        console.log(selectVal);
         setList([...list, {
             ...values,
             agentOutletsId: values.outlets.split('-')[0],
@@ -51,7 +50,10 @@ const AddPersonal = ({ dispatch, onGetList,addLoading }) => {
     }
 
     const modalOk = () => {
-        console.log(list);
+        if (list.length === 0) {
+            message.error('请先添加人员');
+            return;
+        };
         const data = [];
         list.map((item) => {
             data.push({
@@ -64,14 +66,19 @@ const AddPersonal = ({ dispatch, onGetList,addLoading }) => {
         })
         dispatch({
             type: 'personalList/add',
-            payload: {list: data},
+            payload: { list: data },
             onSuccess: () => {
                 message.success('添加成功');
                 onGetList();
                 toggleModalVisible(false);
+                setList([]);
             }
         })
 
+    }
+
+    const del = (id) => {
+        setList(list.filter(item => item.id !== id));
     }
 
     const columns = [
@@ -79,7 +86,7 @@ const AddPersonal = ({ dispatch, onGetList,addLoading }) => {
         { title: '手机', dataIndex: 'phone', key: 'phone' },
         { title: '所属经销商', dataIndex: 'dealer', key: 'name' },
         {
-            title: '操作', dataIndex: 'id', key: 'id', render: (item) => <div key={item.id}>删除</div>
+            title: '操作', dataIndex: 'id', key: 'id', render: (item) => <div className="pointer font-blue" onClick={() => del(item)} key={item.id}>删除</div>
         }
     ];
 
@@ -100,10 +107,10 @@ const AddPersonal = ({ dispatch, onGetList,addLoading }) => {
                 {formVisible ?
                     <Form fields={[
                         {
-                          name: ['outlets'],
-                          value: selectVal.outlets,
+                            name: ['outlets'],
+                            value: selectVal.outlets,
                         },
-                      ]} className='mt-16' name='add-personal-form' onFinish={add} >
+                    ]} className='mt-16' name='add-personal-form' onFinish={add} >
                         <Row gutter={12}>
                             <Col span={8}>
                                 <Form.Item name='name' className='mb-16' rules={[{ required: true, message: '请输入姓名!' }]}>
@@ -134,6 +141,6 @@ const AddPersonal = ({ dispatch, onGetList,addLoading }) => {
     </div>)
 }
 
-export default connect(({loading})=>({
+export default connect(({ loading }) => ({
     addLoading: loading.effects['personalList/add'],
 }))(AddPersonal);

@@ -3,7 +3,7 @@ import { connect } from 'umi';
 import { Form, Table, Popconfirm, Modal, Typography, Input, Button, message } from 'antd';
 import DealerLinkage from '@/components/DealerLinkage'
 import { toggleStatusKeyVal } from '@/commonFun'
-import { PERSONAL_STATUS } from '@/globalConstant'
+import { PERSONAL_STATUS, PAGESIZE } from '@/globalConstant'
 import styles from './index.less';
 
 const { Text } = Typography;
@@ -71,21 +71,21 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
 
   const handleFinish = (values) => {
     if (!checkSelect()) return false;
-    const data={
-      "id":item.id,
-	"agentOutletsId":values.outlets.split('-')[0],
-	"agentOutletsName":values.outlets.split('-')[1],
-	"name":values.name,
-	"phoneNumber":values.phoneNumber,
-	"level":Number(values.level)
+    const data = {
+      "id": item.id,
+      "agentOutletsId": values.outlets.split('-')[0],
+      "agentOutletsName": values.outlets.split('-')[1],
+      "name": values.name,
+      "phoneNumber": values.phoneNumber,
+      "level": Number(values.level)
     }
     console.log(`${item.agentOutletsId}-${item.agentOutletsName}`)
     dispatch({
       type: 'personalStatus/edit',
-      payload:data,
-      onSuccess: ()=>{
+      payload: data,
+      onSuccess: () => {
         toggleModalVisible(false);
-        message.success('添加成功');
+        message.success('编辑成功');
         getList();
       }
     })
@@ -101,7 +101,7 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
     <div>
       <a onClick={() => toggleModalVisible(true)}>编辑</a>
       <Modal title='编辑业务人员' destroyOnClose visible={modalVisible} footer={null} onCancel={() => toggleModalVisible(false)}>
-        <Form initialValues={{ name: item.name, phoneNumber: item.phoneNumber, city: item.region, level: String(item.level)}} fields={[{name: ['outlets'],value: selectVal.outlets}]} className="personal-edit-form" name='catalog-manage-table-search' onFinish={handleFinish} >
+        <Form initialValues={{ name: item.name, phoneNumber: item.phoneNumber, city: item.region, level: String(item.level) }} fields={[{ name: ['outlets'], value: selectVal.outlets }]} className="personal-edit-form" name='catalog-manage-table-search' onFinish={handleFinish} >
           <Form.Item label='姓名' name='name' rules={[{ required: true, message: '请输入姓名!' }]}>
             <Input placeholder="姓名" />
           </Form.Item>
@@ -112,7 +112,7 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
             <DealerLinkage isAddPersonal formProps={formProps} span={8} onCallBack={selectChange} defaultLevel={item.level} />
           </Form.Item>
           <div className='text-right'>
-            <Button type="primary" htmlType="submit" className='search-button mr-8'>添加</Button>
+            <Button type="primary" htmlType="submit" className='search-button mr-8'>保存</Button>
             <Button className='search-button' onClick={() => toggleModalVisible(false)}>取消</Button>
           </div>
         </Form>
@@ -179,8 +179,9 @@ const TableList = (props) => {
     showTotal: total => `共${total}条`,
     showSizeChanger: true,
     showQuickJumper: true,
+    defaultPageSize: PAGESIZE,
     onShowSizeChange: (current, size) => {
-      getList(current, false, { pageSize: size });
+      getList(current, { pageSize: size });
     }
   }
 
