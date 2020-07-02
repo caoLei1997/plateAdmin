@@ -148,7 +148,7 @@ class App extends React.Component {
               }} columns={tableColumns}/>
           </div>
           {/*添加弹框*/}
-          {dropdownData.length>0&&<Add onRef={this.onRef} brandChildren={selectChildren} cityRegion={dropdownData}></Add>}
+          {dropdownData.length>0&&<Add onRef={this.onRef} onAddOk={this.submitSearchData} brandChildren={selectChildren} cityRegion={dropdownData}></Add>}
           {/*编辑弹框*/}
           <Modal
             title="编辑经销商"

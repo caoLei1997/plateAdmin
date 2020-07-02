@@ -81,7 +81,8 @@ class App extends React.Component {
           description: "提示",
           message:"添加成功",
         });
-        this.initAddPopup()
+        this.initAddPopup();
+        this.props.onAddOk()
       }
     });
   };

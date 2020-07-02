@@ -49,7 +49,7 @@ class App extends React.Component {
     componentDidMount() {
       console.log(this.props)
       this.props.onRef(this);
-      this.allBrandData = JSON.parse(sessionStorage.getItem('allBrandData')).list;
+      this.allBrandData = JSON.parse(sessionStorage.getItem('allBrandData')).list||[];
       this.allBrandData.forEach((v,k)=>{
         children.push(<Option key={v.id}>{v.name}</Option>);
       })
@@ -151,7 +151,7 @@ class App extends React.Component {
         return (
           <div>
             <Modal
-              title="新增总代理商"
+              title="新增次级经销商"
               visible={this.state.visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
