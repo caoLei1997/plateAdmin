@@ -29,15 +29,19 @@ const OperaUpdateStatus = ({ dispatch, id, status = PERSONAL_STATUS.OPEN, getLis
         getList();
       }
     })
+
+  }
+  let tips;
+  if (status === PERSONAL_STATUS.OPEN) {
+    tips = (<div>停用会导致该业务人员无法再登<br />录查验小程序办理业务,确认要停用吗?</div>)
+  } else {
+    tips = (<p>启用后该业务人员将可以使用账<br />号登录查验小程序并获得相应的业务办<br />理权限，确认要启用吗？</p>)
   }
 
-  const tips = status === PERSONAL_STATUS.OPEN ? '停用会导致该业务人员无法再登录查验小程序办理业务，确认要停用吗？' : '启用后该业务人员将可以使用账号登录查验小程序并获得相应的业务办理权限，确认要启用吗？'
-
   const statusText = status === PERSONAL_STATUS.OPEN ? '停用' : '启用';
-
   return (
     <div>
-      <Popconfirm okText='是' cancelText='否' title={<p>{tips}</p>} onConfirm={handleConfirm}>
+      <Popconfirm okText='是' cancelText='否' title={tips} onConfirm={handleConfirm}>
         <a>{statusText}</a>
       </Popconfirm>
     </div>
