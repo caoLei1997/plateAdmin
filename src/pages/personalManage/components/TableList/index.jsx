@@ -48,6 +48,12 @@ const OperaUpdateStatus = ({ dispatch, id, status = PERSONAL_STATUS.OPEN, getLis
   )
 }
 
+
+
+
+
+console.log();
+
 const OperaBrandEdit = ({ dispatch, item, getList }) => {
   const [selectVal, setSelectVal] = useState({ city: item.region, level: item.level, outlets: `${item.agentOutletsId}-${item.agentOutletsName}` });
   const [modalVisible, setModalVisible] = useState(false);
