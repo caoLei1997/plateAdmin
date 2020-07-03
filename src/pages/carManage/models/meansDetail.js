@@ -40,7 +40,6 @@ export default {
             data.electrombileHeightStr = `${data.electrombileHeight}mm`;
             data.electrombileWidthStr = `${data.electrombileWidth}mm`;
             data.enduranceMileageStr = `${data.enduranceMileage}KM\\H`;
-            console.log(data);
             return { ...state, data };
         }
     }

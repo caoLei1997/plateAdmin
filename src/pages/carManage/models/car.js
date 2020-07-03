@@ -25,7 +25,6 @@ const Model = {
     },
     reducers: {
         changeMeansList(state, { payload }) {
-            console.log(payload);
             switch (payload.status) {
                 case 'loading':
                     return { ...state, means: { ...state.means, isLoading: true } };

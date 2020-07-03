@@ -79,7 +79,6 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
       "phoneNumber": values.phoneNumber,
       "level": Number(values.level)
     }
-    console.log(`${item.agentOutletsId}-${item.agentOutletsName}`)
     dispatch({
       type: 'personalStatus/edit',
       payload: data,
@@ -122,7 +121,8 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
 }
 
 const TableList = (props) => {
-  const { dispatch, getList, list } = props;
+  const { dispatch, getList, personalList } = props;
+  const [nowPageSize, setNowPageSize] = useState([personalList.pageSize]);
 
   const handlePaginationChange = (page) => {
     getList(page);
@@ -175,12 +175,15 @@ const TableList = (props) => {
   ];
 
   const pagination = {
+    total: personalList.total,
+    current: personalList.current,
     onChange: handlePaginationChange,
     showTotal: total => `共${total}条`,
     showSizeChanger: true,
     showQuickJumper: true,
-    defaultPageSize: PAGESIZE,
+    pageSize: nowPageSize,
     onShowSizeChange: (current, size) => {
+      setNowPageSize(size);
       getList(current, { pageSize: size });
     }
   }
@@ -191,7 +194,7 @@ const TableList = (props) => {
         <Table
           className="components-table-demo-nested"
           columns={columns}
-          dataSource={list}
+          dataSource={personalList.list}
           rowKey='id'
           pagination={pagination}
         /></div>
@@ -199,5 +202,5 @@ const TableList = (props) => {
 }
 
 export default connect(({ personalList }) => ({
-  list: personalList.list
+  personalList
 }))(TableList);
