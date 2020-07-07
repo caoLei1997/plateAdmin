@@ -38,6 +38,7 @@ export default {
                 type: 'changeFilter',
                 payload: {
                     current: payload.pageIndex,
+                    pageSize: payload.pageSize,
                     filter: {
                         "name": payload.name,
                         "phoneNumber": payload.phoneNumber,
@@ -58,7 +59,7 @@ export default {
     },
     reducers: {
         changePersonalList(state, { payload }) {
-            return { ...state, list: payload.data.content };
+            return { ...state, list: payload.data.content, total: payload.data.totalElements };
         },
         changeFilter(state, { payload }) {
             return { ...state, ...payload }

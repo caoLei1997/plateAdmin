@@ -65,7 +65,6 @@ const BasicLayout = props => {
   const menuDataRender = menuList =>
     menuList.map(item => {
       const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
-      console.log(localItem);
       return Authorized.check(item.authority, localItem, null);
     });
 
