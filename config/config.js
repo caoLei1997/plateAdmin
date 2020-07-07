@@ -100,7 +100,7 @@ export default defineConfig({
               hideInMenu: true,
             },
             {
-              name: '经销商管理',
+              name: '商户管理',
               icon: 'smile',
               path: '/agentManage',
               component: './agentManage',
