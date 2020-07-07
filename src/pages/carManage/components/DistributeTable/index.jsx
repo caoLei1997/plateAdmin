@@ -14,7 +14,7 @@ const columns = [
     key: 'plateNumberApplyId'
   },
   {
-    title: '次级经销商',
+    title: '经销商',
     dataIndex: 'secondaryAgentOutletsName',
     key: 'secondaryAgentOutletsName',
   },

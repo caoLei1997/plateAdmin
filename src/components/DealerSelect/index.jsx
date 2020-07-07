@@ -46,7 +46,7 @@ const DealerSelect = ({ dispatch, userInfo, selectLoading, dealerList, changeCal
     <div className={styles.container}>
       <div id="components-select-demo-search">
         <dl className="inline">
-          <dt>经销商：</dt>
+          <dt>品牌厂家：</dt>
           <dd>
             {userInfo.id === SUPER_UNIQUE ?
               <Select style={{ width: 220 }} showSearch loading={selectLoading} placeholder="请选择" optionFilterProp="children" onDropdownVisibleChange={handleDropdown} onChange={handleChange} >

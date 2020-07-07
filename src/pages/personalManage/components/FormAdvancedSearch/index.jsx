@@ -37,7 +37,7 @@ const AdvancedSearchForm = ({ btnLoading, getList, children, defaultOutlets }) =
           },
         ]} className="ant-advanced-search-form" name='catalog-manage-table-search' onFinish={handleFinish} >
           <div gutter={24}>
-            <Form.Item label='所属经销商'>
+            <Form.Item label='所属商户'>
               <DealerLinkage showAll formProps={formProps} span={6} onCallBack={selectChange} />
             </Form.Item>
           </div>
