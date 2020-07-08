@@ -111,7 +111,7 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
           <Form.Item label='手机号' name='phoneNumber' rules={[{ required: true, len: 11, message: '请输入正确的手机号!' }]}>
             <Input placeholder="手机号" />
           </Form.Item>
-          <Form.Item label='所属经销商' name='name'>
+          <Form.Item label='所属商户' name='name'>
             <DealerLinkage isAddPersonal formProps={formProps} span={8} onCallBack={selectChange} defaultLevel={item.level} />
           </Form.Item>
           <div className='text-right'>
@@ -144,7 +144,7 @@ const TableList = (props) => {
       key: 'name',
     },
     {
-      title: '所属经销商',
+      title: '所属商户',
       dataIndex: 'agentOutletsName',
       key: 'agentOutletsName',
     },

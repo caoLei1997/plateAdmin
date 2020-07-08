@@ -13,7 +13,7 @@ const columns = [
     key: 'updatedAt'
   },
   {
-    title: '次级经销商',
+    title: '经销商',
     dataIndex: 'agentOutletsName',
     key: 'agentOutletsName',
   },

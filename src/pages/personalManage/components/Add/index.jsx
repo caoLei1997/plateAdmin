@@ -26,7 +26,7 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
 
     const checkSelect = (values) => {
         if (values.city && values.level && values.outlets) return true;
-        const errorTips = { city: '请选择市区！', level: '请选择经销商级别！', outlets: '请选择所属经销商！' };
+        const errorTips = { city: '请选择市区！', level: '请选择商家级别！', outlets: '请选择所属商户！' };
         const keys = Object.keys(values);
         for (let i = 0; i < keys.length; i++) {
             if (!values[keys[i]]) {
@@ -84,7 +84,7 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
     const columns = [
         { title: '姓名', dataIndex: 'name', key: 'name' },
         { title: '手机', dataIndex: 'phone', key: 'phone' },
-        { title: '所属经销商', dataIndex: 'dealer', key: 'name' },
+        { title: '所属商户', dataIndex: 'dealer', key: 'name' },
         {
             title: '操作', dataIndex: 'id', key: 'id', render: (item) => <div className="pointer font-blue" onClick={() => del(item)} key={item.id}>删除</div>
         }

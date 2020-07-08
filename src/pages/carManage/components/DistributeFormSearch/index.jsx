@@ -27,8 +27,8 @@ const DistributeFormSearch = (props) => {
 
   const getFields = () => (<Row gutter={24}>
     <Col span={8}>
-      <Form.Item label='次级经销商' name='secondDealer'>
-        <Select placeholder="次级经销商">
+      <Form.Item label='经销商' name='secondDealer'>
+        <Select placeholder="经销商">
           {subDealerList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
         </Select>
       </Form.Item>
