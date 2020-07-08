@@ -58,6 +58,7 @@ const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
 });
 
+
 request.interceptors.request.use((url, options = {}) => {
   const { isToken = true } = options;
   const headers = {};
