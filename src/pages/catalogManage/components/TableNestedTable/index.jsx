@@ -93,7 +93,7 @@ const OperaBrandAddModel = (props) => {
     </div>
   )
 }
-
+  
 const OperaModelEdit = ({ dispatch, id, successFun, val, brandId }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -169,7 +169,7 @@ const NestedTable = (props) => {
       editable: true,
     },
     {
-      title: '一级经销商',
+      title: '品牌厂家',
       dataIndex: 'agentOutletsName',
       key: 'agentOutletsName',
     },
