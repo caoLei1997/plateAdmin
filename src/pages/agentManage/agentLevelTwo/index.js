@@ -246,7 +246,7 @@ class App extends React.Component {
           </div>
 
           <div className={style.addAgentBox}>
-            <Button className={style.btn} icon='+ ' onClick={this.showModal}>新增经销商</Button>
+            <Button className={style.btn} icon='+ ' onClick={this.showModal}>新增次级经销商</Button>
           </div>
 
           <div className={style.tableList}>

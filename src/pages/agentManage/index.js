@@ -27,15 +27,15 @@ class agentManage extends React.Component {
         <Breadcrumb>
           <Breadcrumb.Item>带牌销售</Breadcrumb.Item>
           <Breadcrumb.Item>
-            <a href="javascript:;">商户管理</a>
+            <a href="javascript:;">经销商管理</a>
           </Breadcrumb.Item>
         </Breadcrumb>
         <Menu onClick={this.handleClick} selectedKeys={[this.state.level_current]} mode="horizontal">
           <Menu.Item key="level_one" >
-            品牌厂家
+            一级经销商
           </Menu.Item>
           <Menu.Item key="level_tow">
-            经销商
+            次级经销商
           </Menu.Item>
         </Menu>
         {
