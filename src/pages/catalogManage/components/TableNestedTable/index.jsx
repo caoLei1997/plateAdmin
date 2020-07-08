@@ -93,7 +93,7 @@ const OperaBrandAddModel = (props) => {
     </div>
   )
 }
-
+  
 const OperaModelEdit = ({ dispatch, id, successFun, val, brandId }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
