@@ -63,10 +63,8 @@ class App extends React.Component {
     console.log(value2);
     let arr = [];
     let arr2 = [];
-    value2.forEach(v=>{
-      arr.push(v.children)
-      arr2.push(v.value)
-    });
+    arr.push(value2.children);
+    arr2.push(value2.value);
     this.setState({
       agentBrand:arr,
       brandIds:arr2
@@ -130,7 +128,6 @@ class App extends React.Component {
                 </div>
                 <Input className={style.addInpAddress} value={agentAddress} onChange={this.agentAddressInp} placeholder="经销商地址" />
                 <Select
-                    mode="multiple"
                     style={{ width: '100%' }}
                     placeholder="选择代理品牌"
                     onChange={this.handleChange}

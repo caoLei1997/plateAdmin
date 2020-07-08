@@ -24,7 +24,7 @@ class App extends React.Component {
             {title: '地址', width:160,dataIndex: 'address', key: 'address',},
             {title: '代理品牌', dataIndex: 'brand', key: 'brand',},
             {title: '人员数', dataIndex: 'personNum', key: 'personNum',},
-            {title: '操作', dataIndex: 'do', key: 'do',},
+            {title: '操作', dataIndex: 'do', key: 'do',width:60},
           ],
           selectChildren:[],
           editVisible:false,
@@ -175,7 +175,6 @@ class App extends React.Component {
             </div>
             <div className={style.editInp}>
               <Select
-                mode="multiple"
                 style={{ width: '100%' }}
                 placeholder="选择代理品牌"
                 onChange={this.editHandleChange}
@@ -196,9 +195,7 @@ class App extends React.Component {
     // sendDataBrand
     let arr = [];
     let arr1 = [];
-    v2.forEach(v=>{
-      arr.push(v.value)
-    });
+    arr.push(v2.value)
     this.setState({
       editDataBrandId:arr,
     })
@@ -267,7 +264,11 @@ class App extends React.Component {
         let list = res.data.content;
         list.forEach((v,k)=>{
           v.cityRegion = v.city + v.region;
-          v.do = <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>;
+          v.do = <p>
+            <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>
+            <p></p>
+            <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>
+          </p>
           v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
           // v.personNum = <a href='javascript:;' key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
           v.personNum = <Link to={"/personal/"+v.agentOutletsId} key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</Link>;

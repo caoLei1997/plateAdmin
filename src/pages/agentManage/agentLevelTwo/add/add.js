@@ -93,7 +93,7 @@ class App extends React.Component {
         }
       });
         arr.push(v.id);
-        arr2.push({id:v.id,name:v.name,checkChildName:v.checkChildName||[],checkChildId:v.checkChildId||[],allChild:v.allChild})
+        arr2.push({id:v.id,name:v.name,checkChildName:v.checkChildName||[],checkChildId:v.checkChildId||[],allChild:v.allChild||[]})
     });
 
     this.setState({
@@ -193,6 +193,7 @@ class App extends React.Component {
     }
 
     agentBrandClassRender = ()=>{
+      console.log(this.state.agentBrandObjArr);
       return <Collapse size='small' onChange={this.agentBrandCollapseChange} accordion>
         {
           this.state.agentBrandObjArr.map((v,k)=>{
