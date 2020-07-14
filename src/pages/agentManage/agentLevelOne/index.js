@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './index.less';
-import { Form, Input, Button, Cascader,Table,Modal,Select,notification} from 'antd';
+import { Form, Input, Button, Cascader,Table,Modal,Select,notification,Spin} from 'antd';
 import {requestAgentList,requestCityRegion,requestBrand,editFirstAgentSave} from "../../../services/agentManage"
 import Add from "./add/add"
 const { Option } = Select;
@@ -51,8 +51,8 @@ class App extends React.Component {
               region: dropdownValue&&dropdownValue[1]
             };
             this.tableListReq(this.agentTableListParams)
-          }
-
+          },
+        spinningStatus:true
         }
     }
 
@@ -112,7 +112,7 @@ class App extends React.Component {
     console.log('Success:', values);
   };
     render() {
-      let {dropdownData,tableDataSource,paginationSeting,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrandId,total,pageSize,pageIndex,onChange,selectChildren} = this.state
+      let {dropdownData,tableDataSource,paginationSeting,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrandId,total,pageSize,pageIndex,onChange,selectChildren,spinningStatus} = this.state
 
         return (
         <div className={style.agentLevelOneMain}>
@@ -138,17 +138,18 @@ class App extends React.Component {
           <div className={style.addAgentBox}>
             <Button className={style.btn} icon='+ ' onClick={this.showModal}>新增一级经销商</Button>
           </div>
-
-          <div className={style.tableList}>
-            <Table dataSource={tableDataSource} pagination={{
+          <Spin spinning={spinningStatus}>
+            <div className={style.tableList}>
+              <Table dataSource={tableDataSource} pagination={{
                 total:total,
                 pageSize:pageSize,
                 pageIndex:pageIndex,
                 onChange:onChange
               }} columns={tableColumns}/>
-          </div>
+            </div>
+          </Spin>
           {/*添加弹框*/}
-          {dropdownData.length>0&&<Add onRef={this.onRef} onAddOk={this.submitSearchData} brandChildren={selectChildren} cityRegion={dropdownData}></Add>}
+          {dropdownData.length>0&&<Add onRef={this.onRef}  onChangePLoad={this.childChangeState}  onAddOk={this.submitSearchData} brandChildren={selectChildren} cityRegion={dropdownData}></Add>}
           {/*编辑弹框*/}
           <Modal
             title="编辑一级经销商"
@@ -280,7 +281,8 @@ class App extends React.Component {
         this.setState({
           tableDataSource:list,
           pageIndex:data.pageIndex,
-          total:res.data.total
+          total:res.data.total,
+          spinningStatus:false
         });
         this.reqBrand();
       }else{
@@ -332,8 +334,12 @@ class App extends React.Component {
       selectChildren:this.selectChildren
     });
     return data
+  };
+  childChangeState = ()=>{
+    this.setState({
+      spinningStatus:true
+    })
   }
-
 }
 
 export default App;

@@ -80,7 +80,8 @@ class App extends React.Component {
           editDataAddress:'',
           editDataBrand:[],
           editAgentBrandObjArr:[],
-          selectChildren:[]
+          selectChildren:[],
+          spinningStatus:true,
         }
     }
     componentDidMount() {
@@ -139,7 +140,8 @@ class App extends React.Component {
           this.setState({
             tableDataSource:list,
             pageIndex:data.pageIndex,
-            total:res.data.total
+            total:res.data.total,
+            spinningStatus:false
           });
         }else{
           notification.info({
@@ -218,7 +220,7 @@ class App extends React.Component {
     console.log('Success:', values);
   };
     render() {
-      let {cityDropdownData,statusDropdownData,tableDataSource,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrand,total,pageSize,pageIndex,onChange,useOrStopVisible,useOrStopTitle,useOrStopContent,useOrStopIsUse,selectChildren} = this.state;
+      let {cityDropdownData,statusDropdownData,tableDataSource,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrand,total,pageSize,pageIndex,onChange,useOrStopVisible,useOrStopTitle,useOrStopContent,useOrStopIsUse,selectChildren,spinningStatus} = this.state;
 
         return (
         <div className={style.agentLevelOneMain}>
@@ -248,17 +250,18 @@ class App extends React.Component {
           <div className={style.addAgentBox}>
             <Button className={style.btn} icon='+ ' onClick={this.showModal}>新增次级经销商</Button>
           </div>
-
-          <div className={style.tableList}>
-            <Table width='100%' dataSource={tableDataSource} pagination={{
-              total:total,
-              pageSize:pageSize,
-              pageIndex:pageIndex,
-              onChange:onChange
-            }} columns={tableColumns}/>
-          </div>
+          <Spin spinning={spinningStatus}>
+            <div className={style.tableList}>
+              <Table width='100%' dataSource={tableDataSource} pagination={{
+                total:total,
+                pageSize:pageSize,
+                pageIndex:pageIndex,
+                onChange:onChange
+              }} columns={tableColumns}/>
+            </div>
+          </Spin>
           {/*添加弹框*/}
-          <Add onRef={this.onRef} tableReqData={this.data} onRefresh={this.reqTableList} cityDropdownData={cityDropdownData}></Add>
+          <Add onRef={this.onRef} onChangePLoad={this.childChangeState} tableReqData={this.data} onRefresh={this.reqTableList} cityDropdownData={cityDropdownData}></Add>
           {/*编辑弹框*/}
           <Modal
             title="编辑经销商"
@@ -570,6 +573,11 @@ class App extends React.Component {
             message:"获取所有品牌型号数据失败",
           });
         }
+    })
+  };
+  childChangeState = ()=>{
+    this.setState({
+      spinningStatus:true
     })
   }
 }

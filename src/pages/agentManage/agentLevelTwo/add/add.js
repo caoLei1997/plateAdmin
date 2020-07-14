@@ -1,9 +1,8 @@
 import React from 'react';
 import style from './add.less';
-import { Modal, Button, Table ,Input,Select,Cascader ,Tag ,Collapse ,Checkbox, Row, Col ,notification} from 'antd';
+import { Modal, Button, Table ,Input,Select,Cascader ,Tag ,Collapse ,Checkbox, Row, Col ,notification,Spin} from 'antd';
 const { Option } = Select;
 const { Panel } = Collapse;
-const children = [];
 import {addSecondAgent} from "../../../../services/agentManage"
 
 
@@ -47,12 +46,14 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-      console.log(this.props)
       this.props.onRef(this);
       this.allBrandData = JSON.parse(sessionStorage.getItem('allBrandData')).list||[];
+      console.log( this.allBrandData)
+      let children = [];
       this.allBrandData.forEach((v,k)=>{
         children.push(<Option key={v.id}>{v.name}</Option>);
       })
+      this.selectChildren = children
     }
 
     componentWillUnmount() {
@@ -114,21 +115,29 @@ class App extends React.Component {
         brandModelVoList:[]
       };
       v.brandModelVoList.forEach((i,j)=>{
+        let xHData = [];
+        i.allChild.forEach((a,b)=>{
+          if(i.checkChildId === a.id){
+            xHData.push(a)
+          }
+        });
         obj.brandModelVoList.push({
           id:i.id,
           name:i.name,
-          children:i.children,
-        })
+          children:xHData,
+        });
       });
       data.push(obj)
     });
+    console.log(dataSource)
+    this.initAddPopup();
+    this.props.onChangePLoad()
     addSecondAgent({list:data}).then(res=>{
       if(res.retCode === '0000'){
         notification.success({
           description: "提示",
           message:"添加成功",
         });
-        this.initAddPopup();
         this.props.onRefresh(this.props.tableReqData)
       }
     })
@@ -184,7 +193,7 @@ class App extends React.Component {
                   className={style.addInpAgentBrand}
                   value={agentBrand}
                 >
-                  {children}
+                  {this.selectChildren}
                 </Select>
                 {
                   this.agentBrandClassRender()

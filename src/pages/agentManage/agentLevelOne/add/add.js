@@ -72,6 +72,8 @@ class App extends React.Component {
   };
 
   handleOk = e => {
+    this.initAddPopup();
+    this.props.onChangePLoad();
     addFirstAgent({list:this.state.dataSource}).then(res=>{
       console.log(res);
       if(res&&res.data){
@@ -79,7 +81,6 @@ class App extends React.Component {
           description: "提示",
           message:"添加成功",
         });
-        this.initAddPopup();
         this.props.onAddOk()
       }
     });
