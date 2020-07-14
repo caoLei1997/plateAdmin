@@ -106,6 +106,14 @@ export default defineConfig({
               component: './agentManage',
               authority: ['admin'],
             },
+
+            {
+              name: '备案管理',
+              icon: 'smile',
+              path: '/record',
+              component: './record',
+              authority: ['admin'],
+            },
             {
               component: './404',
             },
