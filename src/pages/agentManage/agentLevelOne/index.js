@@ -267,7 +267,7 @@ class App extends React.Component {
           v.do = <p>
             <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>
             <p></p>
-            <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>
+            {/*<a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>*/}
           </p>
           v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
           // v.personNum = <a href='javascript:;' key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;

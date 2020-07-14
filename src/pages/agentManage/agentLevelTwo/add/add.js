@@ -124,6 +124,10 @@ class App extends React.Component {
     });
     addSecondAgent({list:data}).then(res=>{
       if(res.retCode === '0000'){
+        notification.success({
+          description: "提示",
+          message:"添加成功",
+        });
         this.initAddPopup();
         this.props.onRefresh(this.props.tableReqData)
       }
