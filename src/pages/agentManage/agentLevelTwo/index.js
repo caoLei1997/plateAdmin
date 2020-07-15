@@ -392,6 +392,9 @@ class App extends React.Component {
   editHandleOk = ()=>{
     this.allBrandData = JSON.parse(sessionStorage.getItem('allBrandData')).list;
     let {editAgentBrandObjArr,editDataId,editDataName,editDataCity,editDataAddress} = this.state;
+    if(!editDataName){alert('请输入经销商名称'); return}
+    if(!editDataCity){alert('请选择市区');return}
+    if(!editDataAddress){alert('请填写地址');return}
     let data = {
       id: editDataId,
       name: editDataName,
@@ -400,10 +403,9 @@ class App extends React.Component {
       address: editDataAddress,
       brandModelVoList:editAgentBrandObjArr
     };
-    console.log(data)
+    this.setState({editVisible:false,spinningStatus:true});
     editSecondAgent(data).then(res=>{
       if(res.retCode === '0000'){
-        this.setState({editVisible:false})
         notification.success({
           description: "提示",
           message:'数据保存成功',

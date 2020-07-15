@@ -176,6 +176,7 @@ class App extends React.Component {
             </div>
             <div className={style.editInp}>
               <Select
+                allowClear={true}
                 style={{ width: '100%' }}
                 placeholder="选择代理品牌"
                 onChange={this.editHandleChange}
@@ -196,14 +197,18 @@ class App extends React.Component {
     // sendDataBrand
     let arr = [];
     let arr1 = [];
-    arr.push(v2.value)
+    arr.push(v2&&v2.value)
     this.setState({
       editDataBrandId:arr,
     })
   };
   editHandleCancel = ()=>{this.setState({editVisible:false})};
   editHandleOk = ()=>{
-      let {editDataName,editDataCity,editDataAddress,editDataBrandId,editDataId} = this.state;
+    let {editDataName,editDataCity,editDataAddress,editDataBrandId,editDataId} = this.state;
+    if(!editDataName){alert('请输入经销商名称'); return}
+    if(!editDataCity){alert('请选择市区');return}
+    if(!editDataAddress){alert('请填写地址');return}
+    this.setState({spinningStatus:true,editVisible:false});
     editFirstAgentSave({
         id: editDataId,
         name: editDataName,
@@ -212,9 +217,6 @@ class App extends React.Component {
         address: editDataAddress,
         brandIds:editDataBrandId,
       }).then(res=>{
-      this.setState({
-        editVisible:false
-      });
       this.tableListReq(this.agentTableListParams)
     });
 
