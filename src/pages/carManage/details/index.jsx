@@ -77,7 +77,7 @@ const MeansDetail = ({ dispatch, match, detailState, loading, meansListState,his
 
   const judgePageIsDisabled = (type = 'first') => {
     if (type === 'last') {
-      const totalPage = Math.ceil(meansListState.total / Number(meansListState.pageSize));
+      const totalPage = Math.ceil(meansListState.total / 10);
       if (meansListState.current >= totalPage) return true;
       return false;
     }
