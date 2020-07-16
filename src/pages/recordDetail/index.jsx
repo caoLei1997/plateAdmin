@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import styles from './index.less'
-
+import { DoubleLeftOutlined, DoubleRightOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Descriptions, Divider, Table, Space, Button } from 'antd';
+import { Descriptions, Divider, Table, Button, Row, Col } from 'antd';
+import AuditPass from './components/AuditPass'
+import AuditBy from './components/AuditBy'
 import defaultImg from '../../assets/default.png'
+
 
 class index extends Component {
     render() {
@@ -45,9 +48,13 @@ class index extends Component {
                 <PageHeaderWrapper className={styles.main}>
                     <div className={styles.container}>
                         <div className={styles.status}>
-                            <span>审核状态：</span>
-                        待审核
-                    </div>
+                            <span>审核状态： </span>
+                            <div className="inline" style={{display:'inline-block'}}>
+                                <div>待审核</div>
+                                <div className='font-success'>通过</div>
+                                <div className='font-red'>未通过</div>
+                            </div>
+                        </div>
                         <h3>车辆信息</h3>
                         <Divider></Divider>
                         <Descriptions title="" column={2}>
@@ -150,18 +157,30 @@ class index extends Component {
 
                     </div>
                 </PageHeaderWrapper>
-                <div className={styles.recordFooter}>
-                    <div className={styles.recordPrev}>
-                        <div>上一页</div>
-                        <p>上一条</p>
-                    </div>
-                    <div className={styles.recordBtn}></div>
-                    <div className={styles.recordNext}>
-                        <div>下一页</div>
-                        <p>下一条</p>
-                    </div>
-                </div>
 
+                <Row justify="space-between" align="middle" className='mt-32'>
+                    <Col span={3}>
+                        <div> <DoubleLeftOutlined />上一页</div>
+
+                    </Col>
+                    <Col span={3}>
+                        <div>  <LeftOutlined />上一条</div>
+                    </Col>
+
+                    <Col span={12}>
+                        <div className='inline text-center'>
+                            <AuditPass></AuditPass>
+                            <AuditBy></AuditBy>
+                        </div>
+                    </Col>
+
+                    <Col span={3} style={{ textAlign: 'right' }}>
+                        <div>下一条 <RightOutlined /></div>
+                    </Col>
+                    <Col span={3} style={{ textAlign: 'right' }}>
+                        <div>下一页<DoubleRightOutlined /></div>
+                    </Col>
+                </Row>
             </div>
 
         );
