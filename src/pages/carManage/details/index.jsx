@@ -42,7 +42,6 @@ const progressColumns = [
 
 const MeansDetail = ({ dispatch, match, detailState, loading, meansListState,history }) => {
   const listIds = JSON.parse(sessionStorage.getItem(LOCAL_MEANS_IDS_KEY));
-
   const getDetails = (id) => {
     dispatch({
       type: 'meansDetail/getDetail',
@@ -77,7 +76,13 @@ const MeansDetail = ({ dispatch, match, detailState, loading, meansListState,his
 
   const judgePageIsDisabled = (type = 'first') => {
     if (type === 'last') {
-      const totalPage = Math.ceil(meansListState.total / Number(meansListState.pageSize));
+      const totalPage = Math.ceil(meansListState.total / 10);
+      console.log(meansListState.total);
+      
+      console.log(meansListState.pageSize);
+      
+      console.log(totalPage);
+      
       if (meansListState.current >= totalPage) return true;
       return false;
     }

@@ -12,6 +12,8 @@ class Record extends Component {
                 title: '申请日期',
                 dataIndex: 'createDate',
                 key: 'createDate',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.createDate - b.createDate,
             },
             {
                 title: '归属地',
@@ -74,6 +76,8 @@ class Record extends Component {
                 title: '审核日期',
                 dataIndex: 'ReviewTrends',
                 key: 'ReviewTrends',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.ReviewTrends - b.ReviewTrends,
             },
             {
                 title: '不通过原因',
