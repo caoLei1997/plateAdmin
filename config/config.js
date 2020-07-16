@@ -21,8 +21,8 @@ export default defineConfig({
   antd: {},
   analytics: GA_KEY
     ? {
-        ga: GA_KEY,
-      }
+      ga: GA_KEY,
+    }
     : false,
   dva: {
     hmr: true,
@@ -113,6 +113,15 @@ export default defineConfig({
               path: '/record',
               component: './record',
               authority: ['admin'],
+            },
+
+            {
+              name: '备案详情',
+              icon: 'smile',
+              path: '/record/recordDetail',
+              component: './recordDetail',
+              authority: ['admin'],
+              hideInMenu: true,
             },
             {
               component: './404',
