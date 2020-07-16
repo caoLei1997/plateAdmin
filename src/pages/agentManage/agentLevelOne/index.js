@@ -17,8 +17,8 @@ class App extends React.Component {
           dropdownValue:'',
           tableDataSource: [],
           tableColumns:[
-            {title: '品牌厂家ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId',},
-            {title: '品牌厂家名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName',},
+            {title: '商户ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId',},
+            {title: '商户名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName',},
             {title: '级别', dataIndex: 'level', key: 'level',},
             {title: '市区', dataIndex: 'cityRegion', key: 'cityRegion',},
             {title: '地址', width:160,dataIndex: 'address', key: 'address',},
@@ -117,9 +117,9 @@ class App extends React.Component {
         return (
         <div className={style.agentLevelOneMain}>
           <div className={style.searchBox}>
-            <Input onChange={this.inpChange1} className={style.inp} placeholder='品牌厂家名称' size='small' />
+            <Input onChange={this.inpChange1} className={style.inp} placeholder='商户名称' size='small' />
 
-            <Input onChange={this.inpChange2} className={style.inp} placeholder='品牌名称' size='small' />
+            <Input onChange={this.inpChange2} className={style.inp} placeholder='商户名称' size='small' />
 
             <Cascader
               options={dropdownData}
@@ -152,7 +152,7 @@ class App extends React.Component {
           {dropdownData.length>0&&<Add onRef={this.onRef}  onChangePLoad={this.childChangeState}  onAddOk={this.submitSearchData} brandChildren={selectChildren} cityRegion={dropdownData}></Add>}
           {/*编辑弹框*/}
           <Modal
-            title="编辑品牌厂家"
+            title="编辑商户"
             visible={this.state.editVisible}
             onOk={this.editHandleOk}
             onCancel={this.editHandleCancel}
@@ -205,7 +205,7 @@ class App extends React.Component {
   editHandleCancel = ()=>{this.setState({editVisible:false})};
   editHandleOk = ()=>{
     let {editDataName,editDataCity,editDataAddress,editDataBrandId,editDataId} = this.state;
-    if(!editDataName){alert('请输入品牌厂家名称'); return}
+    if(!editDataName){alert('请输入商户名称'); return}
     if(!editDataCity){alert('请选择市区');return}
     if(!editDataAddress){alert('请填写地址');return}
     this.setState({spinningStatus:true,editVisible:false});
@@ -325,11 +325,11 @@ class App extends React.Component {
     this.selectChildren = [];
     data.forEach((v,k)=>{
       let opt ;
-      if(v.agented === 2){
-        opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
-      }else{
+      // if(v.agented === 2){
+      //   opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
+      // }else{
         opt = <Option key={v.id} disabled={false}>{v.brandName}</Option>
-      }
+      // }
       this.selectChildren.push(opt);
     });
     this.setState({

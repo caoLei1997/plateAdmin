@@ -32,8 +32,8 @@ class App extends React.Component {
           statusDropdownValue:[],
           tableDataSource: [],
           tableColumns:[
-            {title: '经销商ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId',},
-            {title: '经销商名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName',width:150},
+            {title: '商户ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId',},
+            {title: '商户名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName',width:150},
             {title: '级别', dataIndex: 'level', key: 'level',},
             {title: '市区', dataIndex: 'cityRegion', key: 'cityRegion',width:100},
             {title: '地址', dataIndex: 'address', key: 'address',width:200},
@@ -193,9 +193,9 @@ class App extends React.Component {
   doUse = (a,b)=>{
     console.log(a,b);
     let title = a.status === '0'? "停用":"启用";
-    let content = a.status === '0'? "停用会导致该经销商相关所有业务人员账号停用，不能再处理代牌销售业务，确认要停用吗？":"启用后该经销商将恢复代牌销售业务相关办理权限，确认要启用吗？";
+    let content = a.status === '0'? "停用会导致该商户相关所有业务人员账号停用，不能再处理代牌销售业务，确认要停用吗？":"启用后该商户将恢复代牌销售业务相关办理权限，确认要启用吗？";
     let isUse =  a.status === '1'&&<p>
-      <Checkbox onChange={this.onUseOrStopCheck}>同时启用该经销商所有人员账号</Checkbox>
+      <Checkbox onChange={this.onUseOrStopCheck}>同时启用该商户所有人员账号</Checkbox>
     </p>
     this.setState({
       allUseCheck:false,
@@ -225,7 +225,7 @@ class App extends React.Component {
         return (
         <div className={style.agentLevelOneMain}>
           <div className={style.searchBox}>
-            <Input onChange={this.inpChange1} className={style.inp} placeholder='经销商名称' size='small' />
+            <Input onChange={this.inpChange1} className={style.inp} placeholder='商户名称' size='small' />
             <Cascader
               options={cityDropdownData}
               expandTrigger="hover"
@@ -261,7 +261,10 @@ class App extends React.Component {
             </div>
           </Spin>
           {/*添加弹框*/}
-          <Add onRef={this.onRef} onChangePLoad={this.childChangeState} tableReqData={this.data} onRefresh={this.reqTableList} cityDropdownData={cityDropdownData}></Add>
+          {
+            selectChildren.length>0&&<Add onRef={this.onRef} onChangePLoad={this.childChangeState} tableReqData={this.data} onRefresh={this.reqTableList} cityDropdownData={cityDropdownData}></Add>
+          }
+
           {/*编辑弹框*/}
           <Modal
             title="编辑经销商"
@@ -271,7 +274,7 @@ class App extends React.Component {
             maskClosable={false}
           >
             <div className={style.editInp}>
-              <Input className={style.editInp} value={editDataName} onChange={this.editAgentNameInp} placeholder="经销商名称" />
+              <Input className={style.editInp} value={editDataName} onChange={this.editAgentNameInp} placeholder="商户名称" />
             </div>
             <div className={style.editInp}>
               <Cascader
@@ -284,7 +287,7 @@ class App extends React.Component {
               />
             </div>
             <div className={style.editInp}>
-              <Input className={style.editInp} value={editDataAddress} onChange={this.editAgentAddressInp} placeholder="经销商地址" />
+              <Input className={style.editInp} value={editDataAddress} onChange={this.editAgentAddressInp} placeholder="商户地址" />
             </div>
             <div className={style.editInp}>
               <Select
@@ -392,7 +395,7 @@ class App extends React.Component {
   editHandleOk = ()=>{
     this.allBrandData = JSON.parse(sessionStorage.getItem('allBrandData')).list;
     let {editAgentBrandObjArr,editDataId,editDataName,editDataCity,editDataAddress} = this.state;
-    if(!editDataName){alert('请输入经销商名称'); return}
+    if(!editDataName){alert('请输入商户名称'); return}
     if(!editDataCity){alert('请选择市区');return}
     if(!editDataAddress){alert('请填写地址');return}
     let data = {
