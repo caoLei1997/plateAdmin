@@ -1,9 +1,8 @@
 import React from 'react';
 import style from './add.less';
-import { Modal, Button, Table ,Input,Select,Cascader ,Tag ,Collapse ,Checkbox, Row, Col ,notification} from 'antd';
+import { Modal, Button, Table ,Input,Select,Cascader ,Tag ,Collapse ,Checkbox, Row, Col ,notification,Spin} from 'antd';
 const { Option } = Select;
 const { Panel } = Collapse;
-const children = [];
 import {addSecondAgent} from "../../../../services/agentManage"
 
 
@@ -23,7 +22,7 @@ class App extends React.Component {
           visible: false,
           dataSource:[],
           columns: [
-            {title: '经销商名称', dataIndex: 'agentName', key: 'agentName',width: 100,},
+            {title: '商户名称', dataIndex: 'agentName', key: 'agentName',width: 100,},
             {title: '市区', dataIndex: 'cityRegion', key: 'cityRegion',width: 100,},
             {title: '地址', dataIndex: 'address', key: 'address',width: 200,},
             {title: '销售品牌型号', dataIndex: 'agentBrand', key: 'agentBrand',width: 200,},
@@ -47,12 +46,14 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-      console.log(this.props)
       this.props.onRef(this);
       this.allBrandData = JSON.parse(sessionStorage.getItem('allBrandData')).list||[];
+      console.log( this.allBrandData)
+      let children = [];
       this.allBrandData.forEach((v,k)=>{
         children.push(<Option key={v.id}>{v.name}</Option>);
       })
+      this.selectChildren = children
     }
 
     componentWillUnmount() {
@@ -114,17 +115,29 @@ class App extends React.Component {
         brandModelVoList:[]
       };
       v.brandModelVoList.forEach((i,j)=>{
+        let xHData = [];
+        i.allChild.forEach((a,b)=>{
+          if(i.checkChildId === a.id){
+            xHData.push(a)
+          }
+        });
         obj.brandModelVoList.push({
           id:i.id,
           name:i.name,
-          children:i.children,
-        })
+          children:xHData,
+        });
       });
       data.push(obj)
     });
+    console.log(dataSource)
+    this.initAddPopup();
+    this.props.onChangePLoad()
     addSecondAgent({list:data}).then(res=>{
       if(res.retCode === '0000'){
-        this.initAddPopup();
+        notification.success({
+          description: "提示",
+          message:"添加成功",
+        });
         this.props.onRefresh(this.props.tableReqData)
       }
     })
@@ -151,7 +164,7 @@ class App extends React.Component {
         return (
           <div>
             <Modal
-              title="新增次级经销商"
+              title="新增商户"
               visible={this.state.visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
@@ -161,7 +174,7 @@ class App extends React.Component {
               <Table scroll={{ x: 600 }} dataSource={this.state.dataSource} columns={columns} pagination={false} />
               <div>
                 <div className={style.addInpInLine}>
-                  <Input className={style.addInp} value={agentName} onChange={this.agentNameInp} placeholder="经销商名称" />
+                  <Input className={style.addInp} value={agentName} onChange={this.agentNameInp} placeholder="商户名称" />
                   <Cascader
                     options={dropdownData}
                     expandTrigger="hover"
@@ -171,7 +184,7 @@ class App extends React.Component {
                     value={dropdownValue}
                   />
                 </div>
-                <Input className={style.addInpAddress} value={agentAddress} onChange={this.agentAddressInp} placeholder="经销商地址" />
+                <Input className={style.addInpAddress} value={agentAddress} onChange={this.agentAddressInp} placeholder="商户地址" />
                 <Select
                   mode="multiple"
                   style={{ width: '100%' }}
@@ -180,7 +193,7 @@ class App extends React.Component {
                   className={style.addInpAgentBrand}
                   value={agentBrand}
                 >
-                  {children}
+                  {this.selectChildren}
                 </Select>
                 {
                   this.agentBrandClassRender()
@@ -270,7 +283,7 @@ class App extends React.Component {
     console.log(e);
   };
   addAgentData = ()=>{
-    if(!this.state.agentName){alert('请输入经销商名称');return}
+    if(!this.state.agentName){alert('请输入商户名称');return}
     if(!this.state.dropdownValue.join('')){alert('请选择市区');return}
     if(!this.state.agentAddress){alert('请输入地址');return}
     if(this.state.agentBrandObjArr.length === 0){alert('请选择品牌');return}
