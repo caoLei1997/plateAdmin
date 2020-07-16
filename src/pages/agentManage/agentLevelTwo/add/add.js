@@ -117,7 +117,7 @@ class App extends React.Component {
       v.brandModelVoList.forEach((i,j)=>{
         let xHData = [];
         i.allChild.forEach((a,b)=>{
-          if(i.checkChildId === a.id){
+          if(i.checkChildId.indexOf(a.id)){
             xHData.push(a)
           }
         });
@@ -138,8 +138,8 @@ class App extends React.Component {
           description: "提示",
           message:"添加成功",
         });
-        this.props.onRefresh(this.props.tableReqData)
       }
+      this.props.onRefresh(this.props.tableReqData)
     })
   };
 
