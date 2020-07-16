@@ -15,7 +15,7 @@ class App extends React.Component {
           visible: false,
           dataSource:[],
           columns: [
-            {title: '经销商名称', dataIndex: 'name', key: 'name',width: 100,},
+            {title: '品牌厂家名称', dataIndex: 'name', key: 'name',width: 100,},
             {title: '市区', dataIndex: 'city', key: 'city',width: 100,},
             {title: '地址', dataIndex: 'address', key: 'address',width: 200,},
             {title: '代理品牌', dataIndex: 'agentBrand', key: 'agentBrand',width: 200,},
@@ -107,7 +107,7 @@ class App extends React.Component {
         return (
           <div>
             <Modal
-              title="新增一级经销商"
+              title="新增品牌厂家"
               visible={this.state.visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
@@ -117,7 +117,7 @@ class App extends React.Component {
               <Table scroll={{ x: 600 }} dataSource={dataSource} columns={columns} pagination={false} />
               <div>
                 <div className={style.addInpInLine}>
-                  <Input className={style.addInp} value={agentName} onChange={this.agentNameInp} placeholder="经销商名称" />
+                  <Input className={style.addInp} value={agentName} onChange={this.agentNameInp} placeholder="品牌厂家名称" />
                   <Cascader
                     options={dropdownData}
                     expandTrigger="hover"
@@ -127,7 +127,7 @@ class App extends React.Component {
                     value={dropdownValue}
                   />
                 </div>
-                <Input className={style.addInpAddress} value={agentAddress} onChange={this.agentAddressInp} placeholder="经销商地址" />
+                <Input className={style.addInpAddress} value={agentAddress} onChange={this.agentAddressInp} placeholder="品牌厂家地址" />
                 <Select
                     style={{ width: '100%' }}
                     placeholder="选择代理品牌"
@@ -144,7 +144,7 @@ class App extends React.Component {
         );
     }
   checkAddData = ()=>{
-    if(!this.state.agentName){alert('请输入经销商名称');return}
+    if(!this.state.agentName){alert('请输入品牌厂家名称');return}
     if(!this.state.dropdownValue.join('')){alert('请选择市区');return}
     if(!this.state.agentAddress){alert('请输入地址');return}
     if(this.state.agentBrand.length === 0){alert('请选择品牌');return}

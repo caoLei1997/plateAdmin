@@ -17,8 +17,8 @@ class App extends React.Component {
           dropdownValue:'',
           tableDataSource: [],
           tableColumns:[
-            {title: '一级经销商ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId',},
-            {title: '一级经销商名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName',},
+            {title: '品牌厂家ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId',},
+            {title: '品牌厂家名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName',},
             {title: '级别', dataIndex: 'level', key: 'level',},
             {title: '市区', dataIndex: 'cityRegion', key: 'cityRegion',},
             {title: '地址', width:160,dataIndex: 'address', key: 'address',},
@@ -117,7 +117,7 @@ class App extends React.Component {
         return (
         <div className={style.agentLevelOneMain}>
           <div className={style.searchBox}>
-            <Input onChange={this.inpChange1} className={style.inp} placeholder='一级经销商名称' size='small' />
+            <Input onChange={this.inpChange1} className={style.inp} placeholder='品牌厂家名称' size='small' />
 
             <Input onChange={this.inpChange2} className={style.inp} placeholder='品牌名称' size='small' />
 
@@ -136,7 +136,7 @@ class App extends React.Component {
           </div>
 
           <div className={style.addAgentBox}>
-            <Button className={style.btn} icon='+ ' onClick={this.showModal}>新增一级经销商</Button>
+            <Button className={style.btn} icon='+ ' onClick={this.showModal}>新增品牌厂家</Button>
           </div>
           <Spin spinning={spinningStatus}>
             <div className={style.tableList}>
@@ -152,14 +152,14 @@ class App extends React.Component {
           {dropdownData.length>0&&<Add onRef={this.onRef}  onChangePLoad={this.childChangeState}  onAddOk={this.submitSearchData} brandChildren={selectChildren} cityRegion={dropdownData}></Add>}
           {/*编辑弹框*/}
           <Modal
-            title="编辑一级经销商"
+            title="编辑品牌厂家"
             visible={this.state.editVisible}
             onOk={this.editHandleOk}
             onCancel={this.editHandleCancel}
             maskClosable={false}
           >
             <div className={style.editInp}>
-              <Input className={style.editInp} value={editDataName} onChange={this.editAgentNameInp} placeholder="一级经销商名称" />
+              <Input className={style.editInp} value={editDataName} onChange={this.editAgentNameInp} placeholder="品牌厂家名称" />
             </div>
             <div className={style.editInp}>
               <Cascader
@@ -172,7 +172,7 @@ class App extends React.Component {
               />
             </div>
             <div className={style.editInp}>
-              <Input className={style.editInp} value={editDataAddress} onChange={this.editAgentAddressInp} placeholder="一级经销商地址" />
+              <Input className={style.editInp} value={editDataAddress} onChange={this.editAgentAddressInp} placeholder="品牌厂家地址" />
             </div>
             <div className={style.editInp}>
               <Select
@@ -205,7 +205,7 @@ class App extends React.Component {
   editHandleCancel = ()=>{this.setState({editVisible:false})};
   editHandleOk = ()=>{
     let {editDataName,editDataCity,editDataAddress,editDataBrandId,editDataId} = this.state;
-    if(!editDataName){alert('请输入经销商名称'); return}
+    if(!editDataName){alert('请输入品牌厂家名称'); return}
     if(!editDataCity){alert('请选择市区');return}
     if(!editDataAddress){alert('请填写地址');return}
     this.setState({spinningStatus:true,editVisible:false});

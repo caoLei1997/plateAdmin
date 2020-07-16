@@ -164,7 +164,7 @@ class App extends React.Component {
         return (
           <div>
             <Modal
-              title="新增次级经销商"
+              title="新增经销商"
               visible={this.state.visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
