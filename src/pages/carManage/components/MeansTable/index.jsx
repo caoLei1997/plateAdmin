@@ -77,18 +77,6 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange }) => {
   const tableProps = {
     rowKey: 'id',
     columns,
-    pagination: {
-      total, current,
-      pageSize: nowPageSize,
-      onChange: handlePaginationChange,
-      showTotal: total => `共${total}条`,
-      showSizeChanger: true,
-      showQuickJumper: true,
-      onShowSizeChange: (current, size) => {
-        setNowPageSize(size);
-        paginationChange(current, false, { pageSize: size });
-      }
-    },
     loading: tableLoading,
     scroll,
     dataSource: list
