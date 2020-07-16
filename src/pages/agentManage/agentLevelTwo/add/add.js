@@ -117,7 +117,7 @@ class App extends React.Component {
       v.brandModelVoList.forEach((i,j)=>{
         let xHData = [];
         i.allChild.forEach((a,b)=>{
-          if(i.checkChildId === a.id){
+          if(v.checkChildId[j] === a.id){
             xHData.push(a)
           }
         });
