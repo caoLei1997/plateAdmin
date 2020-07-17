@@ -325,11 +325,11 @@ class App extends React.Component {
     this.selectChildren = [];
     data.forEach((v,k)=>{
       let opt ;
-      // if(v.agented === 2){
-      //   opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
-      // }else{
+      if(v.agented === 2){
+        // opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
+      }else{
         opt = <Option key={v.id} disabled={false}>{v.brandName}</Option>
-      // }
+      }
       this.selectChildren.push(opt);
     });
     this.setState({
