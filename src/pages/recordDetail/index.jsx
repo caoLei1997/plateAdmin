@@ -159,10 +159,10 @@ class index extends Component {
                 </PageHeaderWrapper>
 
                 <Row justify="space-between" align="middle" className='mt-32'>
-                    <Col span={3}>
+                    {/* <Col span={3}>
                         <div> <DoubleLeftOutlined />上一页</div>
 
-                    </Col>
+                    </Col> */}
                     <Col span={3}>
                         <div>  <LeftOutlined />上一条</div>
                     </Col>
@@ -177,9 +177,9 @@ class index extends Component {
                     <Col span={3} style={{ textAlign: 'right' }}>
                         <div>下一条 <RightOutlined /></div>
                     </Col>
-                    <Col span={3} style={{ textAlign: 'right' }}>
+                    {/* <Col span={3} style={{ textAlign: 'right' }}>
                         <div>下一页<DoubleRightOutlined /></div>
-                    </Col>
+                    </Col> */}
                 </Row>
             </div>
 

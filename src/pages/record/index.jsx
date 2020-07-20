@@ -4,69 +4,120 @@ import { Link } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import FilterSearch from './components/Filter';
 import styles from './index.less';
-
+import { connect } from 'umi';
 class Record extends Component {
+
+    constructor(props) {
+        super(props)
+    }
+
+    getList = () => {
+        let { dispatch, recordList } = this.props;
+        let { current, pageSize, list } = recordList;
+        console.log(1);
+
+
+
+        dispatch({
+            type: 'recordList/getList',
+            payload: {
+                "pageIndex": current,
+                "pageSize": pageSize,
+            },
+            onSuccess: (total) => {
+                console.log(12);
+                
+                console.log(total);
+                if (total < 1) return;
+                const maxCurrent = Math.ceil(total / catalogList.pageSize);
+                if (current > maxCurrent) {
+                    getList(maxCurrent > 1 ? maxCurrent : 1);
+                }
+            }
+        })
+
+        console.log(list);
+
+    }
+
+    componentDidMount() {
+        this.getList()
+    }
+
     render() {
         const columns = [
             {
                 title: '申请日期',
-                dataIndex: 'createDate',
-                key: 'createDate',
+                dataIndex: 'applyTime',
+                key: 'applyTime',
                 defaultSortOrder: 'descend',
                 sorter: (a, b) => a.createDate - b.createDate,
             },
             {
                 title: '归属地',
-                dataIndex: 'address',
-                key: 'address',
+                dataIndex: 'city',
+                key: 'city',
             },
             {
                 title: '登记人',
-                dataIndex: 'regPerson',
-                key: 'regPerson',
+                dataIndex: 'userName',
+                key: 'userName',
             },
             {
                 title: '证件类型',
-                dataIndex: 'IDType',
-                key: 'IDType',
+                key: 'certificateType',
+                render: (data) => {
+                    <Space>
+                        {
+                            data.certificateType === 0 ? '身份证' :
+                                (data.certificateType === 1 ? '护照' :
+                                    (data.certificateType === 2 ? '港澳通行证' :
+                                        '军官证'))
+                        }
+
+                    </Space>
+                }
             },
             {
                 title: '证件号码',
-                dataIndex: 'IDNumber',
-                key: 'IDNumber',
+                dataIndex: 'certificateNumber',
+                key: 'certificateNumber',
             },
             {
                 title: '车牌号',
-                dataIndex: 'carNumber',
-                key: 'carNumber',
+                dataIndex: 'plateNumber',
+                key: 'plateNumber',
             },
             {
                 title: '车辆中文商标',
-                dataIndex: 'trademark',
-                key: 'trademark',
+                dataIndex: 'electrombileChineseTradeMark',
+                key: 'electrombileChineseTradeMark',
             },
             {
                 title: '车辆型号',
-                dataIndex: 'carType',
-                key: 'carType',
+                dataIndex: 'modelName',
+                key: 'modelName',
             },
             {
                 title: '整车编码',
-                dataIndex: 'carCode',
-                key: 'carCode',
+                dataIndex: 'electrombileNumber',
+                key: 'electrombileNumber',
             },
             {
                 title: '审核状态',
-                key: 'status',
+                key: 'recordStatus',
                 render: (text, record) => (
                     <Space size="middle">
                         {
                             text.status == 2 ?
-                                <div className='font-green'>已通过</div> :
+
+                                <div className='font-pending'>待审核</div>
+                                :
                                 (
-                                    text.status == 1 ?
-                                        <div className='font-pending'>待审核</div> :
+                                    text.status == 3 ?
                                         <div className='font-danger'>不通过</div>
+                                        :
+                                        <div className='font-green'>已通过</div>
                                 )
                         }
                     </Space>
@@ -74,15 +125,15 @@ class Record extends Component {
             },
             {
                 title: '审核日期',
-                dataIndex: 'ReviewTrends',
-                key: 'ReviewTrends',
+                dataIndex: 'auditTime',
+                key: 'auditTime',
                 defaultSortOrder: 'descend',
                 sorter: (a, b) => a.ReviewTrends - b.ReviewTrends,
             },
             {
                 title: '不通过原因',
-                dataIndex: 'fail',
-                key: 'fail',
+                dataIndex: 'notPassReason',
+                key: 'notPassReason',
             },
             {
                 title: '操作',
@@ -94,26 +145,23 @@ class Record extends Component {
                 ),
             },
         ];
-
         const data = [
             {
-                key: '1',
-                createDate: '2020-10-12',
-                address: '西安市',
-                regPerson: '张三',
-                IDType: '身份证',
-                IDNumber: '2121931988101',
-                carNumber: '陕A38668',
-                trademark: '吉利',
-                carType: '轿车',
-                carCode: '123321',
-                status: 0, // 0 不通过 1待审核 2已经通过
-                ReviewTrends: '2020-10-13',
-                fail: '资料不全'
+                id: '1',
+                applyTime: '2020-10-12',
+                city: '西安市',
+                userName: '张三',
+                certificateType: 0, // 0身份证 1护照 2港澳通行证 3军官证
+                certificateNumber: '2121931988101',
+                plateNumber: '陕A38668',
+                electrombileChineseTradeMark: '吉利',
+                modelName: '轿车',
+                electrombileNumber: '123321',
+                recordStatus: 0, // 2待审核  3不通过 4已经通过
+                auditTime: '2020-10-13',
+                notPassReason: '资料不全'
             },
-
         ];
-
         return (
             <PageHeaderWrapper className={styles.main}>
                 <div>
@@ -126,4 +174,4 @@ class Record extends Component {
     }
 }
 
-export default Record
+export default connect(({ recordList }) => ({ recordList }))(Record) 
