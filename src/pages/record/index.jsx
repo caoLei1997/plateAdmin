@@ -37,6 +37,10 @@ class Record extends Component {
                 title: '申请日期',
                 dataIndex: 'applyTime',
                 key: 'applyTime',
+                render: applyTime => {
+                    let time = new Date(applyTime);
+                    return time.getFullYear() + '年' + time.getMonth() + '月' + time.getDate() + '日'
+                },
                 sorter: (a, b) => a.applyTime - b.applyTime,
             },
             {
@@ -114,6 +118,10 @@ class Record extends Component {
                 dataIndex: 'auditTime',
                 key: 'auditTime',
                 sorter: (a, b) => a.auditTime - b.auditTime,
+                render: auditTime => {
+                    let time = new Date(auditTime);
+                    return time.getFullYear() + '年' + time.getMonth() + '月' + time.getDate() + '日'
+                },
                 filterMultiple: false,
             },
             {
