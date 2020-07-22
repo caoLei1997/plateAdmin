@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Space } from 'antd';
+import { Table } from 'antd';
 import { Link } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import FilterSearch from './components/Filter';
@@ -57,7 +57,7 @@ class Record extends Component {
                 title: '证件类型',
                 key: 'certificateType',
                 render: (data) => {
-                    <Space>
+                    <div>
                         {
                             data.certificateType === 0 ? '身份证' :
                                 (data.certificateType === 1 ? '护照' :
@@ -65,7 +65,7 @@ class Record extends Component {
                                         '军官证'))
                         }
 
-                    </Space>
+                    </div>
                 }
             },
             {
@@ -97,7 +97,7 @@ class Record extends Component {
                 title: '审核状态',
                 key: 'recordStatus',
                 render: (text, record) => (
-                    <Space size="middle">
+                    <div size="middle">
                         {
                             text.status == 2 ?
 
@@ -110,7 +110,7 @@ class Record extends Component {
                                         <div className='font-green'>已通过</div>
                                 )
                         }
-                    </Space>
+                    </div>
                 ),
             },
             {
@@ -134,9 +134,9 @@ class Record extends Component {
                 dataIndex: 'plateNumberApplyId',
                 key: 'plateNumberApplyId',
                 render: (plateNumberApplyId) => (
-                    <Space size="middle">
+                    <div size="middle">
                         <Link to={`/record/recordDetail/${plateNumberApplyId}`}>查看详情</Link>
-                    </Space>
+                    </div>
                 ),
             },
         ];
