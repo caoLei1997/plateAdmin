@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './index.less';
-import { Form, Input, Button, Cascader,Table,Modal,Select,notification,Spin} from 'antd';
-import {requestAgentList,requestCityRegion,requestBrand,editFirstAgentSave} from "../../../services/agentManage"
+import { Form, Input, Button, Cascader,Table,Modal,Select,notification,Spin, Checkbox} from 'antd';
+import {requestAgentList, requestCityRegion, requestBrand, editFirstAgentSave, useOrStop} from "../../../services/agentManage"
 import Add from "./add/add"
 const { Option } = Select;
 import { Link } from 'umi';
@@ -112,7 +112,7 @@ class App extends React.Component {
     console.log('Success:', values);
   };
     render() {
-      let {dropdownData,tableDataSource,paginationSeting,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrandId,total,pageSize,pageIndex,onChange,selectChildren,spinningStatus} = this.state
+      let {dropdownData,tableDataSource,paginationSeting,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrandId,total,pageSize,pageIndex,onChange,selectChildren,spinningStatus,useOrStopTitle,useOrStopVisible,useOrStopContent,useOrStopIsUse} = this.state
 
         return (
         <div className={style.agentLevelOneMain}>
@@ -185,6 +185,18 @@ class App extends React.Component {
                 {selectChildren}
               </Select>
             </div>
+          </Modal>
+          {/*停用启用弹窗*/}
+          <Modal
+            title={useOrStopTitle}
+            visible={useOrStopVisible}
+            onOk={this.useOrStopHandleOk}
+            onCancel={this.useOrStopHandleCancel}
+          >
+            <p>{useOrStopContent}</p>
+            {
+              useOrStopIsUse
+            }
           </Modal>
         </div>
         );
@@ -262,6 +274,9 @@ class App extends React.Component {
   };
 
   tableListReq = (data)=>{
+    this.setState({
+      spinningStatus:true
+    });
     requestAgentList(data).then(res=>{
       if(res&&res.data&&res.data.content){
         let list = res.data.content;
@@ -270,7 +285,8 @@ class App extends React.Component {
           v.do = <p>
             <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>
             <p></p>
-            {/*<a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>*/}
+            {v.status==='1'?<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>启用</a>:<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>禁用</a>}
+
           </p>
           v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
           // v.personNum = <a href='javascript:;' key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
@@ -293,6 +309,56 @@ class App extends React.Component {
           message:"暂无数据",
         });
       }
+    });
+  };
+  doUse = (a,b)=>{
+    console.log(a,b);
+    let title = a.status === '0'? "停用":"启用";
+    let content = a.status === '0'? "停用会导致该商户相关所有业务人员账号停用，不能再处理代牌销售业务，确认要停用吗？":"启用后该商户将恢复代牌销售业务相关办理权限，确认要启用吗？";
+    let isUse =  a.status === '1'&&<p>
+      <Checkbox onChange={this.onUseOrStopCheck}>同时启用该商户所有人员账号</Checkbox>
+    </p>;
+    this.setState({
+      useOrStopId:a.agentOutletsId,
+      useOrStopVisible:true,
+      useOrStopTitle:title,
+      useOrStopContent:content,
+      useOrStopIsUse:isUse,
+      useOrStopStatus:a.status === '0'?'1':'0'
+    })
+  }
+  onUseOrStopCheck = (a,b)=>{
+    console.log(a.target.checked)
+    this.setState({
+      allUseCheck:a.target.checked
+    })
+  };
+  useOrStopHandleOk = ()=>{
+    let {useOrStopId,useOrStopStatus,allUseCheck} = this.state;
+    this.setState({
+      useOrStopVisible:false,
+      spinningStatus:true,
+    });
+    useOrStop({
+      agentOutletsId:useOrStopId ,
+      status: useOrStopStatus,
+      isEnableAccount: allUseCheck,
+      level:'11'
+    }).then(res=>{
+      console.log(res);
+      this.tableListReq(this.agentTableListParams);
+      if(res.retCode === '0000'){
+        notification.info({
+          description: "提示",
+          message:"状态更新成功",
+        });
+      }
+    });
+
+  };
+  useOrStopHandleCancel = (a)=>{
+    this.setState({
+      useOrStopVisible:false,
     });
   };
   reqCityRegion = ()=>{
@@ -325,11 +391,11 @@ class App extends React.Component {
     this.selectChildren = [];
     data.forEach((v,k)=>{
       let opt ;
-      // if(v.agented === 2){
-      //   opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
-      // }else{
+      if(v.agented === 2){
+        // opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
+      }else{
         opt = <Option key={v.id} disabled={false}>{v.brandName}</Option>
-      // }
+      }
       this.selectChildren.push(opt);
     });
     this.setState({
