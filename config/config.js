@@ -118,7 +118,7 @@ export default defineConfig({
             {
               name: '备案详情',
               icon: 'smile',
-              path: '/record/recordDetail',
+              path: '/record/recordDetail/:id',
               component: './recordDetail',
               authority: ['admin'],
               hideInMenu: true,

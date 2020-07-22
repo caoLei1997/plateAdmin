@@ -63,12 +63,13 @@ request.interceptors.request.use((url, options = {}) => {
   const { isToken = true } = options;
   const headers = {};
   const sessionData = getAuthority2() || {};
-  if (isToken) headers.token = sessionData.token;
+  // if (isToken) headers.token = sessionData.token;
+  if (isToken) headers.token = '07dc5aa9-8c43-4c8b-bae6-85081a3c1599';
 
   let queryUrl = url;
   if (process.env.NODE_ENV === 'development') {
-    // queryUrl = `/cjj-api${url}`; // 开发环境
-    queryUrl = `/vehicle-pre${url}`;
+    queryUrl = `/cjj-api${url}`; // 开发环境
+    // queryUrl = `/vehicle-pre${url}`;
     // queryUrl = `/vehicle/${url}`;
     // queryUrl = `/api${url}`;
   }

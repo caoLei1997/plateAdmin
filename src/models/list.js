@@ -5,8 +5,8 @@ const initialState = {
     total: 0,
     pageSize: PAGESIZE,
     current: 1,
-    list: [],
-    listID: []
+    content: [],
+    ids: []
 }
 export default {
     namespace: 'recordList',
@@ -18,18 +18,19 @@ export default {
                 type: 'changeList',
                 payload: response
             })
-
             if (response.retCode === RETCODESUCCESS) {
                 onSuccess(response.data.total);
-            }
 
+                localStorage.setItem('recordList', JSON.stringify(response))
+
+            }
         }
     },
     reducers: {
         changeList(state, { payload }) {
             const { data } = payload;
-            if (!data) return { ...state, list: [], total: 0 };
-            return { ...state, total: data.total || 0 };
+            if (!data) return { ...state, content: [], total: 0 };
+            return { ...state, ...data };
         },
 
     }

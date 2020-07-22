@@ -13,11 +13,7 @@ class Record extends Component {
 
     getList = () => {
         let { dispatch, recordList } = this.props;
-        let { current, pageSize, list } = recordList;
-        console.log(1);
-
-
-
+        let { current, pageSize } = recordList;
         dispatch({
             type: 'recordList/getList',
             payload: {
@@ -26,18 +22,9 @@ class Record extends Component {
             },
             onSuccess: (total) => {
                 console.log(12);
-                
-                console.log(total);
-                if (total < 1) return;
-                const maxCurrent = Math.ceil(total / catalogList.pageSize);
-                if (current > maxCurrent) {
-                    getList(maxCurrent > 1 ? maxCurrent : 1);
-                }
             }
         })
-
-        console.log(list);
-
+        // console.log(list);
     }
 
     componentDidMount() {
@@ -50,8 +37,7 @@ class Record extends Component {
                 title: '申请日期',
                 dataIndex: 'applyTime',
                 key: 'applyTime',
-                defaultSortOrder: 'descend',
-                sorter: (a, b) => a.createDate - b.createDate,
+                sorter: (a, b) => a.applyTime - b.applyTime,
             },
             {
                 title: '归属地',
@@ -127,8 +113,8 @@ class Record extends Component {
                 title: '审核日期',
                 dataIndex: 'auditTime',
                 key: 'auditTime',
-                defaultSortOrder: 'descend',
-                sorter: (a, b) => a.ReviewTrends - b.ReviewTrends,
+                sorter: (a, b) => a.auditTime - b.auditTime,
+                filterMultiple: false,
             },
             {
                 title: '不通过原因',
@@ -137,36 +123,23 @@ class Record extends Component {
             },
             {
                 title: '操作',
-                key: 'action',
-                render: (text, record) => (
+                dataIndex: 'plateNumberApplyId',
+                key: 'plateNumberApplyId',
+                render: (plateNumberApplyId) => (
                     <Space size="middle">
-                        <Link to={`/record/recordDetail`}>查看详情</Link>
+                        <Link to={`/record/recordDetail/${plateNumberApplyId}`}>查看详情</Link>
                     </Space>
                 ),
             },
         ];
-        const data = [
-            {
-                id: '1',
-                applyTime: '2020-10-12',
-                city: '西安市',
-                userName: '张三',
-                certificateType: 0, // 0身份证 1护照 2港澳通行证 3军官证
-                certificateNumber: '2121931988101',
-                plateNumber: '陕A38668',
-                electrombileChineseTradeMark: '吉利',
-                modelName: '轿车',
-                electrombileNumber: '123321',
-                recordStatus: 0, // 2待审核  3不通过 4已经通过
-                auditTime: '2020-10-13',
-                notPassReason: '资料不全'
-            },
-        ];
+
+        const { recordList } = this.props
+
         return (
             <PageHeaderWrapper className={styles.main}>
                 <div>
                     <FilterSearch></FilterSearch>
-                    <Table columns={columns} dataSource={data} />
+                    <Table columns={columns} dataSource={recordList.content} />
                 </div>
             </PageHeaderWrapper>
 
