@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './index.less';
-import { Form, Input, Button, Cascader,Table,Modal,Select,notification} from 'antd';
+import { Form, Input, Button, Cascader,Table,Modal,Select,notification,Spin} from 'antd';
 import {requestAgentList,requestCityRegion,requestBrand,editFirstAgentSave} from "../../../services/agentManage"
 import Add from "./add/add"
 const { Option } = Select;
@@ -17,8 +17,8 @@ class App extends React.Component {
           dropdownValue:'',
           tableDataSource: [],
           tableColumns:[
-            {title: '品牌厂家ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId',},
-            {title: '品牌厂家名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName',},
+            {title: '商户ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId',},
+            {title: '商户名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName',},
             {title: '级别', dataIndex: 'level', key: 'level',},
             {title: '市区', dataIndex: 'cityRegion', key: 'cityRegion',},
             {title: '地址', width:160,dataIndex: 'address', key: 'address',},
@@ -51,8 +51,8 @@ class App extends React.Component {
               region: dropdownValue&&dropdownValue[1]
             };
             this.tableListReq(this.agentTableListParams)
-          }
-
+          },
+        spinningStatus:true
         }
     }
 
@@ -112,14 +112,14 @@ class App extends React.Component {
     console.log('Success:', values);
   };
     render() {
-      let {dropdownData,tableDataSource,paginationSeting,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrandId,total,pageSize,pageIndex,onChange,selectChildren} = this.state
+      let {dropdownData,tableDataSource,paginationSeting,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrandId,total,pageSize,pageIndex,onChange,selectChildren,spinningStatus} = this.state
 
         return (
         <div className={style.agentLevelOneMain}>
           <div className={style.searchBox}>
-            <Input onChange={this.inpChange1} className={style.inp} placeholder='品牌厂家名称' size='small' />
+            <Input onChange={this.inpChange1} className={style.inp} placeholder='商户名称' size='small' />
 
-            <Input onChange={this.inpChange2} className={style.inp} placeholder='品牌名称' size='small' />
+            <Input onChange={this.inpChange2} className={style.inp} placeholder='商户名称' size='small' />
 
             <Cascader
               options={dropdownData}
@@ -138,20 +138,21 @@ class App extends React.Component {
           <div className={style.addAgentBox}>
             <Button className={style.btn} icon='+ ' onClick={this.showModal}>新增品牌厂家</Button>
           </div>
-
-          <div className={style.tableList}>
-            <Table dataSource={tableDataSource} pagination={{
+          <Spin spinning={spinningStatus}>
+            <div className={style.tableList}>
+              <Table dataSource={tableDataSource} pagination={{
                 total:total,
                 pageSize:pageSize,
                 pageIndex:pageIndex,
                 onChange:onChange
               }} columns={tableColumns}/>
-          </div>
+            </div>
+          </Spin>
           {/*添加弹框*/}
-          {dropdownData.length>0&&<Add onRef={this.onRef} onAddOk={this.submitSearchData} brandChildren={selectChildren} cityRegion={dropdownData}></Add>}
+          {dropdownData.length>0&&<Add onRef={this.onRef}  onChangePLoad={this.childChangeState}  onAddOk={this.submitSearchData} brandChildren={selectChildren} cityRegion={dropdownData}></Add>}
           {/*编辑弹框*/}
           <Modal
-            title="编辑品牌厂家"
+            title="编辑商户"
             visible={this.state.editVisible}
             onOk={this.editHandleOk}
             onCancel={this.editHandleCancel}
@@ -175,6 +176,7 @@ class App extends React.Component {
             </div>
             <div className={style.editInp}>
               <Select
+                allowClear={true}
                 style={{ width: '100%' }}
                 placeholder="选择代理品牌"
                 onChange={this.editHandleChange}
@@ -195,14 +197,18 @@ class App extends React.Component {
     // sendDataBrand
     let arr = [];
     let arr1 = [];
-    arr.push(v2.value)
+    arr.push(v2&&v2.value)
     this.setState({
       editDataBrandId:arr,
     })
   };
   editHandleCancel = ()=>{this.setState({editVisible:false})};
   editHandleOk = ()=>{
-      let {editDataName,editDataCity,editDataAddress,editDataBrandId,editDataId} = this.state;
+    let {editDataName,editDataCity,editDataAddress,editDataBrandId,editDataId} = this.state;
+    if(!editDataName){alert('请输入商户名称'); return}
+    if(!editDataCity){alert('请选择市区');return}
+    if(!editDataAddress){alert('请填写地址');return}
+    this.setState({spinningStatus:true,editVisible:false});
     editFirstAgentSave({
         id: editDataId,
         name: editDataName,
@@ -211,9 +217,6 @@ class App extends React.Component {
         address: editDataAddress,
         brandIds:editDataBrandId,
       }).then(res=>{
-      this.setState({
-        editVisible:false
-      });
       this.tableListReq(this.agentTableListParams)
     });
 
@@ -267,7 +270,7 @@ class App extends React.Component {
           v.do = <p>
             <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>
             <p></p>
-            <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>
+            {/*<a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>*/}
           </p>
           v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
           // v.personNum = <a href='javascript:;' key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
@@ -280,7 +283,8 @@ class App extends React.Component {
         this.setState({
           tableDataSource:list,
           pageIndex:data.pageIndex,
-          total:res.data.total
+          total:res.data.total,
+          spinningStatus:false
         });
         this.reqBrand();
       }else{
@@ -321,19 +325,23 @@ class App extends React.Component {
     this.selectChildren = [];
     data.forEach((v,k)=>{
       let opt ;
-      if(v.agented === 2){
-        opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
-      }else{
+      // if(v.agented === 2){
+      //   opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
+      // }else{
         opt = <Option key={v.id} disabled={false}>{v.brandName}</Option>
-      }
+      // }
       this.selectChildren.push(opt);
     });
     this.setState({
       selectChildren:this.selectChildren
     });
     return data
+  };
+  childChangeState = ()=>{
+    this.setState({
+      spinningStatus:true
+    })
   }
-
 }
 
 export default App;
