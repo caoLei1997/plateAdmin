@@ -106,7 +106,7 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
       <Modal title='编辑业务人员' destroyOnClose visible={modalVisible} footer={null} onCancel={() => toggleModalVisible(false)}>
         <Form initialValues={{ name: item.name, phoneNumber: item.phoneNumber, city: item.region, level: String(item.level) }} fields={[{ name: ['outlets'], value: selectVal.outlets }]} className="personal-edit-form" name='catalog-manage-table-search' onFinish={handleFinish} >
           <Form.Item label='姓名' name='name' rules={[{ required: true, message: '请输入姓名!' }]}>
-            <Input placeholder="姓名" />
+            <Input placeholder="姓名"/>
           </Form.Item>
           <Form.Item label='手机号' name='phoneNumber' rules={[{ required: true, len: 11, message: '请输入正确的手机号!' }]}>
             <Input placeholder="手机号" />
