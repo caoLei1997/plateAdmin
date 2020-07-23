@@ -77,7 +77,7 @@ export default defineConfig({
               icon: 'smile',
               path: '/catalog',
               component: './catalogManage',
-              authority: ['agent','admin'],
+              authority: ['admin'],
             },
             {
               name: '基础详情页',

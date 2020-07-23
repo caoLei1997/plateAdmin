@@ -98,7 +98,7 @@ class Record extends Component {
                                 <div className='font-pending'>待审核</div>
                                 :
                                 (
-                                    recordStatus.status == 3 ?
+                                    recordStatus == 3 ?
                                         <div className='font-danger'>不通过</div>
                                         :
                                         <div className='font-green'>已通过</div>

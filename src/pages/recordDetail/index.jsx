@@ -95,6 +95,8 @@ class index extends Component {
             }
         ]
 
+        
+
         if (content) {
             return (
                 <div>
@@ -104,7 +106,7 @@ class index extends Component {
                                 <span>审核状态： </span>
                                 <div className="inline" style={{ display: 'inline-block' }}>
                                     {
-                                        content.recordStatus == 2 ? <div>待审核</div> : (content.auditStatus == 4 ? <div className='font-success'>通过</div> : <div className='font-red'>未通过</div>)
+                                        content.recordStatus == 2 ? <div>待审核</div> : (content.recordStatus == 4 ? <div className='font-success'>通过</div> : <div className='font-red'>未通过</div>)
                                     }
                                 </div>
                             </div>
