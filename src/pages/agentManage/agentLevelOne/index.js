@@ -288,6 +288,7 @@ class App extends React.Component {
             {v.status==='1'?<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>启用</a>:<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>禁用</a>}
 
           </p>
+          v.level = v.level===11?'品牌厂家':'--';
           v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
           // v.personNum = <a href='javascript:;' key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
           v.personNum = <Link to={"/personal/"+v.agentOutletsId} key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</Link>;
