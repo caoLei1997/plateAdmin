@@ -120,6 +120,9 @@ class App extends React.Component {
   };
 
     reqTableList = (data)=>{
+      this.setState({
+        spinningStatus:true
+      });
       requestAgentList(data).then(res=>{
         if(res&&res.data&&res.data.content){
           let list = res.data.content;
@@ -195,10 +198,9 @@ class App extends React.Component {
     let title = a.status === '0'? "停用":"启用";
     let content = a.status === '0'? "停用会导致该商户相关所有业务人员账号停用，不能再处理代牌销售业务，确认要停用吗？":"启用后该商户将恢复代牌销售业务相关办理权限，确认要启用吗？";
     let isUse =  a.status === '1'&&<p>
-      <Checkbox onChange={this.onUseOrStopCheck}>同时启用该商户所有人员账号</Checkbox>
+      <Checkbox onChange={this.onUseOrStopCheck} id={a.id}>同时启用该商户所有人员账号</Checkbox>
     </p>
     this.setState({
-      allUseCheck:false,
       useOrStopId:a.agentOutletsId,
       useOrStopVisible:true,
       useOrStopTitle:title,
@@ -326,31 +328,35 @@ class App extends React.Component {
   onUseOrStopCheck = (a,b)=>{
       console.log(a.target.checked)
     this.setState({
-      allUseCheck:true
+      allUseCheck:a.target.checked
     })
   };
   useOrStopHandleOk = ()=>{
     let {useOrStopId,useOrStopStatus,allUseCheck} = this.state;
+    this.setState({
+      useOrStopVisible:false,
+      spinningStatus:true,
+    });
     useOrStop({
       agentOutletsId:useOrStopId ,
       status: useOrStopStatus,
-      isEnableAccount: allUseCheck
+      isEnableAccount: allUseCheck,
+      level:'12'
     }).then(res=>{
       console.log(res);
       this.reqTableList(this.data);
-      this.setState({
-        useOrStopVisible:false
-      });
-      notification.info({
-        description: "提示",
-        message:"状态更新成功",
-      });
+      if(res.retCode === '0000'){
+        notification.info({
+          description: "提示",
+          message:"状态更新成功",
+        });
+      }
     });
 
   };
   useOrStopHandleCancel = (a)=>{
     this.setState({
-      useOrStopVisible:false
+      useOrStopVisible:false,
     });
   };
 
