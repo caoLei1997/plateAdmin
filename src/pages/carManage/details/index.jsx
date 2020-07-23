@@ -152,7 +152,7 @@ const MeansDetail = ({ dispatch, match, detailState, loading, meansListState,his
             />
           </Card>
           <Row justify="space-between" align="middle" className='mt-32'>
-            <Col span={3}>
+            {/* <Col span={3}>
               {
                 judgePageIsDisabled() ?
                   <Text className='font-size-20' disabled><DoubleLeftOutlined />上一页</Text>
@@ -160,7 +160,7 @@ const MeansDetail = ({ dispatch, match, detailState, loading, meansListState,his
                   <div className='font-size-20 pointer font-blue' onClick={() => getMeansList('first')}>
                     <DoubleLeftOutlined />上一页</div>
               }
-            </Col>
+            </Col> */}
             <Col span={3}>
               {judgeIdIsDisabled() ?
                 <Text className='font-size-20' disabled><LeftOutlined />上一个</Text>
@@ -185,7 +185,7 @@ const MeansDetail = ({ dispatch, match, detailState, loading, meansListState,his
                 </Link>
               }
             </Col>
-            <Col span={3} style={{ textAlign: 'right' }}>
+            {/* <Col span={3} style={{ textAlign: 'right' }}>
               {judgePageIsDisabled('last') ?
                 <Text className='font-size-20' disabled>下一页<DoubleRightOutlined /></Text>
                 :
@@ -193,7 +193,7 @@ const MeansDetail = ({ dispatch, match, detailState, loading, meansListState,his
                   <span>下一页</span><DoubleRightOutlined />
                 </div>
               }
-            </Col>
+            </Col> */}
           </Row>
         </div>
       }
