@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Input, Button, Select, DatePicker } from 'antd';
 import { connect } from 'umi';
 import styles from './index.less';
 const { RangePicker } = DatePicker;
 
-const FilterSearch = ({ dispatch, recordList }) => {
+const FilterSearch = ({ dispatch, recordList, login }) => {
     const [form] = Form.useForm();
 
     const onFinish = data => {
@@ -22,27 +22,29 @@ const FilterSearch = ({ dispatch, recordList }) => {
         })
     };
 
-    const initialForm = {
-        city: '全部',
-        recordStatus: '2'
-    }
+    useEffect(() => {
+        dispatch({
+            type: 'recordList/requestGetCity',
+            payload: {
+                agentOutletsId: login.id
+            }
+        })
+    }, []);
 
     return (
         <div className={styles.filter} >
             <Form
-                // form={form}
+                form={form}
                 name="advanced_search"
                 className="ant-advanced-search-form"
                 onFinish={onFinish}
-                initialValues={initialForm}
+
             >
                 <Row gutter={24}>
                     <Col span={6}>
                         <Form.Item label='归属地' name='city'>
-                            <Select >
-                                <Select.Option value="全部">全部</Select.Option>
-                                <Select.Option value="西安市">西安市</Select.Option>
-                                <Select.Option value="咸阳">咸阳</Select.Option>
+                            <Select placeholder='归属地'>
+                                {recordList.city.map(item=> <Select.Option key={item.cityId} value={item.label}>{item.value}</Select.Option>)}
                             </Select>
                         </Form.Item>
                     </Col>
@@ -70,7 +72,7 @@ const FilterSearch = ({ dispatch, recordList }) => {
                     </Col>
                     <Col span={6}>
                         <Form.Item label='审核状态' name='recordStatus'>
-                            <Select >
+                            <Select placeholder='审核状态'>
                                 <Select.Option value="2">已审核</Select.Option>
                                 <Select.Option value="4">待审核</Select.Option>
                                 <Select.Option value="3">不通过</Select.Option>
@@ -106,4 +108,4 @@ const FilterSearch = ({ dispatch, recordList }) => {
     );
 };
 
-export default connect(({ recordList }) => ({ recordList }))(FilterSearch) 
+export default connect(({ recordList, login }) => ({ recordList, login }))(FilterSearch) 

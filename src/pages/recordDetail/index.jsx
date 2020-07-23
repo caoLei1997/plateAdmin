@@ -104,7 +104,7 @@ class index extends Component {
                                 <span>审核状态： </span>
                                 <div className="inline" style={{ display: 'inline-block' }}>
                                     {
-                                        content.auditStatus == 0 ? <div>待审核</div> : (content.auditStatus == 1 ? <div className='font-success'>通过</div> : <div className='font-red'>未通过</div>)
+                                        content.recordStatus == 2 ? <div>待审核</div> : (content.auditStatus == 4 ? <div className='font-success'>通过</div> : <div className='font-red'>未通过</div>)
                                     }
                                 </div>
                             </div>
@@ -133,7 +133,7 @@ class index extends Component {
                                 <Descriptions.Item label="车身颜色"> {content.electrombileColor || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="车辆用途"> {filter(content.electrombileUsage) || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="车牌号"> {content.plateNumber || '--'}</Descriptions.Item>
-                                <Descriptions.Item label="车牌种类"> {content.plateNumberType == '01' ?'普通电动自行车号牌' :'其他电动车号牌）' || '--'}</Descriptions.Item>
+                                <Descriptions.Item label="车牌种类"> {content.plateNumberType == '01' ? '普通电动自行车号牌' : '其他电动车号牌）' || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="登记日期"> {content.createAt || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="登记省份"> {content.registeredRegionName || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="发证机关"> {content.licenselssueAgencyName || '--'}</Descriptions.Item>
@@ -194,22 +194,14 @@ class index extends Component {
                             <Divider></Divider>
                             <Descriptions title="" column={2}>
                                 <Descriptions.Item label="姓名">{content.userName || '--'}</Descriptions.Item>
-                                <Descriptions.Item label="证件类型">{content.certificateNumber || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="证件类型">{content.certificateType == 0 ? '身份证' : (content.certificateType == 1 ? '护照' : (content.certificateType == 2 ? '港澳通行证' : '军官证')) || '--'}</Descriptions.Item>
+                                <Descriptions.Item label="证件号码">{content.certificateNumber || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="手机号码">{content.phoneNumber || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="家庭住址">{content.detailAddress || '--'}</Descriptions.Item>
                             </Descriptions>
-
-                            {/* {content.managementPlatformAuditRecordsList} */}
-                            {
-                                content.auditStatus !== 0 && (
-                                    <>
-                                        <h3>审核记录</h3>
-                                        <Divider></Divider>
-                                        <Table rowKey={"id"} columns={columns} dataSource={content.managementPlatformAuditRecordsList}></Table>
-                                    </>
-                                )
-                            }
+                            <h3>审核记录</h3>
+                            <Divider></Divider>
+                            <Table rowKey={"id"} columns={columns} dataSource={content.managementPlatformAuditRecordsList}></Table>
                         </div>
                     </PageHeaderWrapper>
 
@@ -223,7 +215,7 @@ class index extends Component {
                         </Col>
                         <Col span={12}>
                             {
-                                content.auditStatus != 1 && (
+                                content.recordStatus != 4 && (
                                     <div className='inline text-center'>
                                         <AuditPass recordId={id} ></AuditPass>
                                         <AuditBy recordId={id}></AuditBy>

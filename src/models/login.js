@@ -1,4 +1,4 @@
-import { RETCODESUCCESS, SUPER_UNIQUE } from '@/globalConstant';
+import { RETCODESUCCESS, SUPER_UNIQUE,PoliceChannel ,agentChannel} from '@/globalConstant';
 import { stringify } from 'querystring';
 import { history } from 'umi';
 import { fakeAccountLogin } from '@/services/login';
@@ -63,7 +63,7 @@ const Model = {
         ...payload.data,
         phone: payload.data.account,
         firstId: payload.data.id === SUPER_UNIQUE ? '' : payload.data.id,
-        'antd-pro-authority': payload.data.id === SUPER_UNIQUE ? 'admin' : ''
+        'antd-pro-authority':authorityFn(payload.data)
       };
       setAuthority(userInfo);
 
@@ -80,3 +80,14 @@ const Model = {
   },
 };
 export default Model;
+
+function authorityFn( data ) {
+  if(data.id  === SUPER_UNIQUE){
+    return 'admin'
+  }else if(data.channel  === PoliceChannel){
+    return 'police'
+  }else if(data.channel  === agentChannel){
+    return 'agent'
+  }
+
+}
