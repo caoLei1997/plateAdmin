@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Space } from 'antd';
+import { Table } from 'antd';
 import { Link } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import FilterSearch from './components/Filter';
@@ -36,7 +36,6 @@ class Record extends Component {
             {
                 title: '申请日期',
                 dataIndex: 'applyTime',
-                key: 'applyTime',
                 render: applyTime => {
                     let time = new Date(applyTime);
                     return time.getFullYear() + '年' + time.getMonth() + '月' + time.getDate() + '日'
@@ -46,77 +45,68 @@ class Record extends Component {
             {
                 title: '归属地',
                 dataIndex: 'city',
-                key: 'city',
             },
             {
                 title: '登记人',
                 dataIndex: 'userName',
-                key: 'userName',
             },
             {
                 title: '证件类型',
-                key: 'certificateType',
-                render: (data) => {
-                    <Space>
+                dataIndex: 'certificateType',
+                render: (certificateType) => {
+                    <div>
                         {
-                            data.certificateType === 0 ? '身份证' :
-                                (data.certificateType === 1 ? '护照' :
-                                    (data.certificateType === 2 ? '港澳通行证' :
+                            certificateType === 0 ? '身份证' :
+                                (certificateType === 1 ? '护照' :
+                                    (certificateType === 2 ? '港澳通行证' :
                                         '军官证'))
                         }
 
-                    </Space>
+                    </div>
                 }
             },
             {
                 title: '证件号码',
                 dataIndex: 'certificateNumber',
-                key: 'certificateNumber',
             },
             {
                 title: '车牌号',
                 dataIndex: 'plateNumber',
-                key: 'plateNumber',
             },
             {
                 title: '车辆中文商标',
                 dataIndex: 'electrombileChineseTradeMark',
-                key: 'electrombileChineseTradeMark',
             },
             {
                 title: '车辆型号',
                 dataIndex: 'modelName',
-                key: 'modelName',
             },
             {
                 title: '整车编码',
                 dataIndex: 'electrombileNumber',
-                key: 'electrombileNumber',
             },
             {
                 title: '审核状态',
-                key: 'recordStatus',
-                render: (text, record) => (
-                    <Space size="middle">
+                dataIndex: 'recordStatus',
+                render: (recordStatus) => (
+                    <div size="middle">
                         {
-                            text.status == 2 ?
-
+                            recordStatus == 2 ?
                                 <div className='font-pending'>待审核</div>
                                 :
                                 (
-                                    text.status == 3 ?
+                                    recordStatus.status == 3 ?
                                         <div className='font-danger'>不通过</div>
                                         :
                                         <div className='font-green'>已通过</div>
                                 )
                         }
-                    </Space>
+                    </div>
                 ),
             },
             {
                 title: '审核日期',
                 dataIndex: 'auditTime',
-                key: 'auditTime',
                 sorter: (a, b) => a.auditTime - b.auditTime,
                 render: auditTime => {
                     let time = new Date(auditTime);
@@ -127,16 +117,14 @@ class Record extends Component {
             {
                 title: '不通过原因',
                 dataIndex: 'notPassReason',
-                key: 'notPassReason',
             },
             {
                 title: '操作',
                 dataIndex: 'plateNumberApplyId',
-                key: 'plateNumberApplyId',
                 render: (plateNumberApplyId) => (
-                    <Space size="middle">
+                    <div size="middle">
                         <Link to={`/record/recordDetail/${plateNumberApplyId}`}>查看详情</Link>
-                    </Space>
+                    </div>
                 ),
             },
         ];
@@ -147,7 +135,7 @@ class Record extends Component {
             <PageHeaderWrapper className={styles.main}>
                 <div>
                     <FilterSearch></FilterSearch>
-                    <Table columns={columns} dataSource={recordList.content} />
+                    <Table rowKey={"id"} columns={columns} dataSource={recordList.content} />
                 </div>
             </PageHeaderWrapper>
 

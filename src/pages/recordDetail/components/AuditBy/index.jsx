@@ -22,12 +22,6 @@ const AuditBy = (props) => {
                         id: props.recordId
                     }
                 })
-                // if (recordList.ids.length > 1) {
-                //     let index = recordList.ids.indexOf(Number(props.recordId));
-                //     if (index + 1 >= recordList.ids.length) {
-                //         router.push(`/record/recordDetail / ${recordList.ids[index + 1]}`)
-                //     }
-                // }
             }
         })
     }
