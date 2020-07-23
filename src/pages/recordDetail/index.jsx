@@ -62,6 +62,14 @@ class index extends Component {
         const { content, retMsg } = this.props.recordDetail
         const { id } = this.props.match.params
 
+        const filter = val => {
+            if (val == 0) return '自用'
+            if (val == 1) return '快递'
+            if (val == 2) return '外卖'
+            if (val == 3) return '其它'
+            return ''
+        }
+
         const columns = [
             {
                 title: '审核人',
@@ -123,9 +131,9 @@ class index extends Component {
                                 <Descriptions.Item label="生产企业名称"> {content.factoryName || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="电机编码"> {content.electricNumber || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="车身颜色"> {content.electrombileColor || '--'}</Descriptions.Item>
-                                <Descriptions.Item label="车辆用途"> {content.electrombileUsage || '--'}</Descriptions.Item>
+                                <Descriptions.Item label="车辆用途"> {filter(content.electrombileUsage) || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="车牌号"> {content.plateNumber || '--'}</Descriptions.Item>
-                                <Descriptions.Item label="车牌种类"> {content.plateNumberType || '--'}</Descriptions.Item>
+                                <Descriptions.Item label="车牌种类"> {content.plateNumberType == '01' ?'普通电动自行车号牌' :'其他电动车号牌）' || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="登记日期"> {content.createAt || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="登记省份"> {content.registeredRegionName || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="发证机关"> {content.licenselssueAgencyName || '--'}</Descriptions.Item>
@@ -198,7 +206,7 @@ class index extends Component {
                                     <>
                                         <h3>审核记录</h3>
                                         <Divider></Divider>
-                                        <Table columns={columns} dataSource={content.managementPlatformAuditRecordsList}></Table>
+                                        <Table rowKey={"id"} columns={columns} dataSource={content.managementPlatformAuditRecordsList}></Table>
                                     </>
                                 )
                             }
