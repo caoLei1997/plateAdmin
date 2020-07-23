@@ -104,7 +104,7 @@ class index extends Component {
                                 <span>审核状态： </span>
                                 <div className="inline" style={{ display: 'inline-block' }}>
                                     {
-                                        content.auditStatus == 0 ? <div>待审核</div> : (content.auditStatus == 1 ? <div className='font-success'>通过</div> : <div className='font-red'>未通过</div>)
+                                        content.recordStatus == 2 ? <div>待审核</div> : (content.auditStatus == 4 ? <div className='font-success'>通过</div> : <div className='font-red'>未通过</div>)
                                     }
                                 </div>
                             </div>
@@ -199,17 +199,9 @@ class index extends Component {
                                 <Descriptions.Item label="手机号码">{content.phoneNumber || '--'}</Descriptions.Item>
                                 <Descriptions.Item label="家庭住址">{content.detailAddress || '--'}</Descriptions.Item>
                             </Descriptions>
-
-                            {/* {content.managementPlatformAuditRecordsList} */}
-                            {
-                                content.auditStatus !== 0 && (
-                                    <>
-                                        <h3>审核记录</h3>
-                                        <Divider></Divider>
-                                        <Table rowKey={"id"} columns={columns} dataSource={content.managementPlatformAuditRecordsList}></Table>
-                                    </>
-                                )
-                            }
+                            <h3>审核记录</h3>
+                            <Divider></Divider>
+                            <Table rowKey={"id"} columns={columns} dataSource={content.managementPlatformAuditRecordsList}></Table>
                         </div>
                     </PageHeaderWrapper>
 
@@ -223,7 +215,7 @@ class index extends Component {
                         </Col>
                         <Col span={12}>
                             {
-                                content.auditStatus != 1 && (
+                                content.recordStatus != 4 && (
                                     <div className='inline text-center'>
                                         <AuditPass recordId={id} ></AuditPass>
                                         <AuditBy recordId={id}></AuditBy>

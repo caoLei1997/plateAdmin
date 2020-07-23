@@ -27,6 +27,9 @@ class Record extends Component {
         // console.log(list);
     }
 
+
+    
+
     componentDidMount() {
         this.getList()
     }
