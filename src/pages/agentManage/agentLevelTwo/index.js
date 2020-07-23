@@ -133,6 +133,7 @@ class App extends React.Component {
               <p><a href="javascript:;" onClick={this.editData.bind('',v,k,this)}>编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;</p>
               {v.status==='1'?<a href="javascript:;" onClick={this.doUse.bind('',v,k,this)}>启用</a>:<a href="javascript:;" onClick={this.doUse.bind('',v,k,this)}>停用</a>}
             </div>;
+            v.level = v.level===12?'经销商':'--';
             v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
             v.personNum = <Link to={"/personal/"+v.agentOutletsId} key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</Link>;
             v.vityRegion = v.city+v.region;
