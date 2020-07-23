@@ -152,7 +152,7 @@ class App extends React.Component {
           {dropdownData.length>0&&<Add onRef={this.onRef}  onChangePLoad={this.childChangeState}  onAddOk={this.submitSearchData} brandChildren={selectChildren} cityRegion={dropdownData}></Add>}
           {/*编辑弹框*/}
           <Modal
-            title="编辑商户"
+            title="编辑品牌厂家"
             visible={this.state.editVisible}
             onOk={this.editHandleOk}
             onCancel={this.editHandleCancel}
