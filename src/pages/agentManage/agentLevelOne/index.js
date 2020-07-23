@@ -5,7 +5,7 @@ import {requestAgentList, requestCityRegion, requestBrand, editFirstAgentSave, u
 import Add from "./add/add"
 const { Option } = Select;
 import { Link } from 'umi';
-
+import { PlusOutlined } from '@ant-design/icons';
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -124,26 +124,36 @@ class App extends React.Component {
         return (
         <div className={style.agentLevelOneMain}>
           <div className={style.searchBox}>
-            <Input onChange={this.inpChange1} className={style.inp} placeholder='商户名称' size='small' />
-
-            <Input onChange={this.inpChange2} className={style.inp} placeholder='代理品牌' size='small' />
-
-            <Cascader
-              options={dropdownData}
-              expandTrigger="hover"
-              displayRender={this.displayRender}
-              onChange={this.dropDownChange}
-              className={style.inp}
-              placeholder='市区'
-            />
-            <Cascader
-              options={[{label:'全部',value:''},{label:'启用',value:'0'},{label:'停用',value:'1'}]}
-              expandTrigger="hover"
-              displayRender={this.displayRender}
-              onChange={this.statusDropDownChange}
-              className={style.inp}
-              placeholder='状态'
-            />
+            <div className={style.searchBoxItem}>
+              <span>商户名称：</span>
+              <Input onChange={this.inpChange1} className={style.inp} placeholder='姓名' size='middle' />
+            </div>
+            <div className={style.searchBoxItem}>
+              <span>代理品牌：</span>
+              <Input onChange={this.inpChange2} className={style.inp} placeholder='品牌名称' size='middle'/>
+            </div>
+            <div className={style.searchBoxItem}>
+              <span>市区：</span>
+              <Cascader
+                options={dropdownData}
+                expandTrigger="hover"
+                displayRender={this.displayRender}
+                onChange={this.dropDownChange}
+                className={style.inp}
+                placeholder='全部'
+              />
+            </div>
+              <div className={style.searchBoxItem}>
+                <span>状态：</span>
+                <Cascader
+                  options={[{label:'全部',value:''},{label:'启用',value:'0'},{label:'停用',value:'1'}]}
+                  expandTrigger="hover"
+                  displayRender={this.displayRender}
+                  onChange={this.statusDropDownChange}
+                  className={style.inp}
+                  placeholder='全部'
+                />
+              </div>
 
             <Button className={style.sub} onClick={this.submitSearchData} type="primary" htmlType="submit">
               查询
@@ -151,7 +161,7 @@ class App extends React.Component {
           </div>
 
           <div className={style.addAgentBox}>
-            <Button className={style.btn} icon='+ ' onClick={this.showModal}>新增品牌厂家</Button>
+            <Button style={{backgroundColor:'#52c41a',color:'#fff'}} className={style.btn} icon={<PlusOutlined />} onClick={this.showModal}>新增品牌厂家</Button>
           </div>
           <Spin spinning={spinningStatus}>
             <div className={style.tableList}>

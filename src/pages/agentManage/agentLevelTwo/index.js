@@ -6,6 +6,7 @@ import {requestAgentList,useOrStop,getSecondAgentBrand,editSecondAgent} from "@/
 const { Option } = Select;
 const { Panel } = Collapse;
 import { Link } from 'umi';
+import { PlusOutlined } from '@ant-design/icons';
 
 class App extends React.Component {
     constructor(props) {
@@ -228,22 +229,31 @@ class App extends React.Component {
         return (
         <div className={style.agentLevelOneMain}>
           <div className={style.searchBox}>
-            <Input onChange={this.inpChange1} className={style.inp} placeholder='商户名称' size='small' />
-            <Cascader
-              options={cityDropdownData}
-              expandTrigger="hover"
-              displayRender={this.displayRender}
-              onChange={this.cityDropDownChange}
-              className={style.inp}
-              placeholder='市区'
-            />
-            <Cascader
-              options={statusDropdownData}
-              expandTrigger="hover"
-              onChange={this.statusDropDownChange}
-              className={style.inp}
-              placeholder='状态'
-            />
+            <div className={style.searchBoxItem}>
+              <span>商户名称：</span>
+              <Input onChange={this.inpChange1} className={style.inp} placeholder='姓名' size='middle' />
+            </div>
+            <div className={style.searchBoxItem}>
+              <span>市区：</span>
+              <Cascader
+                options={cityDropdownData}
+                expandTrigger="hover"
+                displayRender={this.displayRender}
+                onChange={this.cityDropDownChange}
+                className={style.inp}
+                placeholder='全部'
+              />
+            </div>
+            <div className={style.searchBoxItem}>
+              <span>状态：</span>
+              <Cascader
+                options={statusDropdownData}
+                expandTrigger="hover"
+                onChange={this.statusDropDownChange}
+                className={style.inp}
+                placeholder='全部'
+              />
+            </div>
 
             <Button className={style.sub} onClick={this.submitData} type="primary" htmlType="submit">
               查询
@@ -251,7 +261,7 @@ class App extends React.Component {
           </div>
 
           <div className={style.addAgentBox}>
-            <Button className={style.btn} icon='+ ' onClick={this.showModal}>新增经销商</Button>
+            <Button style={{backgroundColor:'#52c41a',color:'#fff'}} className={style.btn} icon={<PlusOutlined/>} onClick={this.showModal}>新增经销商</Button>
           </div>
           <Spin spinning={spinningStatus}>
             <div className={style.tableList}>
