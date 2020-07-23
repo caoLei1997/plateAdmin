@@ -12,6 +12,7 @@ const DealerSelect = (props) => {
   const [outletsVal, setOutletsVal] = useState('6666666');
   const { city = {}, level = {}, dealer = {} } = formProps;
 
+  
   const getCityList = () => {
     dispatch({
       type: 'personalDealer/getCityList'

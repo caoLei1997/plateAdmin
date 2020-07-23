@@ -11,8 +11,10 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
     const [formVisible, setFormVisible] = useState(false);
     const [selectVal, setSelectVal] = useState({ city: null, level: '', outlets: '' });
     const [list, setList] = useState([]);
+    const [form] = Form.useForm();
 
     const toggleModalVisible = visible => {
+        form.resetFields();
         setModalVisible(visible);
     }
 
@@ -21,6 +23,7 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
     }
 
     const toggleShowForm = (bool) => {
+        form.resetFields();
         setFormVisible(bool);
     }
 
@@ -105,12 +108,15 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
             <Modal className='add-personal-modal' forceRender destroyOnClose visible={modalVisible} title='新增人员' onCancel={() => toggleModalVisible(false)} onOk={() => modalOk()}>
                 <Table {...tableProps} />
                 {formVisible ?
-                    <Form fields={[
-                        {
-                            name: ['outlets'],
-                            value: selectVal.outlets,
-                        },
-                    ]} className='mt-16' name='add-personal-form' onFinish={add} >
+                    <Form
+                        className='mt-16'
+                        name='add-personal-form'
+                        onFinish={add}
+                        form={form}
+                        initialValues={
+                            { outletsVal: '' }
+                        }
+                    >
                         <Row gutter={12}>
                             <Col span={8}>
                                 <Form.Item name='name' className='mb-16' rules={[{ required: true, message: '请输入姓名!' }]}>

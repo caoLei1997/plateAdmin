@@ -14,7 +14,7 @@ const AuditPass = (props) => {
         setModalVisible(visible);
     }
     const handlePass = (visible) => {
-        form.resetFields();
+        // form.resetFields();
         setModalVisible(visible);
     }
     const onFinish = async values => {
@@ -34,10 +34,10 @@ const AuditPass = (props) => {
                     id: props.recordId
                 }
             })
-           
-            
 
-           
+
+
+
             handlePass()
         } else {
             notification.error(data.retMsg)
