@@ -38,6 +38,9 @@ export const LOCAL_MEANS_IDS_KEY = 'means_ids';
 export const LOCAL_MEANS_FILTER = 'means_filter';
 
 export const SUPER_UNIQUE = 999999999;
+export const PoliceChannel = 13;
+export const agentChannel = 11;
+
 export const RETCODESUCCESS = '0000';
 export const RETCODE_TOKEN_ERR = 'token_error';
 

@@ -26,7 +26,8 @@ class App extends React.Component {
             {title: '地址', width:160,dataIndex: 'address', key: 'address',},
             {title: '代理品牌', dataIndex: 'brand', key: 'brand',},
             {title: '人员数', dataIndex: 'personNum', key: 'personNum',},
-            {title: '状态', dataIndex: 'status', key: 'status',},
+            {title: '状态', dataIndex: 'statusTxt', key: 'statusTxt',},
+            {title: '停用/启用日期', dataIndex: 'updateTime', key: 'updateTime',width:150},
             {title: '操作', dataIndex: 'do', key: 'do',width:60},
           ],
           selectChildren:[],
@@ -287,7 +288,7 @@ class App extends React.Component {
     let {agentName,agentBrand,dropdownValue,statusDropdownValue} = this.state;
     this.agentTableListParams.brandName = agentBrand;
     this.agentTableListParams.agentOutletsName = agentName;
-    this.agentTableListParams.statusDropdownValue = statusDropdownValue;
+    this.agentTableListParams.status = statusDropdownValue;
     this.agentTableListParams.city = dropdownValue&&dropdownValue[0];
     this.agentTableListParams.region = dropdownValue&&dropdownValue[1];
     this.agentTableListParams.pageIndex = 1;
@@ -307,10 +308,10 @@ class App extends React.Component {
           v.do = <p>
             <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>
             <p></p>
-            {v.status==='1'?<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>启用</a>:<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>禁用</a>}
+            {v.status==='1'?<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>启用</a>:<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>停用</a>}
 
           </p>
-          v.status =  v.status === '0' ? <Tag color="orange">正常</Tag> : <Tag color="red">停用</Tag>;
+          v.statusTxt =  v.status === '0' ? <Tag color="orange">正常</Tag> : <Tag color="red">停用</Tag>;
           v.level = v.level===11?'品牌厂家':'--';
           v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
           // v.personNum = <a href='javascript:;' key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;

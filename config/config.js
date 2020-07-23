@@ -77,6 +77,7 @@ export default defineConfig({
               icon: 'smile',
               path: '/catalog',
               component: './catalogManage',
+              authority: ['agent','admin'],
             },
             {
               name: '基础详情页',
@@ -90,6 +91,7 @@ export default defineConfig({
               icon: 'smile',
               path: '/carmanage',
               component: './carManage',
+              authority: ['agent','admin'],
             },
             {
               name: '车辆管理重构',
@@ -111,7 +113,7 @@ export default defineConfig({
               icon: 'smile',
               path: '/record',
               component: './record',
-              authority: ['admin'],
+              authority: ['admin','police'],
             },
 
             {
@@ -119,7 +121,7 @@ export default defineConfig({
               icon: 'smile',
               path: '/record/recordDetail/:id',
               component: './recordDetail',
-              authority: ['admin'],
+              authority: ['admin','police'],
               hideInMenu: true,
             },
             {
