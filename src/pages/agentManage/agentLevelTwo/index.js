@@ -11,7 +11,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.collapseIndex = null;
-      this.pageIndex = 0;
+      this.pageIndex = 1;
       this.pageSize = 10;
       this.data = {};
       this.allBrandData = [];
@@ -46,12 +46,12 @@ class App extends React.Component {
         // paginationSeting
           total:null,
           pageSize:10,
-          pageIndex:0,
+          pageIndex:1,
           onChange:(a,b)=>{
             console.log(a,b);
             let {pageSize,cityDropdownValue,statusDropdownValue} = this.state;
             this.data = {
-              pageIndex: a - 1,
+              pageIndex: a ,
               pageSize: pageSize,
               level: 12,
               brandName:'',
@@ -107,7 +107,7 @@ class App extends React.Component {
   submitData = ()=>{
       let {agentName, cityDropdownValue, statusDropdownValue,} = this.state;
     this.data = {
-      pageIndex: this.pageIndex,
+      pageIndex: 1,
       pageSize: this.pageSize,
       level: 12,
       brandName: "",
@@ -258,7 +258,7 @@ class App extends React.Component {
               <Table width='100%' dataSource={tableDataSource} pagination={{
                 total:total,
                 pageSize:pageSize,
-                pageIndex:pageIndex,
+                current:pageIndex,
                 onChange:onChange
               }} columns={tableColumns}/>
             </div>

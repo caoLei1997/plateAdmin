@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './index.less';
-import { Form, Input, Button, Cascader,Table,Modal,Select,notification,Spin, Checkbox} from 'antd';
+import { Form, Input, Button, Cascader,Table,Modal,Select,notification,Spin, Checkbox,Tag} from 'antd';
 import {requestAgentList, requestCityRegion, requestBrand, editFirstAgentSave, useOrStop} from "../../../services/agentManage"
 import Add from "./add/add"
 const { Option } = Select;
@@ -15,7 +15,9 @@ class App extends React.Component {
       this.state={
           dropdownData:[],
           dropdownValue:'',
+        statusDropdownValue:'',
           tableDataSource: [],
+        consTrCt:false,
           tableColumns:[
             {title: '商户ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId',},
             {title: '商户名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName',},
@@ -24,6 +26,7 @@ class App extends React.Component {
             {title: '地址', width:160,dataIndex: 'address', key: 'address',},
             {title: '代理品牌', dataIndex: 'brand', key: 'brand',},
             {title: '人员数', dataIndex: 'personNum', key: 'personNum',},
+            {title: '状态', dataIndex: 'status', key: 'status',},
             {title: '操作', dataIndex: 'do', key: 'do',width:60},
           ],
           selectChildren:[],
@@ -37,16 +40,17 @@ class App extends React.Component {
         // paginationSeting
           total:null,
           pageSize:10,
-          pageIndex:0,
+          pageIndex:1,
           onChange:(a,b)=>{
             console.log(a,b);
             let {pageSize,dropdownValue} = this.state;
             this.agentTableListParams = {
-              pageIndex: a - 1,
+              pageIndex: a,
               pageSize: pageSize,
               level: 11,
               brandName:this.state.agentBrand,
               agentOutletsName: this.state.agentName,
+              status:this.state.statusDropdownValue,
               city: dropdownValue&&dropdownValue[0],
               region: dropdownValue&&dropdownValue[1]
             };
@@ -58,17 +62,19 @@ class App extends React.Component {
 
     componentDidMount() {
       this.agentTableListParams = {
-        pageIndex: 0,
+        pageIndex: 1,
         pageSize: this.state.pageSize,
         level: 11,
         brandName:'',
         agentOutletsName: "",
+        status:this.state.statusDropdownValue,
         city: "",
         region: ""
       };
       console.log(process.env.REACT_APP_ENV);
       this.tableListReq(this.agentTableListParams);
       this.reqCityRegion();
+      this.reqBrand();
     }
 
     componentWillUnmount() {
@@ -112,14 +118,14 @@ class App extends React.Component {
     console.log('Success:', values);
   };
     render() {
-      let {dropdownData,tableDataSource,paginationSeting,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrandId,total,pageSize,pageIndex,onChange,selectChildren,spinningStatus,useOrStopTitle,useOrStopVisible,useOrStopContent,useOrStopIsUse} = this.state
+      let {dropdownData,tableDataSource,paginationSeting,tableColumns,visible,editDataName,editDataCity,editDataAddress,editDataBrandId,total,pageSize,pageIndex,onChange,selectChildren,spinningStatus,useOrStopTitle,useOrStopVisible,useOrStopContent,useOrStopIsUse,consTrCt} = this.state
 
         return (
         <div className={style.agentLevelOneMain}>
           <div className={style.searchBox}>
             <Input onChange={this.inpChange1} className={style.inp} placeholder='商户名称' size='small' />
 
-            <Input onChange={this.inpChange2} className={style.inp} placeholder='商户名称' size='small' />
+            <Input onChange={this.inpChange2} className={style.inp} placeholder='代理品牌' size='small' />
 
             <Cascader
               options={dropdownData}
@@ -128,6 +134,14 @@ class App extends React.Component {
               onChange={this.dropDownChange}
               className={style.inp}
               placeholder='市区'
+            />
+            <Cascader
+              options={[{label:'全部',value:''},{label:'启用',value:'0'},{label:'停用',value:'1'}]}
+              expandTrigger="hover"
+              displayRender={this.displayRender}
+              onChange={this.statusDropDownChange}
+              className={style.inp}
+              placeholder='状态'
             />
 
             <Button className={style.sub} onClick={this.submitSearchData} type="primary" htmlType="submit">
@@ -140,11 +154,11 @@ class App extends React.Component {
           </div>
           <Spin spinning={spinningStatus}>
             <div className={style.tableList}>
-              <Table dataSource={tableDataSource} pagination={{
+              <Table dataSource={tableDataSource} pagination={consTrCt&&{
                 total:total,
                 pageSize:pageSize,
-                pageIndex:pageIndex,
-                onChange:onChange
+                current:pageIndex,
+                onChange:onChange,
               }} columns={tableColumns}/>
             </div>
           </Spin>
@@ -262,20 +276,28 @@ class App extends React.Component {
       dropdownValue:a
     })
   };
+  statusDropDownChange = (a)=>{
+    console.log(a.join(''))
+    this.setState({
+      statusDropdownValue:a.join('')
+    })
+  };
 
   submitSearchData = ()=>{
-    let {agentName,agentBrand,dropdownValue} = this.state;
+    let {agentName,agentBrand,dropdownValue,statusDropdownValue} = this.state;
     this.agentTableListParams.brandName = agentBrand;
     this.agentTableListParams.agentOutletsName = agentName;
+    this.agentTableListParams.statusDropdownValue = statusDropdownValue;
     this.agentTableListParams.city = dropdownValue&&dropdownValue[0];
     this.agentTableListParams.region = dropdownValue&&dropdownValue[1];
-    this.agentTableListParams.pageIndex = 0;
+    this.agentTableListParams.pageIndex = 1;
     this.tableListReq(this.agentTableListParams)
   };
 
   tableListReq = (data)=>{
     this.setState({
-      spinningStatus:true
+      spinningStatus:true,
+      consTrCt:false
     });
     requestAgentList(data).then(res=>{
       if(res&&res.data&&res.data.content){
@@ -288,6 +310,7 @@ class App extends React.Component {
             {v.status==='1'?<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>启用</a>:<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>禁用</a>}
 
           </p>
+          v.status =  v.status === '0' ? <Tag color="orange">正常</Tag> : <Tag color="red">停用</Tag>;
           v.level = v.level===11?'品牌厂家':'--';
           v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
           // v.personNum = <a href='javascript:;' key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</a>;
@@ -297,13 +320,14 @@ class App extends React.Component {
             v.brand.push( i.brandName + '\n')
           })
         });
+        console.log(data)
         this.setState({
+          consTrCt:true,
           tableDataSource:list,
           pageIndex:data.pageIndex,
           total:res.data.total,
           spinningStatus:false
         });
-        this.reqBrand();
       }else{
         notification.info({
           description: "暂无数据",
