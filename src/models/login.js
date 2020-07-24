@@ -4,6 +4,7 @@ import { history } from 'umi';
 import { fakeAccountLogin } from '@/services/login';
 import { setAuthority, getAuthority2 } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
+import { log } from 'util';
 
 const initialUser = getAuthority2() || {};
 
@@ -26,8 +27,11 @@ const Model = {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
+        console.log(redirect);
+        
 
         if (redirect) {
+          console.log(222);
           const redirectUrlParams = new URL(redirect);
 
           if (redirectUrlParams.origin === urlParams.origin) {
@@ -46,7 +50,8 @@ const Model = {
         } else if (response.data.channel  === PoliceChannel) {
           history.replace('/record');
           return;
-        } else if (response.data.channel  === agentChannel) {
+        } else if (response.data.channel  == agentChannel) {
+          log(1111)
           history.replace('/carmanage');
           return;
         }
