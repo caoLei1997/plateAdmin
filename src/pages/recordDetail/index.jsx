@@ -14,17 +14,19 @@ const Text = Typography
 
 class index extends Component {
     componentDidMount() {
-        this.getDetail()
+        this.getDetail(this.props.match.params.id)
     }
-    getDetail = () => {
-        let { dispatch, match } = this.props;
-        let { id } = match.params
+    getDetail = (id) => {
+        let { dispatch, history } = this.props;
         dispatch({
             type: 'recordDetail/getDetail',
             payload: {
                 id
             }
         })
+        history.replace(`/record/recordDetail/${id}`);
+        window.scrollTo(0, 0);
+
     }
     getPagePrev = (type = 'first') => {
         let { match } = this.props;
@@ -95,7 +97,7 @@ class index extends Component {
             }
         ]
 
-        
+
 
         if (content) {
             return (
@@ -208,10 +210,12 @@ class index extends Component {
                     </PageHeaderWrapper>
 
                     <Row justify="space-between" align="middle" className='mt-32'>
+                        {/* <Text to={`/record/recordDetail/${this.toDetail('prev')}`}> <LeftOutlined />上一条</Text> : */}
+
                         <Col span={3}>
                             {
                                 this.getPagePrev('first') ?
-                                    <Link to={`/record/recordDetail/${this.toDetail('prev')}`}> <LeftOutlined />上一条</Link> :
+                                    <Text className='link-a' onClick={() => (this.getDetail(this.toDetail('prev')))}> <LeftOutlined />上一条 </Text> :
                                     <Text className='font-size-16' disabled={true}><LeftOutlined />上一条</Text>
                             }
                         </Col>
@@ -225,15 +229,16 @@ class index extends Component {
                                 )
                             }
                         </Col>
+                        {/* <Text to={`/record/recordDetail/${this.toDetail('next')}`}>下一条 <RightOutlined /></Text> : */}
                         <Col span={3} style={{ textAlign: 'right' }}>
                             {
                                 this.getPagePrev('last') ?
-                                    <Link to={`/record/recordDetail/${this.toDetail('next')}`}>下一条 <RightOutlined /></Link> :
+                                    <Text className='link-a' onClick={() => (this.getDetail(this.toDetail('next')))}> 下一条 <RightOutlined /> </Text> :
                                     <Text className='font-size-16' disabled={true}>下一条 <RightOutlined /></Text>
                             }
                         </Col>
                     </Row>
-                </div>
+                </div >
 
             );
         } else {
