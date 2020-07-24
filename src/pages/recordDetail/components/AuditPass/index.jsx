@@ -79,7 +79,7 @@ const AuditPass = (props) => {
 
                         />
                     </Form.Item>
-                    <div style={{ "textAlign": "right",'margin':'-10px 0 10px' }}>
+                    <div style={{ "textAlign": "right", 'margin': '-10px 0 10px' }}>
                         {passValue.length || 0}/30
                     </div>
                     <div style={{ textAlign: 'right' }}>
