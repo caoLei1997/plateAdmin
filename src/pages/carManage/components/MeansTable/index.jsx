@@ -69,7 +69,8 @@ const columns = [
 const MeansTable = ({ meansListState, tableLoading, paginationChange }) => {
   const { total, current, pageSize, list } = meansListState;
   const [nowPageSize, setNowPageSize] = useState([pageSize]);
-
+  console.log(pageSize);
+  
   const handlePaginationChange = (page) => {
     paginationChange(page);
   }
@@ -79,6 +80,7 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange }) => {
     columns,
     loading: tableLoading,
     scroll,
+    pagination: { total, current, pageSize ,onChange: handlePaginationChange },
     dataSource: list
   }
   return (
