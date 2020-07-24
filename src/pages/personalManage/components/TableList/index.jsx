@@ -8,8 +8,11 @@ import styles from './index.less';
 
 const { Text } = Typography;
 
-const OperaUpdateStatus = ({ dispatch, id, status = PERSONAL_STATUS.OPEN, getList }) => {
+const OperaUpdateStatus = ({ personalList, dispatch, id, status = PERSONAL_STATUS.OPEN, getList, item }) => {
   const handleConfirm = () => {
+
+    const { current, filter, list } = personalList
+
     let payloadStatus = '';
     if (status === PERSONAL_STATUS.OPEN) {
       payloadStatus = PERSONAL_STATUS.CLOSE;
@@ -18,7 +21,6 @@ const OperaUpdateStatus = ({ dispatch, id, status = PERSONAL_STATUS.OPEN, getLis
     if (status === PERSONAL_STATUS.CLOSE) {
       payloadStatus = PERSONAL_STATUS.OPEN;
     }
-
     dispatch({
       type: 'personalStatus/update',
       payload: {
@@ -26,7 +28,9 @@ const OperaUpdateStatus = ({ dispatch, id, status = PERSONAL_STATUS.OPEN, getLis
         id
       },
       onSuccess: () => {
-        getList();
+        const payload = { ...filter, agentOutletsId: item.agentOutletsId, outlets: item.agentOutletsId }
+        console.log(payload);
+        getList(current, payload);
       }
     })
 
@@ -106,7 +110,7 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
       <Modal title='编辑业务人员' destroyOnClose visible={modalVisible} footer={null} onCancel={() => toggleModalVisible(false)}>
         <Form initialValues={{ name: item.name, phoneNumber: item.phoneNumber, city: item.region, level: String(item.level) }} fields={[{ name: ['outlets'], value: selectVal.outlets }]} className="personal-edit-form" name='catalog-manage-table-search' onFinish={handleFinish} >
           <Form.Item label='姓名' name='name' rules={[{ required: true, message: '请输入姓名!' }]}>
-            <Input placeholder="姓名"/>
+            <Input placeholder="姓名" />
           </Form.Item>
           <Form.Item label='手机号' name='phoneNumber' rules={[{ required: true, len: 11, message: '请输入正确的手机号!' }]}>
             <Input placeholder="手机号" />
@@ -172,7 +176,7 @@ const TableList = (props) => {
       render: (input, item) => {
         return (<div className='inline'>
           <OperaBrandEdit item={item} dispatch={dispatch} getList={getList} />
-          <OperaUpdateStatus id={item.id} status={item.status} dispatch={dispatch} getList={getList} />
+          <OperaUpdateStatus id={item.id} status={item.status} item={item} dispatch={dispatch} getList={getList} personalList={personalList} />
         </div>)
       }
     }
@@ -206,5 +210,5 @@ const TableList = (props) => {
 }
 
 export default connect(({ personalList }) => ({
-  personalList
+  personalList: personalList
 }))(TableList);

@@ -7,6 +7,7 @@ import { router } from 'umi';
 import { notification } from 'antd';
 const AuditPass = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [passValue, setPassValue] = useState(0);
     const { recordDetail, login, dispatch } = props
     const recordList = JSON.parse(localStorage.getItem('recordList'));
     const [form] = Form.useForm();
@@ -34,15 +35,17 @@ const AuditPass = (props) => {
                     id: props.recordId
                 }
             })
-
-
-
-
             handlePass()
         } else {
             notification.error(data.retMsg)
         }
     };
+
+    const handleChange = e => {
+        console.log(e);
+        setPassValue(e.notPassReason)
+
+    }
     return (
         <div>
             <Button type='danger' onClick={() => { handlePass(true) }}>审核不通过</Button>
@@ -55,6 +58,8 @@ const AuditPass = (props) => {
                     initialValues={
                         { notPassReason: '' }
                     }
+
+                    onValuesChange={(e) => { handleChange(e) }}
                 // onFinishFailed={onFinishFailed}
                 >
                     <Form.Item
@@ -70,9 +75,13 @@ const AuditPass = (props) => {
                         <TextArea
                             rows={4}
                             placeholder="请填写审核不通过理由"
-                            maxLength={50}
+                            maxLength={30}
+
                         />
                     </Form.Item>
+                    <div style={{ "textAlign": "right", 'margin': '-10px 0 10px' }}>
+                        {passValue.length || 0}/30
+                    </div>
                     <div style={{ textAlign: 'right' }}>
                         <Button type="primary" htmlType="submit" style={{ marginRight: 16 }}>确定</Button>
                         <Button onClick={() => toggleModalVisible(false)}>取消</Button>
