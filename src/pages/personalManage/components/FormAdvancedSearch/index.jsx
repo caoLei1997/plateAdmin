@@ -8,6 +8,8 @@ const AdvancedSearchForm = ({ btnLoading, getList, children, defaultOutlets }) =
   const [selectVal, setSelectVal] = useState({ city: null, level: '', outlets: defaultOutlets || '' });
 
   const handleFinish = values => {
+    console.log(values);
+    
     const params = { city: '', region: '', level: values.level, agentOutletsId: selectVal.outlets };
     if (values.city) {
       params.city = values.city.split('-')[0];
@@ -30,12 +32,7 @@ const AdvancedSearchForm = ({ btnLoading, getList, children, defaultOutlets }) =
   return (
     <div className={styles.container}>
       <div id="catalog-list-search-form">
-        <Form fields={[
-          {
-            name: ['outlets'],
-            value: selectVal.outlets,
-          },
-        ]} className="ant-advanced-search-form" name='catalog-manage-table-search' onFinish={handleFinish} >
+        <Form  className="ant-advanced-search-form" name='catalog-manage-table-search' onFinish={handleFinish} >
           <div gutter={24}>
             <Form.Item label='所属商户'>
               <DealerLinkage showAll formProps={formProps} span={6} onCallBack={selectChange} />
