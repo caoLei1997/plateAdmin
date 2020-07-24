@@ -66,11 +66,11 @@ const columns = [
   },
 ];
 
-const MeansTable = ({ meansListState, tableLoading, paginationChange }) => {
+const MeansTable = ({ meansListState, tableLoading, paginationChange, getList }) => {
   const { total, current, pageSize, list } = meansListState;
   const [nowPageSize, setNowPageSize] = useState([pageSize]);
   console.log(pageSize);
-  
+
   const handlePaginationChange = (page) => {
     paginationChange(page);
   }
@@ -80,6 +80,18 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange }) => {
     columns,
     loading: tableLoading,
     scroll,
+    pagination: {
+      total, current,
+      pageSize: nowPageSize,
+      onChange: handlePaginationChange,
+      showTotal: total => `共${total}条`,
+      showSizeChanger: true,
+      showQuickJumper: true,
+      onShowSizeChange: (current, size) => {
+        setNowPageSize(size);
+        paginationChange(current, false, { pageSize: size });
+      }
+    },
     dataSource: list
   }
   return (

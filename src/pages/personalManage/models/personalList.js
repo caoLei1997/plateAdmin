@@ -44,7 +44,8 @@ export default {
                         "phoneNumber": payload.phoneNumber,
                         "city": payload.city,
                         "region": payload.region,
-                        "level": payload.level
+                        "level": payload.level,
+                        'outlets':payload.agentOutletsId
                     }
                 }
             });
