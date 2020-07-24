@@ -68,10 +68,11 @@ const columns = [
 
 const MeansTable = ({ dataAuditList, tableLoading, getList }) => {
     const { total, current, pageSize, list } = dataAuditList;
-
     const handlePaginationChange = (page) => {
         getList(page);
     }
+
+    console.log(pageSize);
 
     const tableProps = {
         rowKey: 'id',

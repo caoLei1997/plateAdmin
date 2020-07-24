@@ -58,11 +58,13 @@ const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
 });
 
+
 request.interceptors.request.use((url, options = {}) => {
   const { isToken = true } = options;
   const headers = {};
   const sessionData = getAuthority2() || {};
   if (isToken) headers.token = sessionData.token;
+  // if (isToken) headers.token = '07dc5aa9-8c43-4c8b-bae6-85081a3c1599';
 
   let queryUrl = url;
   if (process.env.NODE_ENV === 'development') {

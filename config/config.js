@@ -21,8 +21,8 @@ export default defineConfig({
   antd: {},
   analytics: GA_KEY
     ? {
-        ga: GA_KEY,
-      }
+      ga: GA_KEY,
+    }
     : false,
   dva: {
     hmr: true,
@@ -77,6 +77,7 @@ export default defineConfig({
               icon: 'smile',
               path: '/catalog',
               component: './catalogManage',
+              authority: ['admin'],
             },
             {
               name: '基础详情页',
@@ -90,6 +91,7 @@ export default defineConfig({
               icon: 'smile',
               path: '/carmanage',
               component: './carManage',
+              authority: ['agent','admin'],
             },
             {
               name: '车辆管理重构',
@@ -104,6 +106,23 @@ export default defineConfig({
               path: '/agentManage',
               component: './agentManage',
               authority: ['admin'],
+            },
+
+            {
+              name: '备案管理',
+              icon: 'smile',
+              path: '/record',
+              component: './record',
+              authority: ['admin','police'],
+            },
+
+            {
+              name: '备案详情',
+              icon: 'smile',
+              path: '/record/recordDetail/:id',
+              component: './recordDetail',
+              authority: ['admin','police'],
+              hideInMenu: true,
             },
             {
               component: './404',

@@ -107,7 +107,7 @@ class App extends React.Component {
         return (
           <div>
             <Modal
-              title="新增商户"
+              title="新增品牌厂家"
               visible={this.state.visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
@@ -232,11 +232,11 @@ class App extends React.Component {
     let brandChildren = [];
     data.forEach((v,k)=>{
       let opt ;
-      // if(v.agented === 2){
-      //   opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
-      // }else{
+      if(v.agented === 2){
+        // opt = <Option key={v.id} disabled={true}>{v.brandName}</Option>
+      }else{
         opt = <Option key={v.id} disabled={false}>{v.brandName}</Option>
-      // }
+      }
       brandChildren.push(opt);
     });
     this.setState({

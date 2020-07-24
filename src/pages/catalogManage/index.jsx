@@ -32,41 +32,41 @@ const catalogIndex = (props) => {
         "modelName": searchParams.modelName || '',
         ...config
       },
-    onSuccess: (total) => {
-      if(total < 1) return;
+      onSuccess: (total) => {
+        if (total < 1) return;
         const maxCurrent = Math.ceil(total / catalogList.pageSize);
-  if (current > maxCurrent) {
-    getCatalogList(maxCurrent > 1 ? maxCurrent : 1);
-  }
-}
+        if (current > maxCurrent) {
+          getCatalogList(maxCurrent > 1 ? maxCurrent : 1);
+        }
+      }
     })
   }
 
-useEffect(() => {
-  getCatalogList(1);
+  useEffect(() => {
+    getCatalogList(1);
 
-  return () => {
-    dispatch({ type: 'catalogList/resetState' });
-  }
-}, [])
+    return () => {
+      dispatch({ type: 'catalogList/resetState' });
+    }
+  }, [])
 
-return (
-  <PageHeaderWrapper className={styles.main}>
-    {/* <DealerSelect changeCallBack={firstDealerChange} /> */}
-    <FormSearch getList={getCatalogList}>
-      <div
-        className="inline"
-        style={{
-          textAlign: 'right',
-        }}
-      >
-        <AddBrand getList={getCatalogList} />
-        <ImportSN getList={getCatalogList} />
-      </div>
-      <TableNestedTable getList={getCatalogList} />
-    </FormSearch>
-  </PageHeaderWrapper>
-);
+  return (
+    <PageHeaderWrapper className={styles.main}>
+      {/* <DealerSelect changeCallBack={firstDealerChange} /> */}
+      <FormSearch getList={getCatalogList}>
+        <div
+          className="inline"
+          style={{
+            textAlign: 'right',
+          }}
+        >
+          <AddBrand getList={getCatalogList} />
+          <ImportSN getList={getCatalogList} />
+        </div>
+        <TableNestedTable getList={getCatalogList} />
+      </FormSearch>
+    </PageHeaderWrapper>
+  );
 }
 export default connect(({ login, catalogList }) => ({
   userInfo: login,

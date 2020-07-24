@@ -164,7 +164,7 @@ class App extends React.Component {
         return (
           <div>
             <Modal
-              title="新增商户"
+              title="新增经销商"
               visible={this.state.visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
@@ -263,6 +263,8 @@ class App extends React.Component {
     console.log('checked = ', checkedValues);
     console.log('checked = ', this.collapseIndex);
     let arr = this.state.agentBrandObjArr;
+    arr[this.collapseIndex].checkChildName=[];
+    arr[this.collapseIndex].checkChildId=[];
     checkedValues.forEach(v=>{
       arr[this.collapseIndex].allChild.forEach(a=>{
         if(a.id === v){

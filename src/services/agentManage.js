@@ -36,7 +36,7 @@ export async function addFirstAgent(data) {
 }
 
 export async function useOrStop(data) {
-  return request('/agent/v1.1/RelAgentOutletsBrand/enableSecondAgent', {
+  return request('/agent/v1.1/RelAgentOutletsBrand/enableAgentAndAccount', {
     method: 'POST',
     data
   });

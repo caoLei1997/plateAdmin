@@ -6,12 +6,13 @@ import {requestAgentList,useOrStop,getSecondAgentBrand,editSecondAgent} from "@/
 const { Option } = Select;
 const { Panel } = Collapse;
 import { Link } from 'umi';
+import { PlusOutlined } from '@ant-design/icons';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.collapseIndex = null;
-      this.pageIndex = 0;
+      this.pageIndex = 1;
       this.pageSize = 10;
       this.data = {};
       this.allBrandData = [];
@@ -46,12 +47,12 @@ class App extends React.Component {
         // paginationSeting
           total:null,
           pageSize:10,
-          pageIndex:0,
+          pageIndex:1,
           onChange:(a,b)=>{
             console.log(a,b);
             let {pageSize,cityDropdownValue,statusDropdownValue} = this.state;
             this.data = {
-              pageIndex: a - 1,
+              pageIndex: a ,
               pageSize: pageSize,
               level: 12,
               brandName:'',
@@ -107,7 +108,7 @@ class App extends React.Component {
   submitData = ()=>{
       let {agentName, cityDropdownValue, statusDropdownValue,} = this.state;
     this.data = {
-      pageIndex: this.pageIndex,
+      pageIndex: 1,
       pageSize: this.pageSize,
       level: 12,
       brandName: "",
@@ -120,6 +121,9 @@ class App extends React.Component {
   };
 
     reqTableList = (data)=>{
+      this.setState({
+        spinningStatus:true
+      });
       requestAgentList(data).then(res=>{
         if(res&&res.data&&res.data.content){
           let list = res.data.content;
@@ -130,6 +134,7 @@ class App extends React.Component {
               <p><a href="javascript:;" onClick={this.editData.bind('',v,k,this)}>编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;</p>
               {v.status==='1'?<a href="javascript:;" onClick={this.doUse.bind('',v,k,this)}>启用</a>:<a href="javascript:;" onClick={this.doUse.bind('',v,k,this)}>停用</a>}
             </div>;
+            v.level = v.level===12?'经销商':'--';
             v.employeesNumber = v.employeesNumber === null? 0 : v.employeesNumber;
             v.personNum = <Link to={"/personal/"+v.agentOutletsId} key={k} onClick={this.personNumClick.bind('',v,k,this)}>{v.employeesNumber}</Link>;
             v.vityRegion = v.city+v.region;
@@ -194,11 +199,11 @@ class App extends React.Component {
     console.log(a,b);
     let title = a.status === '0'? "停用":"启用";
     let content = a.status === '0'? "停用会导致该商户相关所有业务人员账号停用，不能再处理代牌销售业务，确认要停用吗？":"启用后该商户将恢复代牌销售业务相关办理权限，确认要启用吗？";
-    let isUse =  a.status === '1'&&<p>
-      <Checkbox onChange={this.onUseOrStopCheck}>同时启用该商户所有人员账号</Checkbox>
-    </p>
+    let isUse ;
+    // =  a.status === '1'&&<p>
+    //   <Checkbox onChange={this.onUseOrStopCheck} id={a.id}>同时启用该商户所有人员账号</Checkbox>
+    // </p>
     this.setState({
-      allUseCheck:false,
       useOrStopId:a.agentOutletsId,
       useOrStopVisible:true,
       useOrStopTitle:title,
@@ -225,22 +230,31 @@ class App extends React.Component {
         return (
         <div className={style.agentLevelOneMain}>
           <div className={style.searchBox}>
-            <Input onChange={this.inpChange1} className={style.inp} placeholder='商户名称' size='small' />
-            <Cascader
-              options={cityDropdownData}
-              expandTrigger="hover"
-              displayRender={this.displayRender}
-              onChange={this.cityDropDownChange}
-              className={style.inp}
-              placeholder='市区'
-            />
-            <Cascader
-              options={statusDropdownData}
-              expandTrigger="hover"
-              onChange={this.statusDropDownChange}
-              className={style.inp}
-              placeholder='状态'
-            />
+            <div className={style.searchBoxItem}>
+              <span>商户名称：</span>
+              <Input onChange={this.inpChange1} className={style.inp} placeholder='姓名' size='middle' />
+            </div>
+            <div className={style.searchBoxItem}>
+              <span>市区：</span>
+              <Cascader
+                options={cityDropdownData}
+                expandTrigger="hover"
+                displayRender={this.displayRender}
+                onChange={this.cityDropDownChange}
+                className={style.inp}
+                placeholder='全部'
+              />
+            </div>
+            <div className={style.searchBoxItem}>
+              <span>状态：</span>
+              <Cascader
+                options={statusDropdownData}
+                expandTrigger="hover"
+                onChange={this.statusDropDownChange}
+                className={style.inp}
+                placeholder='全部'
+              />
+            </div>
 
             <Button className={style.sub} onClick={this.submitData} type="primary" htmlType="submit">
               查询
@@ -248,14 +262,14 @@ class App extends React.Component {
           </div>
 
           <div className={style.addAgentBox}>
-            <Button className={style.btn} icon='+ ' onClick={this.showModal}>新增经销商</Button>
+            <Button style={{backgroundColor:'#52c41a',color:'#fff'}} className={style.btn} icon={<PlusOutlined/>} onClick={this.showModal}>新增经销商</Button>
           </div>
           <Spin spinning={spinningStatus}>
             <div className={style.tableList}>
               <Table width='100%' dataSource={tableDataSource} pagination={{
                 total:total,
                 pageSize:pageSize,
-                pageIndex:pageIndex,
+                current:pageIndex,
                 onChange:onChange
               }} columns={tableColumns}/>
             </div>
@@ -326,31 +340,35 @@ class App extends React.Component {
   onUseOrStopCheck = (a,b)=>{
       console.log(a.target.checked)
     this.setState({
-      allUseCheck:true
+      allUseCheck:a.target.checked
     })
   };
   useOrStopHandleOk = ()=>{
     let {useOrStopId,useOrStopStatus,allUseCheck} = this.state;
+    this.setState({
+      useOrStopVisible:false,
+      spinningStatus:true,
+    });
     useOrStop({
       agentOutletsId:useOrStopId ,
       status: useOrStopStatus,
-      isEnableAccount: allUseCheck
+      isEnableAccount: allUseCheck,
+      level:'12'
     }).then(res=>{
       console.log(res);
       this.reqTableList(this.data);
-      this.setState({
-        useOrStopVisible:false
-      });
-      notification.info({
-        description: "提示",
-        message:"状态更新成功",
-      });
+      if(res.retCode === '0000'){
+        notification.info({
+          description: "提示",
+          message:"状态更新成功",
+        });
+      }
     });
 
   };
   useOrStopHandleCancel = (a)=>{
     this.setState({
-      useOrStopVisible:false
+      useOrStopVisible:false,
     });
   };
 

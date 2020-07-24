@@ -33,7 +33,6 @@ const webpackPlugin = config => {
         vendors: {
           test: module => {
             const packageName = getModulePackageName(module) || '';
-
             if (packageName) {
               return [
                 'bizcharts',
@@ -45,7 +44,6 @@ const webpackPlugin = config => {
                 'bizcharts-plugin-slider',
               ].includes(packageName);
             }
-
             return false;
           },
 

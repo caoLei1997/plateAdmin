@@ -8,8 +8,11 @@ import styles from './index.less';
 
 const { Text } = Typography;
 
-const OperaUpdateStatus = ({ dispatch, id, status = PERSONAL_STATUS.OPEN, getList }) => {
+const OperaUpdateStatus = ({ personalList, dispatch, id, status = PERSONAL_STATUS.OPEN, getList, item }) => {
   const handleConfirm = () => {
+
+    const { current, filter, list } = personalList
+
     let payloadStatus = '';
     if (status === PERSONAL_STATUS.OPEN) {
       payloadStatus = PERSONAL_STATUS.CLOSE;
@@ -18,7 +21,6 @@ const OperaUpdateStatus = ({ dispatch, id, status = PERSONAL_STATUS.OPEN, getLis
     if (status === PERSONAL_STATUS.CLOSE) {
       payloadStatus = PERSONAL_STATUS.OPEN;
     }
-
     dispatch({
       type: 'personalStatus/update',
       payload: {
@@ -26,7 +28,9 @@ const OperaUpdateStatus = ({ dispatch, id, status = PERSONAL_STATUS.OPEN, getLis
         id
       },
       onSuccess: () => {
-        getList();
+        const payload = { ...filter, agentOutletsId: item.agentOutletsId, outlets: item.agentOutletsId }
+        console.log(payload);
+        getList(current, payload);
       }
     })
 
@@ -172,7 +176,7 @@ const TableList = (props) => {
       render: (input, item) => {
         return (<div className='inline'>
           <OperaBrandEdit item={item} dispatch={dispatch} getList={getList} />
-          <OperaUpdateStatus id={item.id} status={item.status} dispatch={dispatch} getList={getList} />
+          <OperaUpdateStatus id={item.id} status={item.status} item={item} dispatch={dispatch} getList={getList} personalList={personalList} />
         </div>)
       }
     }
@@ -206,5 +210,5 @@ const TableList = (props) => {
 }
 
 export default connect(({ personalList }) => ({
-  personalList
+  personalList: personalList
 }))(TableList);
