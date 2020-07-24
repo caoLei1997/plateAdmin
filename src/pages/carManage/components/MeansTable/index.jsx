@@ -80,6 +80,7 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange }) => {
     columns,
     loading: tableLoading,
     scroll,
+    pagination: { total, current, pageSize ,onChange: handlePaginationChange },
     dataSource: list
   }
   return (
