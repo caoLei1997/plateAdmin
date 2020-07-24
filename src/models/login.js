@@ -23,24 +23,26 @@ const Model = {
       }); // Login successfully
 
       if (response.retCode === RETCODESUCCESS) {
+        debugger
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
 
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            window.location.href = '/';
-            return;
-          }
-        } else if (response.data.id === SUPER_UNIQUE) {
+        // if (redirect) {
+        //   const redirectUrlParams = new URL(redirect);
+        //
+        //   if (redirectUrlParams.origin === urlParams.origin) {
+        //     redirect = redirect.substr(urlParams.origin.length);
+        //
+        //     if (redirect.match(/^\/.*#/)) {
+        //       redirect = redirect.substr(redirect.indexOf('#') + 1);
+        //     }
+        //   } else {
+        //     window.location.href = '/';
+        //     return;
+        //   }
+        // } else
+        if (response.data.id === SUPER_UNIQUE) {
           history.replace('/personal');
           return;
         } else if (response.data.channel  === PoliceChannel) {
