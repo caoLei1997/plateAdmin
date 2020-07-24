@@ -351,9 +351,10 @@ class App extends React.Component {
     console.log(a,b);
     let title = a.status === '0'? "停用":"启用";
     let content = a.status === '0'? "停用会导致该商户相关所有业务人员账号停用，不能再处理代牌销售业务，确认要停用吗？":"启用后该商户将恢复代牌销售业务相关办理权限，确认要启用吗？";
-    let isUse =  a.status === '1'&&<p>
-      <Checkbox onChange={this.onUseOrStopCheck}>同时启用该商户所有人员账号</Checkbox>
-    </p>;
+    let isUse;
+    // = a.status === '1'&&<p>
+    //   <Checkbox onChange={this.onUseOrStopCheck}>同时启用该商户所有人员账号</Checkbox>
+    // </p>;
     this.setState({
       useOrStopId:a.agentOutletsId,
       useOrStopVisible:true,
