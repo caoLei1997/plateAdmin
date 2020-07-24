@@ -43,6 +43,12 @@ const Model = {
         } else if (response.data.id === SUPER_UNIQUE) {
           history.replace('/personal');
           return;
+        } else if (response.data.channel  === PoliceChannel) {
+          history.replace('/record');
+          return;
+        } else if (response.data.channel  === agentChannel) {
+          history.replace('/carmanage');
+          return;
         }
         history.replace(redirect || '/');
       } else {
