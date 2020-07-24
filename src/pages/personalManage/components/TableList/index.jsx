@@ -28,7 +28,7 @@ const OperaUpdateStatus = ({ personalList, dispatch, id, status = PERSONAL_STATU
         id
       },
       onSuccess: () => {
-        const payload = { ...filter, agentOutletsId: item.agentOutletsId, outlets: item.agentOutletsId }
+        const payload = { ...filter }
         console.log(payload);
         getList(current, payload);
       }

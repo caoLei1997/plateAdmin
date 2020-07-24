@@ -15,6 +15,8 @@ const AdvancedSearchForm = ({ btnLoading, getList, children, defaultOutlets }) =
       params.city = values.city.split('-')[0];
       params.region = values.city.split('-')[1];
     }
+
+    
     console.log({ ...values, ...params })
     getList(1, { ...values, ...params });
   }
