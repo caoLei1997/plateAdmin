@@ -221,7 +221,7 @@ class index extends Component {
                         </Col>
                         <Col span={12}>
                             {
-                                content.recordStatus != 4 && (
+                                content.recordStatus == 2 && (
                                     <div className='inline text-center'>
                                         <AuditPass recordId={id} ></AuditPass>
                                         <AuditBy recordId={id}></AuditBy>
