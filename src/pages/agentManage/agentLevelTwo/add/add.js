@@ -105,6 +105,7 @@ class App extends React.Component {
 
   handleOk = e => {
     let {dataSource} = this.state;
+    if(dataSource.length === 0){alert('数据不能为为空');return false}
     let data = [];
     dataSource.forEach((v,k)=>{
       let obj = {

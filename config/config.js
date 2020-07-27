@@ -73,6 +73,13 @@ export default defineConfig({
               authority: ['admin'],
             },
             {
+              name: '商户管理',
+              icon: 'smile',
+              path: '/agentManage',
+              component: './agentManage',
+              authority: ['admin'],
+            },
+            {
               name: '目录管理',
               icon: 'https://electric.sxwinstar.net/plateSale/mlgl.png',
               path: '/catalog',
@@ -115,7 +122,6 @@ export default defineConfig({
               component: './record',
               authority: ['admin','police'],
             },
-
             {
               name: '备案详情',
               icon: 'smile',
