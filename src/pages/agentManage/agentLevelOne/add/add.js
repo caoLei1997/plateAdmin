@@ -72,6 +72,7 @@ class App extends React.Component {
   };
 
   handleOk = e => {
+    if(this.state.dataSource === 0 ){alert('数据不能为为空');return false}
     this.initAddPopup();
     this.props.onChangePLoad();
     addFirstAgent({list:this.state.dataSource}).then(res=>{
