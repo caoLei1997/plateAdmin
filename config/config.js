@@ -67,14 +67,14 @@ export default defineConfig({
             },
             {
               name: '人员管理',
-              icon: 'smile',
+              icon: 'https://electric.sxwinstar.net/plateSale/rygl.png',
               path: '/personal/:index?',
               component: './personalManage/$index$.jsx',
               authority: ['admin'],
             },
             {
               name: '目录管理',
-              icon: 'smile',
+              icon: 'https://electric.sxwinstar.net/plateSale/mlgl.png',
               path: '/catalog',
               component: './catalogManage',
               authority: ['admin'],
@@ -88,7 +88,7 @@ export default defineConfig({
             },
             {
               name: '车辆管理',
-              icon: 'smile',
+              icon: 'https://electric.sxwinstar.net/plateSale/clgl.png',
               path: '/carmanage',
               component: './carManage',
               authority: ['agent','admin'],
@@ -102,7 +102,7 @@ export default defineConfig({
             },
             {
               name: '商户管理',
-              icon: 'smile',
+              icon: 'https://electric.sxwinstar.net/plateSale/shgl.png',
               path: '/agentManage',
               component: './agentManage',
               authority: ['admin'],
@@ -110,7 +110,7 @@ export default defineConfig({
 
             {
               name: '备案管理',
-              icon: 'smile',
+              icon: 'https://electric.sxwinstar.net/plateSale/bagl.png',
               path: '/record',
               component: './record',
               authority: ['admin','police'],

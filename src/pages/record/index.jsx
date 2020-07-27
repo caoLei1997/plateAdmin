@@ -8,33 +8,43 @@ import { connect } from 'umi';
 class Record extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
+        let { recordList } = this.props;
+        this.state = {
+            pageSize: recordList.pageSize,
+            pageIndex: recordList.current
+        }
     }
 
     getList = () => {
-        let { dispatch, recordList } = this.props;
-        let { current, pageSize } = recordList;
+        let { dispatch } = this.props;
         dispatch({
             type: 'recordList/getList',
             payload: {
-                "pageIndex": current,
-                "pageSize": pageSize,
+                "pageIndex": this.state.pageIndex,
+                "pageSize": this.state.pageSize
             },
             onSuccess: (total) => {
-                console.log(12);
             }
         })
-        // console.log(list);
     }
 
+    handlePaginationChange(pages) {
+        console.log(pages);
 
-    
+        this.setState({
+            pageIndex: pages
+        }, () => {
+            this.getList()
+        })
+    }
 
     componentDidMount() {
         this.getList()
     }
 
     render() {
+
         const columns = [
             {
                 title: '申请日期',
@@ -134,11 +144,30 @@ class Record extends Component {
 
         const { recordList } = this.props
 
+        let _this = this;
+
+        const pagination = {
+            total: recordList.total,
+            current: this.current,
+            pageSize: this.pageSize,
+            onChange: this.handlePaginationChange,
+            showTotal: total => `共${total}条`,
+            showSizeChanger: true,
+            showQuickJumper: true,
+            onShowSizeChange: (current, size) => {
+                _this.setState({
+                    pageIndex: current,
+                    pageSize: size
+                })
+            }
+        }
+
+
         return (
             <PageHeaderWrapper className={styles.main}>
                 <div>
                     <FilterSearch></FilterSearch>
-                    <Table rowKey={"id"} columns={columns} dataSource={recordList.content} />
+                    <Table rowKey={"id"} columns={columns} dataSource={recordList.content} pagination={pagination} />
                 </div>
             </PageHeaderWrapper>
 
