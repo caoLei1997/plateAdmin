@@ -74,7 +74,7 @@ export default defineConfig({
             },
             {
               name: '商户管理',
-              icon: 'smile',
+              icon: 'https://electric.sxwinstar.net/plateSale/shgl.png',
               path: '/agentManage',
               component: './agentManage',
               authority: ['admin'],
@@ -107,14 +107,6 @@ export default defineConfig({
               component: './carManageNew',
               hideInMenu: true,
             },
-            {
-              name: '商户管理',
-              icon: 'https://electric.sxwinstar.net/plateSale/shgl.png',
-              path: '/agentManage',
-              component: './agentManage',
-              authority: ['admin'],
-            },
-
             {
               name: '备案管理',
               icon: 'https://electric.sxwinstar.net/plateSale/bagl.png',

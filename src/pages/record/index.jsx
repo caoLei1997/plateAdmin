@@ -34,8 +34,6 @@ class Record extends Component {
 
         this.setState({
             pageIndex: pages
-        }, () => {
-            this.getList()
         })
     }
 
