@@ -11,8 +11,8 @@ const PersonalIndex = (props) => {
 
   const getList = (pageIndex = current, listParams = filter) => {
 
-    console.log(111111,pageIndex,listParams);
-    
+    console.log(111111, pageIndex, listParams);
+
     dispatch({
       type: 'personalList/getList',
       payload: {
@@ -20,7 +20,7 @@ const PersonalIndex = (props) => {
         "pageIndex": pageIndex,
         "pageSize": listParams.pageSize || pageSize,
         "name": listParams.name || "",
-        "phoneNumber": listParams.phone || "",
+        "phoneNumber": listParams.phone || listParams.phoneNumber,
         "city": listParams.city || "",
         "region": listParams.region || "",
         "level": listParams.level || ''
