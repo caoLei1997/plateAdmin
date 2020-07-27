@@ -23,7 +23,6 @@ const Model = {
       }); // Login successfully
 
       if (response.retCode === RETCODESUCCESS) {
-        debugger
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
