@@ -145,8 +145,8 @@ class Record extends Component {
 
         const pagination = {
             total: recordList.total,
-            current: this.current,
-            pageSize: this.pageSize,
+            current: this.state.current,
+            pageSize: this.state.pageSize,
             onChange: this.handlePaginationChange,
             showTotal: total => `共${total}条`,
             showSizeChanger: true,

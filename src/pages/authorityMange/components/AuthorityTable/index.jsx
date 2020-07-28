@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, Row, Col, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 const AuthorityTable = () => {
     const dataSource = [
         {
@@ -49,14 +50,19 @@ const AuthorityTable = () => {
         },
         {
             title: '操作',
-            dataIndex: 'role',
-            key: 'role',
+            key: 'action',
+            render: () => (
+                <div>
+                    <a className='mr-8'>编辑</a>
+                    <a>停用</a>
+                </div>
+            )
         },
     ];
 
 
     const handlePaginationChange = (pages) => {
-
+        
     }
 
 
@@ -64,6 +70,7 @@ const AuthorityTable = () => {
         total: 10,
         current: 1,
         pageSize: 10,
+        // rowKey:'id',
         onChange: handlePaginationChange,
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
@@ -75,7 +82,7 @@ const AuthorityTable = () => {
         <div className='mt-32'>
             <Row justify='end'>
                 <Col>
-                    <Button type='primary'>新增</Button>
+                    <Button className='btn-green' icon={<PlusOutlined />} type='primary'>新增</Button>
                 </Col>
             </Row>
 
