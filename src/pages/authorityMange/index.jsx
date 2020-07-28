@@ -13,7 +13,6 @@ const authorityManage = () => {
         <PageHeaderWrapper className={styles.main}>
             <div className='mt-top_15'>
                <Filter></Filter>
-                
                <AuthorityTable></AuthorityTable>
             </div>
         </PageHeaderWrapper>
