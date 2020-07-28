@@ -49,6 +49,9 @@ const CarManage = (props) => {
   const { dispatch, means, meansListState, userInfo, distributeListState } = props;
   const [tabKey, setTabKey] = useState('1');
 
+  console.log(userInfo);
+  
+
   const getMeansList = (current, firstId, config = {}) => {
     dispatch({
       type: 'meansList/getList',

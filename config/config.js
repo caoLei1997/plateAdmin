@@ -98,7 +98,7 @@ export default defineConfig({
               icon: 'https://electric.sxwinstar.net/plateSale/clgl.png',
               path: '/carmanage',
               component: './carManage',
-              authority: ['agent','admin'],
+              authority: ['agent', 'admin'],
             },
             {
               name: '车辆管理重构',
@@ -112,14 +112,22 @@ export default defineConfig({
               icon: 'https://electric.sxwinstar.net/plateSale/bagl.png',
               path: '/record',
               component: './record',
-              authority: ['admin','police'],
+              authority: ['admin', 'police'],
             },
             {
               name: '备案详情',
               icon: 'smile',
               path: '/record/recordDetail/:id',
               component: './recordDetail',
-              authority: ['admin','police'],
+              authority: ['admin', 'police'],
+              hideInMenu: true,
+            }, 
+            {
+              name: '权限管理',
+              icon: 'https://electric.sxwinstar.net/plateSale/bagl.png',
+              path: '/authorityMange',
+              component: './authorityMange',
+              authority: ['admin'],
               hideInMenu: true,
             },
             {
