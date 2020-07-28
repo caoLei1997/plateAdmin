@@ -28,7 +28,7 @@ class App extends React.Component {
             {title: '人员数', dataIndex: 'personNum', key: 'personNum',},
             {title: '状态', dataIndex: 'statusTxt', key: 'statusTxt',},
             {title: '停用/启用日期', dataIndex: 'updateTime', key: 'updateTime',width:150},
-            {title: '操作', dataIndex: 'do', key: 'do',width:60},
+            {title: '操作', dataIndex: 'do', key: 'do',width:120},
           ],
           selectChildren:[],
           editVisible:false,
@@ -316,8 +316,7 @@ class App extends React.Component {
         list.forEach((v,k)=>{
           v.cityRegion = v.city + v.region;
           v.do = <p>
-            <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>
-            <p></p>
+            <a href="javascript:;" key={k} onClick={this.editData.bind('',v,k,this)}>编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
             {v.status==='1'?<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>启用</a>:<a href="javascript:;" key={k} onClick={this.doUse.bind('',v,k,this)}>停用</a>}
 
           </p>
@@ -347,7 +346,7 @@ class App extends React.Component {
       }
     });
   };
-  
+
   doUse = (a,b)=>{
     console.log(a,b);
     let title = a.status === '0'? "停用":"启用";
