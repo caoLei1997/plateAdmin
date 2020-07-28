@@ -128,6 +128,7 @@ export default defineConfig({
               path: '/authorityMange',
               component: './authorityMange',
               authority: ['admin'],
+              hideInMenu: true,
             },
             {
               component: './404',

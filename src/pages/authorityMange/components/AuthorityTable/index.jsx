@@ -54,7 +54,7 @@ const AuthorityTable = () => {
             render: () => (
                 <div>
                     <a className='mr-8'>编辑</a>
-                    <a>停用</a>
+                    {1 ? <a className='font-red'>停用</a> : <a>启用</a>}
                 </div>
             )
         },
@@ -62,7 +62,7 @@ const AuthorityTable = () => {
 
 
     const handlePaginationChange = (pages) => {
-        
+
     }
 
 
