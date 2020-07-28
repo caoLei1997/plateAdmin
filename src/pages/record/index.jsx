@@ -29,14 +29,13 @@ class Record extends Component {
         })
     }
 
-    handlePaginationChange(pages) {
-        console.log(pages);
-
+    handlePaginationChange = (pages) => {
         this.setState({
             pageIndex: pages
+        }, () => {
+            this.getList()
         })
     }
-
     componentDidMount() {
         this.getList()
     }
