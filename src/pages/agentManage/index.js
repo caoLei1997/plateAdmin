@@ -25,9 +25,9 @@ class agentManage extends React.Component {
    return (
       <div className={styles.agentManageMain}>
         <Breadcrumb>
-          <Breadcrumb.Item>带牌销售</Breadcrumb.Item>
+          <Breadcrumb.Item> <a href='/'>首页</a></Breadcrumb.Item>
           <Breadcrumb.Item>
-            <a href="javascript:;">商户管理</a>
+            商户管理
           </Breadcrumb.Item>
         </Breadcrumb>
         <Menu onClick={this.handleClick} selectedKeys={[this.state.level_current]} mode="horizontal">

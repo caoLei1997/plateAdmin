@@ -63,7 +63,7 @@ export default defineConfig({
           routes: [
             {
               path: '/',
-              redirect: '/catalog',
+              redirect: '/personal',
             },
             {
               name: '人员管理',
@@ -87,18 +87,17 @@ export default defineConfig({
               authority: ['admin'],
             },
             {
-              name: '基础详情页',
-              icon: 'smile',
-              path: '/carmanage/details/:id',
-              component: './carManage/details',
-              hideInMenu: true,
-            },
-            {
               name: '车辆管理',
               icon: 'https://electric.sxwinstar.net/plateSale/clgl.png',
               path: '/carmanage',
               component: './carManage',
               authority: ['agent', 'admin'],
+            },
+            {
+              name: '基础详情页',
+              path: '/carmanage/details/:id',
+              component: './carManage/details',
+              hideInMenu: true,
             },
             {
               name: '车辆管理重构',
@@ -170,7 +169,6 @@ export default defineConfig({
         }
 
         const match = context.resourcePath.match(/src(.*)/);
-
         if (match && match[1]) {
           const antdProPath = match[1].replace('.less', '');
           const arr = winPath(antdProPath)

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, Table, Form, Row, Col, Input, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import DealerLinkage from '@/components/DealerLinkage/index';
+import DealerLinkage from '@/components/DealerLinkage1/index';
 import { connect } from 'umi';
 
 import styles from './index.less';
@@ -118,12 +118,12 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
                         }
                     >
                         <Row gutter={12}>
-                            <Col span={8}>
+                            <Col span={12}>
                                 <Form.Item name='name' className='mb-16' rules={[{ required: true, message: '请输入姓名!' }]}>
                                     <Input placeholder="姓名" />
                                 </Form.Item>
                             </Col>
-                            <Col span={8}>
+                            <Col span={12}>
                                 <Form.Item name='phone' className='mb-16' rules={[{ required: true, len: 11, message: '请输入正确的手机号!' }]}>
                                     <Input placeholder="手机号" />
                                 </Form.Item>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'umi';
 import { Form, Table, Popconfirm, Modal, Typography, Input, Button, message } from 'antd';
-import DealerLinkage from '@/components/DealerLinkage'
+import DealerLinkage from '@/components/DealerLinkage1'
 import { toggleStatusKeyVal } from '@/commonFun'
 import { PERSONAL_STATUS, PAGESIZE } from '@/globalConstant'
 import styles from './index.less';
@@ -107,7 +107,7 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
   return (
     <div>
       <a onClick={() => toggleModalVisible(true)}>编辑</a>
-      <Modal title='编辑业务人员' destroyOnClose visible={modalVisible} footer={null} onCancel={() => toggleModalVisible(false)}>
+      <Modal   title='编辑业务人员' destroyOnClose visible={modalVisible} footer={null} onCancel={() => toggleModalVisible(false)}>
         <Form initialValues={{ name: item.name, phoneNumber: item.phoneNumber, city: item.region, level: String(item.level) }} fields={[{ name: ['outlets'], value: selectVal.outlets }]} className="personal-edit-form" name='catalog-manage-table-search' onFinish={handleFinish} >
           <Form.Item label='姓名' name='name' rules={[{ required: true, message: '请输入姓名!' }]}>
             <Input placeholder="姓名" />

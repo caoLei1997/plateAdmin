@@ -1,7 +1,8 @@
 import React from 'react';
-import { Table, Row, Col, Button } from 'antd';
+import { Table, Row, Col, Button, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 const AuthorityTable = () => {
+    const { error,info } = Modal;
     const dataSource = [
         {
             key: '1',
@@ -54,11 +55,38 @@ const AuthorityTable = () => {
             render: () => (
                 <div>
                     <a className='mr-8'>编辑</a>
-                    {1 ? <a className='font-red'>停用</a> : <a>启用</a>}
+                    <a onClick={handleStop} className='font-red'>停用</a>
+                    <a onClick={handleStart}>启用</a>
                 </div>
             )
         },
     ];
+
+    const handleStop = () => {
+        error({
+            title: '停用',
+            content: '停用会导致该管理员不能在登录后台管理系统进行任何管理操作，确认要停用么？',
+            onOk() {
+                console.log('OK');
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
+
+    const handleStart = () => {
+        info({
+            title: '启用',
+            content: '启用后该管理员将恢复账号角色对应管理权限，确认要启用吗？',
+            onOk() {
+                console.log('OK');
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
 
 
     const handlePaginationChange = (pages) => {

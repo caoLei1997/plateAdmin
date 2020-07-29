@@ -5,10 +5,6 @@ import AuthorityTable from './components/AuthorityTable'
 
 import styles from './index.less';
 const authorityManage = () => {
-
-
-  
-
     return (
         <PageHeaderWrapper className={styles.main}>
             <div>
@@ -16,7 +12,6 @@ const authorityManage = () => {
                <AuthorityTable></AuthorityTable>
             </div>
         </PageHeaderWrapper>
-
     );
 }
 

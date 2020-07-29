@@ -78,7 +78,6 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange, getList })
   const tableProps = {
     rowKey: 'id',
     columns,
-    loading: tableLoading,
     scroll,
     pagination: {
       total, current,
@@ -97,7 +96,7 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange, getList })
   return (
     <div className={styles.container}>
       <div id="components-table-demo-basic">
-        <Table {...tableProps} />
+        <Table loading={tableLoading} {...tableProps}  />
       </div>
     </div>
   )

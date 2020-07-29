@@ -85,7 +85,7 @@ const MeansTable = ({ distributeListState, tableLoading, paginationChange }) => 
         paginationChange(current, false, { pageSize: size });
       }
     },
-    loading: tableLoading,
+
     scroll,
     dataSource: list
   }
@@ -95,7 +95,7 @@ const MeansTable = ({ distributeListState, tableLoading, paginationChange }) => 
         <div style={{ textAlign: 'right' }}>
           <Button type="primary" className='btn-green mb-24' icon={<PlusOutlined />} onClick={exportExcel}>导出分配表</Button>
         </div>
-        <Table {...tableProps} />
+        <Table loading={tableLoading} {...tableProps} />
       </div>
     </div>
   )

@@ -139,7 +139,7 @@ class Record extends Component {
             },
         ];
 
-        const { recordList } = this.props
+        const { recordList, tableLoading } = this.props
 
         let _this = this;
 
@@ -164,7 +164,7 @@ class Record extends Component {
             <PageHeaderWrapper className={styles.main}>
                 <div>
                     <FilterSearch></FilterSearch>
-                    <Table rowKey={"id"} columns={columns} dataSource={recordList.content} pagination={pagination} />
+                    <Table rowKey={"id"} columns={columns} dataSource={recordList.content} pagination={pagination} loading={tableLoading} />
                 </div>
             </PageHeaderWrapper>
 
@@ -172,4 +172,4 @@ class Record extends Component {
     }
 }
 
-export default connect(({ recordList }) => ({ recordList }))(Record) 
+export default connect(({ recordList, loading }) => ({ recordList, tableLoading: loading.effects['recordList/getList'] }))(Record) 

@@ -50,7 +50,7 @@ const CarManage = (props) => {
   const [tabKey, setTabKey] = useState('1');
 
   console.log(userInfo);
-  
+
 
   const getMeansList = (current, firstId, config = {}) => {
     dispatch({
@@ -61,6 +61,13 @@ const CarManage = (props) => {
         "pageIndex": current,
         "pageSize": meansListState.pageSize,
         ...config
+      }
+    })
+
+    dispatch({
+      type: 'subDealer/getList',
+      payload: {
+        agentOutletsId: firstId || userInfo.firstId
       }
     })
   }
@@ -87,6 +94,13 @@ const CarManage = (props) => {
       type: 'distributeList/getCensus',
       payload: {
         account: userInfo.phone,
+        agentOutletsId: firstId || userInfo.firstId
+      }
+    })
+
+    dispatch({
+      type: 'subDealer/getList',
+      payload: {
         agentOutletsId: firstId || userInfo.firstId
       }
     })
@@ -136,5 +150,6 @@ const CarManage = (props) => {
 export default connect(({ login, meansList, distributeList }) => ({
   userInfo: login,
   meansListState: meansList,
-  distributeListState: distributeList
+  distributeListState: distributeList,
+
 }))(CarManage);

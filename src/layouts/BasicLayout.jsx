@@ -10,8 +10,9 @@ import { Result, Button } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { getAuthorityFromRouter } from '@/utils/utils';
-import {SUPER_UNIQUE} from '@/globalConstant'
+import { SUPER_UNIQUE } from '@/globalConstant'
 import styles from './BasicLayout.less';
+import login from '@/pages/user/login';
 
 const noMatch = (
   <Result
@@ -44,6 +45,9 @@ const BasicLayout = props => {
     },
     loginState
   } = props;
+
+
+
   /**
    * constructor
    */
@@ -104,11 +108,11 @@ const BasicLayout = props => {
         ...routers,
       ]}
       itemRender={(route, params, routes, paths) => {
-        const first = routes.indexOf(route) === 0;
-        return first ? (
-          <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+        const last = routes.indexOf(route) === routes.length - 1;
+        return last ? (
+          <span>{route.breadcrumbName}</span>
         ) : (
-            <span>{route.breadcrumbName}</span>
+            <Link to={`/${paths.join('/')}`}>{route.breadcrumbName}</Link>
           );
       }}
       footerRender={() => defaultFooterDom}
@@ -124,7 +128,7 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ login,global, settings }) => ({
+export default connect(({ login, global, settings }) => ({
   collapsed: global.collapsed,
   settings,
   loginState: login
