@@ -34,7 +34,7 @@ class App extends React.Component {
       tableDataSource: [],
       tableColumns: [
         { title: '商户ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId', },
-        { title: '商户名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName', width: 150 },
+        { title: '商户名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName' },
         { title: '级别', dataIndex: 'level', key: 'level', },
         { title: '市区', dataIndex: 'cityRegion', key: 'cityRegion', width: 100 },
         { title: '地址', dataIndex: 'address', key: 'address', width: 200 },
@@ -42,7 +42,7 @@ class App extends React.Component {
         { title: '人员数', dataIndex: 'personNum', key: 'personNum', },
         { title: '状态', dataIndex: 'statusTxt', key: 'statusTxt', },
         { title: '停用/启用日期', dataIndex: 'updateTime', key: 'updateTime', width: 150 },
-        { title: '操作', dataIndex: 'do', key: 'do', width: 100 },
+        { title: '操作', dataIndex: 'do', key: 'do', width: 120 },
       ],
       // paginationSeting
       total: null,
@@ -131,7 +131,7 @@ class App extends React.Component {
           v.key = k;
           v.cityRegion = v.city + v.region;
           v.do = <div key={k}>
-            <p><a href="javascript:;" onClick={this.editData.bind('', v, k, this)}>编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <a href="javascript:;" onClick={this.editData.bind('', v, k, this)}>编辑</a>&nbsp;&nbsp;
             {v.status === '1' ? <a href="javascript:;" onClick={this.doUse.bind('', v, k, this)}>启用</a> : <a href="javascript:;" onClick={this.doUse.bind('', v, k, this)}>停用</a>}
           </div>;
           v.level = v.level === 12 ? '经销商' : '--';
