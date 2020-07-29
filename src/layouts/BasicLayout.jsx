@@ -100,13 +100,15 @@ const BasicLayout = props => {
 
         return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
-      breadcrumbRender={(routers = []) => [
-        {
-          path: '/',
-          breadcrumbName: '首页',
-        },
-        ...routers,
-      ]}
+      breadcrumbRender={(routers = []) => {
+        return [
+          {
+            path: '/personal/:index',
+            breadcrumbName: '首页',
+          },
+          ...routers,
+        ]
+      }}
       itemRender={(route, params, routes, paths) => {
         const last = routes.indexOf(route) === routes.length - 1;
         return last ? (
