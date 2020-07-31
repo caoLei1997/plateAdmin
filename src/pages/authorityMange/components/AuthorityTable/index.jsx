@@ -1,22 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table, Row, Col, Button, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-const AuthorityTable = () => {
-    const { error,info } = Modal;
-    const dataSource = [
-        {
-            key: '1',
-            name: '胡彦斌',
-            age: 32,
-            address: '西湖区湖底公园1号',
-        },
-        {
-            key: '2',
-            name: '胡彦祖',
-            age: 42,
-            address: '西湖区湖底公园1号',
-        },
-    ];
+import AddAuthority from '../AddAuthority'
+const AuthorityTable = ({ authorityList }) => {
+    const { confirm } = Modal;
+    // table
+
 
     const columns = [
         {
@@ -26,8 +15,8 @@ const AuthorityTable = () => {
         },
         {
             title: '手机号',
-            dataIndex: 'phone',
-            key: 'phone',
+            dataIndex: 'phoneNumber',
+            key: 'phoneNumber',
         },
         {
             title: '角色',
@@ -36,36 +25,44 @@ const AuthorityTable = () => {
         },
         {
             title: '功能权限',
-            dataIndex: 'role',
-            key: 'role',
+            dataIndex: 'authority',
+            key: 'authority',
         },
         {
             title: '状态',
-            dataIndex: 'role',
-            key: 'role',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => {
+                return (<div>
+                    {status == 1 ? <a className='font-success'>开启</a> : <a className='font-red'>关闭</a>}
+                </div>)
+            }
         },
         {
             title: '停用/启用日期',
-            dataIndex: 'role',
-            key: 'role',
+            dataIndex: 'turnStopDate',
+            key: 'turnStopDate',
         },
         {
             title: '操作',
             key: 'action',
-            render: () => (
-                <div>
-                    <a className='mr-8'>编辑</a>
-                    <a onClick={handleStop} className='font-red'>停用</a>
-                    <a onClick={handleStart}>启用</a>
-                </div>
-            )
-        },
+            render: (row) => {
+                return (
+                    <div>
+                        <a onClick={() => { handleAdd('edit', row) }} className='mr-8'>编辑</a>
+                        {row.status == 1 ? <a onClick={handleStop} className='font-red'>停用</a> : <a onClick={handleStart}>启用</a>}
+                    </div>
+                )
+            }
+        }
     ];
-
+    // 操作 关闭
     const handleStop = () => {
-        error({
+        confirm({
             title: '停用',
             content: '停用会导致该管理员不能在登录后台管理系统进行任何管理操作，确认要停用么？',
+            okText: '确认',
+            cancelText: '取消',
             onOk() {
                 console.log('OK');
             },
@@ -74,11 +71,13 @@ const AuthorityTable = () => {
             },
         });
     }
-
+    // 操作 开启
     const handleStart = () => {
-        info({
+        confirm({
             title: '启用',
             content: '启用后该管理员将恢复账号角色对应管理权限，确认要启用吗？',
+            cancelText: '取消',
+            okText: '确认',
             onOk() {
                 console.log('OK');
             },
@@ -88,40 +87,57 @@ const AuthorityTable = () => {
         });
     }
 
-
+    // 分页
     const handlePaginationChange = (pages) => {
 
     }
 
+    // 条数
+    const [pageSize, setPageSize] = useState(10)
+    const [current, setCurrent] = useState(1)
 
     const pagination = {
         total: 10,
-        current: 1,
-        pageSize: 10,
-        // rowKey:'id',
+        current: current,
+        pageSize: pageSize,
+
         onChange: handlePaginationChange,
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
         showQuickJumper: true,
         onShowSizeChange: (current, size) => {
+            setCurrent(current)
+            setPageSize(size)
         }
     }
+
+    // 弹窗prop
+    const [isVisible, setIsVisible] = useState(false);
+    const [type, setType] = useState('add');
+    const [rows, setRows] = useState(null)
+
+    const visibleFn = () => {
+        setIsVisible(false)
+    }
+
+    // 新增编辑
+    const handleAdd = (type, row = null) => {
+        setRows(row)
+        setType(type)
+        setIsVisible(true)
+    }
+
     return (
         <div className='mt-32'>
             <Row justify='end'>
                 <Col>
-                    <Button className='btn-green' icon={<PlusOutlined />} type='primary'>新增</Button>
+                    <Button onClick={() => { handleAdd('add') }} className='btn-green' icon={<PlusOutlined />} type='primary'>新增</Button>
                 </Col>
             </Row>
-
-            <Row justify='end'>
-                <Col span={24}>
-                    <div className='mt-32'>
-                        <Table dataSource={dataSource} columns={columns} pagination={pagination}></Table>
-                    </div>
-                </Col>
-            </Row>
-
+            <div className='mt-16'>
+                <Table rowKey='id' dataSource={authorityList.data} columns={columns} pagination={pagination}></Table>
+            </div>
+            <AddAuthority type={type} isVisible={isVisible} visibleFn={visibleFn} rows={rows}></AddAuthority>
         </div>
     );
 }

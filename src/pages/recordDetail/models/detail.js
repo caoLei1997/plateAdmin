@@ -1,5 +1,4 @@
 import { requestRecordDetail } from '@/services/recordDetail'
-import { PAGESIZE, RETCODESUCCESS } from '@/globalConstant';
 
 const initialState = {
     content: {}
