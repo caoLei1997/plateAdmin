@@ -4,11 +4,14 @@ function AddAuthority({ isVisible = true, visibleFn = null, type, rows = {} }) {
     const { Option } = Select
     const [form] = Form.useForm()
     const [authority, setAuthority] = useState(null)
+
     // 弹窗确认
     const handleOk = () => {
+
+        form.validateFields()
         const formValue = form.getFieldsValue()
         console.log(formValue);
-        visibleFn()
+        // visibleFn()
     }
     // 弹窗关闭
     const handleCancel = () => {
@@ -28,7 +31,7 @@ function AddAuthority({ isVisible = true, visibleFn = null, type, rows = {} }) {
                 form.resetFields()
             }
         }
-    })
+    },[rows])
     //选择权限
     const changeAuthority = (value) => {
         setAuthority(value)
@@ -62,13 +65,13 @@ function AddAuthority({ isVisible = true, visibleFn = null, type, rows = {} }) {
                     form={form}
                     initialValues={rows}
                 >
-                    <Form.Item label='姓名' name='name'>
+                    <Form.Item rules={[{ required: true }]} label='姓名' name='name'>
                         <Input placeholder='姓名' />
                     </Form.Item>
-                    <Form.Item label='手机号' name='phoneNumber' help="该管理员通过手机号验证码可以登录">
+                    <Form.Item rules={[{ required: true }]} label='手机号' name='phoneNumber' >
                         <Input placeholder='手机号' />
                     </Form.Item>
-                    <Form.Item label='角色权限' className='mt-8' name='role'>
+                    <Form.Item rules={[{ required: true }]} label='角色权限' className='mt-8' name='role'>
                         <Select placeholder='权限选择' onChange={changeAuthority}>
                             <Option value='超级管理员'>超级管理员</Option>
                             <Option value='品牌厂家'>品牌厂家</Option>
@@ -77,7 +80,7 @@ function AddAuthority({ isVisible = true, visibleFn = null, type, rows = {} }) {
                     </Form.Item>
                     {
                         authority === '支队管理员' && (
-                            <Form.Item label='所选支队' name='detachment'>
+                            <Form.Item rules={[{ required: true }]} label='所选支队' name='detachment'>
                                 <Select placeholder='所选支队'>
                                     <Option value='西安支队'>西安支队</Option>
                                     <Option value='咸阳支队'>咸阳支队</Option>

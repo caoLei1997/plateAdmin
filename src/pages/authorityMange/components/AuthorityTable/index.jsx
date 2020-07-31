@@ -137,7 +137,7 @@ const AuthorityTable = ({ authorityList }) => {
             <div className='mt-16'>
                 <Table rowKey='id' dataSource={authorityList.data} columns={columns} pagination={pagination}></Table>
             </div>
-            <AddAuthority type={type} isVisible={isVisible} visibleFn={visibleFn} rows={rows}></AddAuthority>
+            <AddAuthority key={rows ? rows.id : 1} type={type} isVisible={isVisible} visibleFn={visibleFn} rows={rows}></AddAuthority>
         </div>
     );
 }
