@@ -26,7 +26,7 @@ class agentManage extends React.Component {
       <div className={styles.agentManageMain}>
         <Breadcrumb>
           <Breadcrumb.Item>
-          <Link to='/:index'>首页</Link> </Breadcrumb.Item>
+          <Link to='/personal/:index'>首页</Link> </Breadcrumb.Item>
           <Breadcrumb.Item>
             商户管理
           </Breadcrumb.Item>
