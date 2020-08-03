@@ -3,7 +3,7 @@ import Mock from 'mockjs';
 
 export default {
     'POST /api/authority/authorityList': Mock.mock({
-        'data|10': [{
+        'data|20': [{
             'id|+1': 1,
             'name|1':['陈平安','徐凤年','李淳刚','剑九黄','洗洪象'],
             'phoneNumber': 15619270901,
@@ -12,6 +12,7 @@ export default {
             'status|1': ['0','1'], // 0 停用 1启用
             'turnStopDate': '@date(yyyy-MM-dd)',
         }],
-        'total': 10
+        'total': 20,
+        
     })
 }

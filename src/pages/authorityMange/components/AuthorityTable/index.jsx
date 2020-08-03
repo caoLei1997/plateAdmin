@@ -4,6 +4,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import AddAuthority from '../AddAuthority'
 const AuthorityTable = ({ authorityList }) => {
     const { confirm } = Modal;
+
+
     // table
 
 
@@ -87,20 +89,20 @@ const AuthorityTable = ({ authorityList }) => {
         });
     }
 
-    // 分页
-    const handlePaginationChange = (pages) => {
-
-    }
-
     // 条数
     const [pageSize, setPageSize] = useState(10)
     const [current, setCurrent] = useState(1)
 
+    // 分页
+    const handlePaginationChange = (pages) => {
+        setCurrent(pages)
+    }
+
+
     const pagination = {
-        total: 10,
+        total: authorityList.total,
         current: current,
         pageSize: pageSize,
-
         onChange: handlePaginationChange,
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
