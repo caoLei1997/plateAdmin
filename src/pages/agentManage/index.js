@@ -1,7 +1,7 @@
 import { Menu, Breadcrumb,Alert } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
-import { connect } from 'umi';
+import { connect,Link } from 'umi';
 import styles from './index.less';
 
 import AgentLevelOne from "./agentLevelOne"
@@ -25,7 +25,8 @@ class agentManage extends React.Component {
    return (
       <div className={styles.agentManageMain}>
         <Breadcrumb>
-          <Breadcrumb.Item> <a href='/'>首页</a></Breadcrumb.Item>
+          <Breadcrumb.Item>
+          <Link to='/:index'>首页</Link> </Breadcrumb.Item>
           <Breadcrumb.Item>
             商户管理
           </Breadcrumb.Item>
