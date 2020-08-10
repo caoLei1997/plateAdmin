@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Modal, Table, Form, Row, Col, Input, message } from 'antd';
+import { Button, Modal, Table, Form, Row, Col, Input, message, Checkbox } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import DealerLinkage from '@/components/DealerLinkage1/index';
 import { connect } from 'umi';
-
+import { RETCODESUCCESS } from '@/globalConstant';
 import styles from './index.less';
 
 const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
@@ -12,6 +12,8 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
     const [selectVal, setSelectVal] = useState({ city: null, level: '', outlets: '' });
     const [list, setList] = useState([]);
     const [form] = Form.useForm();
+
+    console.log(form.getFieldsValue());
 
     const toggleModalVisible = visible => {
         form.resetFields();
@@ -42,7 +44,7 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
 
     const add = (values) => {
         if (!checkSelect(values)) return false;
-        toggleShowForm(false);
+        toggleShowForm(true);
         setList([...list, {
             ...values,
             agentOutletsId: values.outlets.split('-')[0],
@@ -58,7 +60,7 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
             return;
         };
         const data = [];
-        list.map((item) => {
+        list.forEach((item) => {
             data.push({
                 "agentOutletsId": item.agentOutletsId,
                 "agentOutletsName": item.dealer,
@@ -70,11 +72,27 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
         dispatch({
             type: 'personalList/add',
             payload: { list: data },
-            onSuccess: () => {
-                message.success('添加成功');
-                onGetList();
-                toggleModalVisible(false);
-                setList([]);
+            onSuccess: (res) => {
+                let { data } = res;
+                console.log(res);
+                if (res.retCode === RETCODESUCCESS) {
+                    message.success('添加成功');
+                    onGetList();
+                    toggleModalVisible(false);
+                    setList([]);
+                } else {
+                    const newList = list.map((item, index) => {
+                        data.forEach((filterItem, filterIndex) => {
+                            if (item.phone === filterItem) {
+                                item['repeatStatus'] = 1
+                            } else {
+                                item['repeatStatus'] = 0
+                            }
+                        })
+                        return item
+                    })
+                    console.log(newList);
+                }
             }
         })
 
@@ -85,20 +103,44 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
     }
 
     const columns = [
-        { title: '姓名', dataIndex: 'name', key: 'name' },
-        { title: '手机', dataIndex: 'phone', key: 'phone' },
-        { title: '所属商户', dataIndex: 'dealer', key: 'name' },
         {
-            title: '操作', dataIndex: 'id', key: 'id', render: (item) => <div className="pointer font-blue" onClick={() => del(item)} key={item.id}>删除</div>
+            title: '姓名',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: '手机',
+            dataIndex: 'phone',
+            key: 'phone'
+        },
+        {
+            title: '所属商户',
+            dataIndex: 'dealer',
+            key: 'name'
+        },
+        {
+            title: '操作',
+            dataIndex: 'id',
+            key: 'id',
+            render: (item) => <div className="pointer font-blue" onClick={() => del(item)} key={item.id}>删除</div>
         }
+
     ];
 
     const tableProps = {
         columns,
         dataSource: list,
         rowKey: 'id',
-        pagination: false
+        pagination: false,
+
+
     }
+
+    const filterRepeat = (record) => {
+        let className = record.repeatStatus ? styles.red : '';
+        return className
+    }
+
 
     return (<div className={styles.container}>
         <div id='add-personal-container'>
@@ -106,7 +148,7 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
                 <Button type="primary" className='btn-green mb-24' icon={<PlusOutlined />} onClick={() => toggleModalVisible(true)}>新增人员</Button>
             </div>
             <Modal className='add-personal-modal' forceRender destroyOnClose visible={modalVisible} title='新增人员' onCancel={() => toggleModalVisible(false)} onOk={() => modalOk()}>
-                <Table {...tableProps} />
+                <Table {...tableProps} rowClassName={filterRepeat} />
                 {formVisible ?
                     <Form
                         className='mt-16'
@@ -135,6 +177,11 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
                         <div className='text-right'>
                             <Button loading={addLoading} type="primary" htmlType="submit" className='search-button mr-8'>添加</Button>
                             <Button className='search-button' onClick={() => toggleShowForm(false)}>取消</Button>
+                        </div>
+                        <div>
+                            <Form.Item name='allRun'>
+                                <Checkbox value='全部启用' >全部启用</Checkbox>
+                            </Form.Item>
                         </div>
                     </Form>
                     :

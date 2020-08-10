@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'umi';
-import { Form, Select, Row, Col } from 'antd';
+import { Form, Select, Row, Col,Cascader } from 'antd';
 import styles from './index.less';
 
 const { Option, OptGroup } = Select;
@@ -66,7 +66,7 @@ const DealerSelect = (props) => {
       <Row gutter={12}>
         <Col span={12}>
           <Form.Item name='city' label={city.label || ''} className='mb-16'>
-            <Select placeholder={city.placeholder || "选择市区"} onSelect={value => handleSelect(value, 'city')}>
+            <Select placeholder={level.placeholder || "选择商户级别"} onSelect={value => handleSelect(value, 'city')}>
               {showAll && <Option value="">全部市区</Option>}
               {personalDealerState.city && personalDealerState.city.map(item => (
                 <OptGroup label={item.value}>
@@ -74,6 +74,12 @@ const DealerSelect = (props) => {
                 </OptGroup>
               ))}
             </Select>
+
+            {/* <Cascader
+              defaultValue={['zhejiang', 'hangzhou', 'xihu']}
+              options={options}
+              onChange={onChange}
+            /> */}
           </Form.Item>
         </Col>
         <Col span={12}>

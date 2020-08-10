@@ -63,6 +63,7 @@ class Record extends Component {
             {
                 title: '证件类型',
                 dataIndex: 'certificateType',
+                ellipsis:true,
                 render: (certificateType) => {
                     <div>
                         {
@@ -78,10 +79,12 @@ class Record extends Component {
             {
                 title: '证件号码',
                 dataIndex: 'certificateNumber',
+                ellipsis:true,
             },
             {
                 title: '车牌号',
                 dataIndex: 'plateNumber',
+                ellipsis:true,
             },
             {
                 title: '车辆中文商标',
@@ -94,6 +97,7 @@ class Record extends Component {
             {
                 title: '整车编码',
                 dataIndex: 'electrombileNumber',
+                ellipsis:true,
             },
             {
                 title: '审核状态',
