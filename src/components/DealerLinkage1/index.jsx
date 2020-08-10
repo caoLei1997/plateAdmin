@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'umi';
-import { Form, Select, Row, Col, Cascader } from 'antd';
+import { Form, Select, Row, Col,Cascader } from 'antd';
 import styles from './index.less';
 
 const { Option, OptGroup } = Select;
@@ -61,73 +61,25 @@ const DealerSelect = (props) => {
     getOutletsList();
   }, [])
 
-  const options = [
-    {
-      value: 'zhejiang',
-      label: 'Zhejiang',
-      children: [
-        {
-          value: 'hangzhou',
-          label: 'Hangzhou',
-          children: [
-            {
-              value: 'xihu',
-              label: 'West Lake',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      value: 'jiangsu',
-      label: 'Jiangsu',
-      children: [
-        {
-          value: 'nanjing',
-          label: 'Nanjing',
-          children: [
-            {
-              value: 'zhonghuamen',
-              label: 'Zhong Hua Men',
-            },
-          ],
-        },
-      ],
-    },
-  ];
-
-  function onChange(value) {
-    console.log(value);
-  }
-
   return (
     <div className={styles.container}>
       <Row gutter={12}>
         <Col span={12}>
           <Form.Item name='city' label={city.label || ''} className='mb-16'>
-          <Cascader
-              options={personalDealerState.city}
-              onChange={onChange}
-              placeholder='选择市区'
-              expandTrigger="hover"
-              value={city.placeholder}
-            />
-            {/* <Cascader
-              options={personalDealerState.city}
-              onChange={onChange}
-              placeholder={city.placeholder || "选择市区"}
-              value={city.placeholder}
-              expandTrigger="hover"
-            /> */}
-            {/* {JSON.stringify(personalDealerState) } */}
-            {/* <Select placeholder={city.placeholder || "选择市区"} onSelect={value => handleSelect(value, 'city')}>
+            <Select placeholder={level.placeholder || "选择商户级别"} onSelect={value => handleSelect(value, 'city')}>
               {showAll && <Option value="">全部市区</Option>}
               {personalDealerState.city && personalDealerState.city.map(item => (
                 <OptGroup label={item.value}>
                   {item.children.length > 0 && item.children.map(sItem => <Option value={`${item.value}-${sItem.value}`}>{sItem.value}</Option>)}
                 </OptGroup>
               ))}
-            </Select> */}
+            </Select>
+
+            {/* <Cascader
+              defaultValue={['zhejiang', 'hangzhou', 'xihu']}
+              options={options}
+              onChange={onChange}
+            /> */}
           </Form.Item>
         </Col>
         <Col span={12}>

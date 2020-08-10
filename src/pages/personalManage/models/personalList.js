@@ -22,10 +22,7 @@ export default {
     effects: {
         *add({ payload, onSuccess }, { call, put }) {
             const response = yield call(requestAddPersonal, payload);
-
-            if (response.retCode === RETCODESUCCESS) {
-                onSuccess();
-            }
+            onSuccess(response);
         },
         *updateStatus({ payload }, { call, put }) {
             yield put({

@@ -10,7 +10,7 @@ export default {
             'role|1': ['超级管理员', '支队管理员', '品牌厂家'],
             'authority': ['人员管理', '商户管理', '目录管理'],
             'status|1': ['0','1'], // 0 停用 1启用
-            'turnStopDate': '@date(yyyy-MM-dd)',
+            'updateTime;': '@date(yyyy-MM-dd)',
         }],
         'total': 20,
         

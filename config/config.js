@@ -63,7 +63,7 @@ export default defineConfig({
           routes: [
             {
               path: '/',
-              redirect: '/',
+              redirect: 'personal',
             },
             {
               name: '人员管理',
