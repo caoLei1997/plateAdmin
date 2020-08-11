@@ -6,12 +6,18 @@ import { connect } from 'umi'
 import styles from './index.less';
 const AuthorityManage = ({ authorityList, dispatch }) => {
     const getList = (filterValue = null) => {
-        const { pageSize, current } = authorityList
+        const { pageSize, current } = authorityList;
+        if (filterValue != null) {
+            if (!filterValue.pageSize) {
+                filterValue.pageSize = pageSize
+                filterValue.pageIndex = current
+            }
+        }
         dispatch({
             type: 'authorityList/getList',
             payload: {
-                pageSize:filterValue ? filterValue.pageSize :pageSize ,
-                pageIndex: filterValue ? filterValue.current :current ,
+                pageSize: filterValue ? filterValue.pageSize : pageSize,
+                pageIndex: filterValue ? filterValue.current : current,
                 ...filterValue
             }
         })

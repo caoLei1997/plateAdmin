@@ -26,7 +26,7 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
         } else {
             payload = {
                 ...formValue,
-                agentOutletsId:rows.agentOutletsId,
+                agentOutletsId: rows.agentOutletsId,
                 type: rows.type,
                 brandId: rows.brandId,
                 brandName: rows.brandName,
@@ -89,14 +89,14 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                     form={form}
                     initialValues={{ ...rows, type: rows && rows.role, agentOutletsId: rows && rows.brandName }}
                 >
-                    <Form.Item rules={[{ required: true }]} label='姓名' name='name'>
+                    <Form.Item rules={[{ required: true, message: '姓名不能为空' }]} label='姓名' name='name'>
                         <Input placeholder='姓名' />
                     </Form.Item>
-                    <Form.Item rules={[{ required: true }]} label='手机号' name='phoneNumber' >
+                    <Form.Item rules={[{ required: true, message: '手机号不能为空' }]} label='手机号' name='phoneNumber' >
                         <Input placeholder='手机号' />
                     </Form.Item>
-                    <Form.Item rules={[{ required: true }]} label='角色选择' className='mt-8' name='type'>
-                        <Select placeholder='权限选择' onChange={changeAuthority}>
+                    <Form.Item rules={[{ required: true, message: '角色不能为空' }]} label='角色选择' className='mt-8' name='type'>
+                        <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder='权限选择' onChange={changeAuthority}>
                             {
                                 authorityList.rolesList && authorityList.rolesList.map(item =>
                                     <Option key={item.message} value={item.code + ',' + item.type}>{item.message}</Option>
@@ -106,8 +106,8 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                     </Form.Item>
                     {
                         authority === '品牌厂家' && (
-                            <Form.Item rules={[{ required: true }]} label='经销商' name='agentOutletsId'>
-                                <Select placeholder='经销商' onChange={handleAgent} >
+                            <Form.Item rules={[{ required: true, message:'经销商不能为空' }]} label='经销商' name='agentOutletsId'>
+                                <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder='经销商' onChange={handleAgent} >
                                     {
                                         authorityList.agentList && authorityList.agentList.map((item, index) =>
                                             <Option brandid={item.brandId} brandname={item.brandName} key={index} value={item.agentOutletId}>{item.brandName}</Option>

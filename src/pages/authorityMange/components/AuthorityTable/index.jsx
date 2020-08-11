@@ -3,7 +3,8 @@ import { Table, Row, Col, Button, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import AddAuthority from '../AddAuthority'
 import { connect } from 'umi'
-const AuthorityTable = ({ authorityList, dispatch, getList }) => {
+import { INIT_ADMIN } from '../../../../globalConstant';
+const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login }) => {
     const { confirm } = Modal;
     // table
     const columns = [
@@ -51,16 +52,25 @@ const AuthorityTable = ({ authorityList, dispatch, getList }) => {
             title: '操作',
             key: 'action',
             render: (row) => {
-                return (
-                    <div>
-                        <a onClick={() => { handleAdd('edit', row) }} className='mr-8'>编辑</a>
-                        {
-                            row.status == 1 ?
-                                <a onClick={() => { handleStart(row) }}>启用</a> :
-                                <a onClick={() => { handleStop(row) }} className='font-red'>停用</a>
-                        }
-                    </div>
-                )
+                console.log(row);
+                if (row.phoneNumber === INIT_ADMIN) {
+                    return (
+                        <div>
+                            <a onClick={() => { handleAdd('edit', row) }} className='mr-8'>编辑</a>
+                        </div>
+                    )
+                } else {
+                    return (
+                        <div>
+                            <a onClick={() => { handleAdd('edit', row) }} className='mr-8'>编辑</a>
+                            {
+                                row.status == 1 ?
+                                    <a onClick={() => { handleStart(row) }}>启用</a> :
+                                    <a onClick={() => { handleStop(row) }} className='font-red'>停用</a>
+                            }
+                        </div>
+                    )
+                }
             }
         }
     ];
@@ -72,6 +82,7 @@ const AuthorityTable = ({ authorityList, dispatch, getList }) => {
             okText: '确认',
             cancelText: '取消',
             onOk() {
+
                 dispatch({
                     type: 'authorityList/modifyStatus',
                     payload: { status: 1, id }
@@ -98,11 +109,9 @@ const AuthorityTable = ({ authorityList, dispatch, getList }) => {
             },
         });
     }
-
     // 条数
     const [pageSize, setPageSize] = useState(authorityList.pageSize)
     const [current, setCurrent] = useState(authorityList.current)
-
     // 分页
     const handlePaginationChange = (pages) => {
         setCurrent(pages)
@@ -113,17 +122,11 @@ const AuthorityTable = ({ authorityList, dispatch, getList }) => {
                 pageSize,
             },
             onSuccess: () => {
-                getList({pageIndex:pages,pageSize})
+                getList({ pageIndex: pages, pageSize })
             }
         })
 
     }
-
-    // const changePageSizeAndCurrent = () => {
-
-
-    // }
-
     const pagination = {
         total: authorityList.total,
         current: current,
@@ -146,14 +149,12 @@ const AuthorityTable = ({ authorityList, dispatch, getList }) => {
     const visibleFn = () => {
         setIsVisible(false)
     }
-
     // 新增编辑
     const handleAdd = (type, row = null) => {
         setRows(row)
         setType(type)
         setIsVisible(true)
     }
-
     return (
         <div className='mt-32'>
             <Row justify='end'>
@@ -162,11 +163,11 @@ const AuthorityTable = ({ authorityList, dispatch, getList }) => {
                 </Col>
             </Row>
             <div className='mt-16'>
-                <Table rowKey='id' dataSource={authorityList.data ? authorityList.data.content : []} columns={columns} pagination={pagination}></Table>
+                <Table loading={tableLoading} rowKey='id' dataSource={authorityList.data ? authorityList.data.content : []} columns={columns} pagination={pagination}></Table>
             </div>
             <AddAuthority key={rows ? rows.id : 1} type={type} isVisible={isVisible} visibleFn={visibleFn} rows={rows} getList={getList}></AddAuthority>
         </div>
     );
 }
 
-export default connect(({ authorityList }) => ({ authorityList: authorityList }))(AuthorityTable);
+export default connect(({ authorityList, loading, login }) => ({ authorityList: authorityList, login, tableLoading: loading.effects['authorityList/getList'] }))(AuthorityTable);
