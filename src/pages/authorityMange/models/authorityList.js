@@ -4,8 +4,8 @@ import { PAGESIZE, RETCODESUCCESS } from '@/globalConstant';
 const initialState = {
     total: 0,
     pageSize: PAGESIZE,
-    current: 1,
-
+    pageIndex: 1,
+    filterValue: {}
 }
 
 export default {
@@ -13,10 +13,16 @@ export default {
     state: { ...initialState },
     effects: {
         *getList({ payload }, { call, put }) {
-            const res = yield call(authorityList, { ...payload })
+            let { pageSize, pageIndex, filterValue } = payload;
+            const res = yield call(authorityList, { pageSize, pageIndex, ...filterValue })
             yield put({
                 type: 'changeList',
-                payload: res
+                payload: {
+                    filterValue: filterValue,
+                    pageIndex,
+                    pageSize,
+                    ...res
+                }
             })
         },
         *getRoles({ payload }, { call, put }) {
@@ -29,28 +35,27 @@ export default {
         },
         *modifyStatus({ payload }, { put, call }) {
             const res = yield call(reqModifyStatus, { ...payload })
-            yield put({
-                type: 'changeListStatus',
-                payload: payload
-            })
+            if (res.retCode == '0000') {
+                yield put({
+                    type: 'changeListStatus',
+                    payload: payload
+                })
+            }
         },
-
-        *pageSizeAndCurrent({ payload, onSuccess }, { put }) {
-            yield put({
-                type: 'changePageSizeAndCurrent',
-                payload: payload
-            })
-            onSuccess()
-        }
     },
     reducers: {
         changeList(state, { payload }) {
-            const { data } = payload
-            return { ...state, ...payload, total: payload.data.total }
-        },
-        changePageSizeAndCurrent(state, { payload }) {
-            
-            return { ...state, ...payload }
+        
+            let filter = payload.filterValue;
+            console.log('payload',payload);
+            console.log('filter',filter);
+
+            return {
+                ...state,
+                ...payload,
+                pageIndex: filter.pageIndex ? filter.pageIndex : payload.pageIndex,
+                total: payload.data.total
+            }
         },
         changeFRoles(state, { payload: { agent, res } }) {
             return { ...state, rolesList: res.data, agentList: agent.data }

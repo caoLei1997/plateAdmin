@@ -28,7 +28,7 @@ class App extends React.Component {
         { title: '人员数', dataIndex: 'personNum', key: 'personNum', },
         { title: '状态', dataIndex: 'statusTxt', key: 'statusTxt', },
         { title: '停用/启用日期', dataIndex: 'updateTime', key: 'updateTime', width: 150 },
-        { title: '操作', dataIndex: 'do', key: 'do', width:120 },
+        { title: '操作', dataIndex: 'do', key: 'do', width: 120 },
       ],
       selectChildren: [],
       editVisible: false,
@@ -165,21 +165,23 @@ class App extends React.Component {
         </div>
         <Spin spinning={spinningStatus}>
           <div className={style.tableList}>
-            <Table dataSource={tableDataSource} pagination={consTrCt && {
-              total: total,
-              pageSize: pageSize,
-              current: pageIndex,
-              onChange: onChange,
-              showTotal: total => `共${total}条`,
-              showSizeChanger: true,
-              showQuickJumper: true,
-              onShowSizeChange: (current, size) => {
-                this.setState({
-                  pageIndex: current,
-                  pageSize: size
-                })
-              }
-            }} columns={tableColumns} />
+            <Table
+              dataSource={tableDataSource}
+              pagination={consTrCt && {
+                total: total,
+                pageSize: pageSize,
+                current: pageIndex,
+                onChange: onChange,
+                showTotal: total => `共${total}条`,
+                showSizeChanger: true,
+                showQuickJumper: true,
+                onShowSizeChange: (current, size) => {
+                  this.setState({
+                    pageIndex: current,
+                    pageSize: size
+                  })
+                }
+              }} columns={tableColumns} />
           </div>
         </Spin>
         {/*添加弹框*/}
@@ -323,6 +325,7 @@ class App extends React.Component {
       if (res && res.data && res.data.content) {
         let list = res.data.content;
         list.forEach((v, k) => {
+          v.key = 'list' + k
           v.cityRegion = v.city + v.region;
           v.do = <p>
             <a href="javascript:;" key={k} onClick={this.editData.bind('', v, k, this)}>编辑</a>&nbsp;&nbsp;
@@ -339,7 +342,7 @@ class App extends React.Component {
             v.brand.push(i.brandName + '\n')
           })
         });
-        console.log(data)
+        console.log(list)
         this.setState({
           consTrCt: true,
           tableDataSource: list,

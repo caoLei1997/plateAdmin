@@ -5,17 +5,23 @@ import { addAccount } from '@/services/authority';
 function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = null, type, rows = null, getList }) {
     const { Option } = Select
     const [form] = Form.useForm()
-    const role = rows ? rows.role : null
-
-
-    let [authority, setAuthority] = useState(role)
+    let [authority, setAuthority] = useState(rows ? rows.role : null)
     const [agent, setAgent] = useState({})
-    // 弹窗确认
-    const handleOk = () => {
-        form.validateFields()
+    const handleOk =async () => {
+        const values = await form.validateFields();
+        // Promise.all(values.errorFields).then(res => {
+        //     console.log(res);
+            
+        // }).catch((e) => {
+        //     console.log(e);
+            
+        // })
         const { brandid = '', brandname = '' } = agent
         const formValue = form.getFieldsValue()
         let payload
+
+        console.log(rows);
+        
 
         if (rows === null) {
             payload = {
@@ -27,9 +33,8 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
             payload = {
                 ...formValue,
                 agentOutletsId: rows.agentOutletsId,
-                type: rows.type,
-                brandId: rows.brandId,
-                brandName: rows.brandName,
+                brandId:  brandid || rows.brandId,
+                brandName:  brandname || rows.brandName,
                 id: rows && rows.id
             }
         }
@@ -54,6 +59,7 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
     //选择权限
     const changeAuthority = (value, { key }) => {
         setAuthority(key)
+        // role = key
     }
     // 权限展示
     const authorityArr = [
@@ -66,7 +72,7 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
     ]
     const functionDisplay = (authority) => {
         if (authority === '超级管理员') return '拥有所有权限'
-        if (authority === '品牌厂家') return <Checkbox.Group key='1' disabled options={authorityArr} defaultValue={['经销商管理']} />
+        if (authority === '品牌厂家') return <Checkbox.Group key='1' disabled options={authorityArr} defaultValue={['车辆管理']} />
         if (authority != '品牌厂家' && authority != null && authority != '超级管理员') return <Checkbox.Group key='2' disabled options={authorityArr} defaultValue={['备案管理']} />
 
         return '根据角色选择自动匹配'
@@ -82,21 +88,20 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                 visible={isVisible}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                getContainer={false}
             >
                 <Form
                     labelCol={{ span: 4 }}
                     form={form}
-                    initialValues={{ ...rows, type: rows && rows.role, agentOutletsId: rows && rows.brandName }}
+                    initialValues={{ ...rows, type: rows && rows.role, agentOutletsId: rows && rows.brandname }}
                 >
                     <Form.Item rules={[{ required: true, message: '姓名不能为空' }]} label='姓名' name='name'>
                         <Input placeholder='姓名' />
                     </Form.Item>
-                    <Form.Item rules={[{ required: true, message: '手机号不能为空' }]} label='手机号' name='phoneNumber' >
-                        <Input placeholder='手机号' />
+                    <Form.Item rules={[{ required: true, len: 11, message: '手机号不能为空' }]} label='手机号' name='phoneNumber' >
+                        <Input placeholder='手机号' maxLength={11} />
                     </Form.Item>
-                    <Form.Item rules={[{ required: true, message: '角色不能为空' }]} label='角色选择' className='mt-8' name='type'>
-                        <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder='权限选择' onChange={changeAuthority}>
+                    <Form.Item rules={[{ required: true, message: '角色不能为空' }]} label='选择角色' className='mt-8' name='type'>
+                        <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder='选择角色' onChange={changeAuthority}>
                             {
                                 authorityList.rolesList && authorityList.rolesList.map(item =>
                                     <Option key={item.message} value={item.code + ',' + item.type}>{item.message}</Option>
@@ -105,8 +110,8 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                         </Select>
                     </Form.Item>
                     {
-                        authority === '品牌厂家' && (
-                            <Form.Item rules={[{ required: true, message:'经销商不能为空' }]} label='经销商' name='agentOutletsId'>
+                        authority == '品牌厂家' && (
+                            <Form.Item rules={[{ required: true, message: '经销商不能为空' }]} label='经销商' name='agentOutletsId'>
                                 <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder='经销商' onChange={handleAgent} >
                                     {
                                         authorityList.agentList && authorityList.agentList.map((item, index) =>

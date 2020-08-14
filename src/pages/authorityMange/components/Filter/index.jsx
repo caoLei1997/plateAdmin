@@ -8,10 +8,7 @@ const Filter = ({ dispatch, authorityList, getList }) => {
 
     const onFinish = () => {
         const filterValue = form.getFieldsValue()
-        getList(filterValue)
-    }
-
-    const handleRoleCode = (value) => {
+        getList({ ...filterValue, pageIndex: 1 })
     }
     return (
         <div>
@@ -28,8 +25,8 @@ const Filter = ({ dispatch, authorityList, getList }) => {
                         </Form.Item>
                     </Col>
                     <Col span={6}>
-                        <Form.Item name='Integer role_code' label='角色'>
-                            <Select placeholder='全部角色' onChange={handleRoleCode}>
+                        <Form.Item name='type' label='角色'>
+                            <Select placeholder='全部角色'>
                                 {
                                     authorityList.rolesList && authorityList.rolesList.map(item =>
                                         <Option key={item.code} value={item.code + ',' + item.type}>{item.message}</Option>

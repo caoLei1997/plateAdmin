@@ -266,7 +266,7 @@ class App extends React.Component {
         </div>
         <Spin spinning={spinningStatus}>
           <div className={style.tableList}>
-            <Table width='100%' dataSource={tableDataSource} pagination={{
+            <Table width='100%' rowKey={'agentOutletsId'} dataSource={tableDataSource} pagination={{
               total: total,
               pageSize: pageSize,
               current: pageIndex,

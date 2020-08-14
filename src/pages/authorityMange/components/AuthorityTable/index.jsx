@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Row, Col, Button, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import AddAuthority from '../AddAuthority'
@@ -25,13 +25,23 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
             dataIndex: 'role',
             key: 'role',
             render: (role, recode) => {
-                return (<div>{role}  {recode.brandName && <span> ({recode.brandName})</span>} </div>)
+                if (role === '支队管理员') {
+                    return (
+                        <div>
+                            {role}
+                            <div> ({recode.roleArea})</div>
+                        </div>
+                    )
+                }
+                return (
+                    <div>{role} {recode.brandName && <span> ({recode.brandName + '品牌厂家'})</span>} </div>
+                )
             }
         },
         {
             title: '功能权限',
-            dataIndex: 'authority',
-            key: 'authority',
+            dataIndex: 'power',
+            key: 'power',
         },
         {
             title: '状态',
@@ -39,7 +49,7 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
             key: 'status',
             render: (status) => {
                 return (<div>
-                    {status == 1 ? <a className='font-red'>关闭</a> : <a className='font-success'>开启</a>}
+                    {status == 1 ? <a className='font-red'>停用</a> : <a className='font-success'>正常</a>}
                 </div>)
             }
         },
@@ -52,8 +62,7 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
             title: '操作',
             key: 'action',
             render: (row) => {
-                console.log(row);
-                if (row.phoneNumber === INIT_ADMIN) {
+                if (row.phoneNumber == INIT_ADMIN) {
                     return (
                         <div>
                             <a onClick={() => { handleAdd('edit', row) }} className='mr-8'>编辑</a>
@@ -78,7 +87,7 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
     const handleStop = ({ id }) => {
         confirm({
             title: '停用',
-            content: '停用会导致该管理员不能在登录后台管理系统进行任何管理操作，确认要停用么？',
+            content: '停用会导致该管理员不能在登录后台管理系统进行任何管理操作，确认要停用吗？',
             okText: '确认',
             cancelText: '取消',
             onOk() {
@@ -110,33 +119,27 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
         });
     }
     // 条数
+    // console.log('page', authorityList);
     const [pageSize, setPageSize] = useState(authorityList.pageSize)
-    const [current, setCurrent] = useState(authorityList.current)
+    const [pageIndex, setPageIndex] = useState(authorityList.pageIndex)
+    useEffect(() => {
+        setPageSize(authorityList.pageSize)
+        setPageIndex(authorityList.pageIndex)
+    }, [authorityList.pageSize, authorityList.pageIndex]);
     // 分页
-    const handlePaginationChange = (pages) => {
-        setCurrent(pages)
-        dispatch({
-            type: 'authorityList/pageSizeAndCurrent',
-            payload: {
-                current,
-                pageSize,
-            },
-            onSuccess: () => {
-                getList({ pageIndex: pages, pageSize })
-            }
-        })
-
+    const handlePaginationChange = (pageIndex) => {
+        getList({ ...authorityList.filterValue, pageIndex, pageSize, })
     }
+
     const pagination = {
         total: authorityList.total,
-        current: current,
+        pageIndex: pageIndex,
         pageSize: pageSize,
         onChange: handlePaginationChange,
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
         showQuickJumper: true,
-        onShowSizeChange: (current, size) => {
-            setCurrent(current)
+        onShowSizeChange: (pageIndex, size) => {
             setPageSize(size)
         }
     }
@@ -163,9 +166,16 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
                 </Col>
             </Row>
             <div className='mt-16'>
-                <Table loading={tableLoading} rowKey='id' dataSource={authorityList.data ? authorityList.data.content : []} columns={columns} pagination={pagination}></Table>
+                <Table
+                    key={authorityList.pageIndex + new Date().getTime()}
+                    loading={tableLoading}
+                    rowKey='id'
+                    dataSource={authorityList.data ? authorityList.data.content : []}
+                    columns={columns}
+                    pagination={pagination}>
+                </Table>
             </div>
-            <AddAuthority key={rows ? rows.id : 1} type={type} isVisible={isVisible} visibleFn={visibleFn} rows={rows} getList={getList}></AddAuthority>
+            <AddAuthority key={rows ? rows.id + new Date().getTime() : 1} type={type} isVisible={isVisible} visibleFn={visibleFn} rows={rows} getList={getList}></AddAuthority>
         </div>
     );
 }

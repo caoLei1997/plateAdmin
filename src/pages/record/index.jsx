@@ -20,7 +20,7 @@ class Record extends Component {
         let { dispatch } = this.props;
         dispatch({
             type: 'recordList/getList',
-            payload: {
+           payload : {
                 "pageIndex": this.state.pageIndex,
                 "pageSize": this.state.pageSize
             },

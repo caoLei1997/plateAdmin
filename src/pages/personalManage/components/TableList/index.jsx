@@ -133,6 +133,8 @@ const TableList = (props) => {
   const [nowPageSize, setNowPageSize] = useState([personalList.pageSize]);
 
   const handlePaginationChange = (page) => {
+    console.log(page);
+    
     getList(page);
   }
 

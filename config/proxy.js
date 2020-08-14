@@ -15,11 +15,12 @@ export default {
       },
     },
     '/vehicle-pre/': {
-      target: 'http://wechat.sxeccellentdriving.com',
+      target: 'http://192.168.118.250:8080',
+      // target: 'http://wechat.sxeccellentdriving.com',
       // target: '113.142.56.124:8080',
       changeOrigin: true,
       pathRewrite: {
-        '^': '',
+        '/vehicle-pre/': '',
       },
     },
   },
