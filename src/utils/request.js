@@ -77,7 +77,7 @@ request.interceptors.request.use((url, options = {}) => {
     queryUrl = `/api${url}`;    // 正式环境
     if(process.env.REACT_APP_ENV === 'buildtest'){
       // queryUrl = `/vehicle-pre${url}`;   // 测试环境
-      queryUrl = `http://localhost/${url}`;   // 测试环境
+      queryUrl = `http://localh/${url}`;   // 测试环境
     }
   }
   return {
