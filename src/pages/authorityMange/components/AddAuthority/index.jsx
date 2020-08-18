@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Form, Input, Select, Checkbox, Message } from 'antd'
+import { Modal, Form, Input, Select, Checkbox, Message, Cascader } from 'antd'
 import { connect } from 'umi';
 import { addAccount } from '@/services/authority';
 function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = null, type, rows = null, getList }) {
@@ -7,21 +7,14 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
     const [form] = Form.useForm()
     let [authority, setAuthority] = useState(rows ? rows.role : null)
     const [agent, setAgent] = useState({})
-    const handleOk =async () => {
+    const handleOk = async () => {
         const values = await form.validateFields();
-        // Promise.all(values.errorFields).then(res => {
-        //     console.log(res);
-            
-        // }).catch((e) => {
-        //     console.log(e);
-            
-        // })
         const { brandid = '', brandname = '' } = agent
         const formValue = form.getFieldsValue()
         let payload
 
         console.log(rows);
-        
+
 
         if (rows === null) {
             payload = {
@@ -33,12 +26,11 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
             payload = {
                 ...formValue,
                 agentOutletsId: rows.agentOutletsId,
-                brandId:  brandid || rows.brandId,
-                brandName:  brandname || rows.brandName,
+                brandId: brandid || rows.brandId,
+                brandName: brandname || rows.brandName,
                 id: rows && rows.id
             }
         }
-
         addAccount(payload).then(({ retCode, retMsg }) => {
             if (retCode == '0000') {
                 Message.success(retMsg)
@@ -47,7 +39,6 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                 form.resetFields()
             }
         })
-
     }
     // 弹窗关闭
     const handleCancel = () => {
@@ -81,6 +72,50 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
     const handleAgent = (value, options) => {
         setAgent(options)
     }
+
+    // 级联选择数据
+    const options = [
+        {
+            value: 'zhejiang',
+            label: 'Zhejiang',
+            children: [
+                {
+                    value: 'hangzhou',
+                    label: 'Hangzhou',
+                    children: [
+                        {
+                            value: 'xihu',
+                            label: 'West Lake',
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            value: 'jiangsu',
+            label: 'Jiangsu',
+            children: [
+                {
+                    value: 'nanjing',
+                    label: 'Nanjing',
+                    children: [
+                        {
+                            value: 'zhonghuamen',
+                            label: 'Zhong Hua Men',
+                        },
+                    ],
+                },
+            ],
+        },
+    ];
+    function onChange(value) {
+        console.log(value);
+    }
+
+    // Just show the latest item.
+    function displayRender(label) {
+        return label.join('-');
+    }
     return (
         <div>
             <Modal
@@ -109,6 +144,34 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                             }
                         </Select>
                     </Form.Item>
+                    <Form.Item label='所属支队'>
+                        <Select placeholder='选择所属支队'>
+                            <Option value="jack">Jack</Option>
+                            <Option value="lucy">Lucy</Option>
+                            <Option value="Yiminghe">yiminghe</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label='所属大队'>
+                        <div>
+                            <Cascader
+                                options={options}
+                                expandTrigger="hover"
+                                displayRender={displayRender}
+                                onChange={onChange}
+                                plplaceholder='选择市区'
+                            />
+                        </div>
+                    </Form.Item>
+                    <Form.Item colon={false} label=' '>
+                        <div>
+                            <Select placeholder='选择所属大队'>
+                                <Option value="jack">Jack</Option>
+                                <Option value="lucy">Lucy</Option>
+                                <Option value="Yiminghe">yiminghe</Option>
+                            </Select>
+                        </div>
+                    </Form.Item>
+
                     {
                         authority == '品牌厂家' && (
                             <Form.Item rules={[{ required: true, message: '经销商不能为空' }]} label='经销商' name='agentOutletsId'>

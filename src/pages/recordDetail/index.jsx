@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import styles from './index.less'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Descriptions, Divider, Table, Button, Row, Col, Typography } from 'antd';
+import { Descriptions, Divider, Table, Button, Row, Col, Typography, Collapse } from 'antd';
 import AuditPass from './components/AuditPass'
 import AuditBy from './components/AuditBy'
 import defaultImg from '../../assets/default.png'
 
 import { connect, Link } from 'umi'
+
+const { Panel } = Collapse;
 
 const Text = Typography
 
@@ -112,6 +114,67 @@ class index extends Component {
                                     }
                                 </div>
                             </div>
+                            <div className='record-collapse'>
+                                <Collapse
+                                    accordion={true}
+                                    expandIconPosition='right'
+                                    ghost
+                                >
+                                    <Panel className='collapse' header="厂家型号信息" key="1">
+                                        <Descriptions title="" column={2}>
+                                            <Descriptions.Item label="车辆中文商标"></Descriptions.Item>
+                                            <Descriptions.Item label="登记车辆型号序号"></Descriptions.Item>
+                                            <Descriptions.Item label="车身长度"></Descriptions.Item>
+                                            <Descriptions.Item label="车身宽度"></Descriptions.Item>
+                                            <Descriptions.Item label="车身高度"></Descriptions.Item>
+                                            <Descriptions.Item label="续航里程"></Descriptions.Item>
+                                            <Descriptions.Item label="整车质量"></Descriptions.Item>
+                                            <Descriptions.Item label="最高设计时速"></Descriptions.Item>
+                                            <Descriptions.Item label="整车编码位置"></Descriptions.Item>
+                                            <Descriptions.Item label="铭牌固定位置"></Descriptions.Item>
+                                        </Descriptions>
+                                        <Descriptions title="" column={1}>
+                                            <Descriptions.Item label="车辆照片">
+                                                <div className={styles.photoContainer}>
+                                                    <div className={styles.item}>
+                                                        <img src={content.idCardFrontImageBase64 || defaultImg} alt="身份证正面" />
+                                                        <p>身份证正面</p>
+                                                    </div>
+                                                    <div className={styles.item}>
+                                                        <img src={content.idCardEndImageBase64 || defaultImg} alt="身份证反面" />
+                                                        <p>身份证反面</p>
+                                                    </div>
+                                                    <div className={styles.item}>
+                                                        <img src={content.electrombileImageBase64 || defaultImg} alt="右后方45度整车照片" />
+                                                        <p>右后方45度整车照片</p>
+                                                    </div>
+                                                    <div className={styles.item}>
+                                                        <img src={content.electrombileNumberImageBase64 || defaultImg} alt="整车编码" />
+                                                        <p>整车编码</p>
+                                                    </div>
+                                                    <div className={styles.item}>
+                                                        <img src={content.electricNumberImageBase64 || defaultImg} alt="电机编码" />
+                                                        <p>电机编码</p>
+                                                    </div>
+                                                    <div className={styles.item}>
+                                                        <img src={content.otherImage1Base64 || defaultImg} alt="其它1" />
+                                                        <p>其它1</p>
+                                                    </div>
+                                                    <div className={styles.item}>
+                                                        <img src={content.otherImage2Base64 || defaultImg} alt="其它2" />
+                                                        <p>其它2</p>
+                                                    </div>
+                                                </div>
+                                            </Descriptions.Item>
+                                        </Descriptions>
+                                    </Panel>
+                                </Collapse>
+                            </div>
+
+
+
+
+                            <Divider></Divider>
                             <h3>车辆信息</h3>
                             <Divider></Divider>
                             <Descriptions title="" column={2}>
