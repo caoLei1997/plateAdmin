@@ -67,7 +67,7 @@ request.interceptors.request.use((url, options = {}) => {
   // if (isToken) headers.token = '07dc5aa9-8c43-4c8b-bae6-85081a3c1599';
 
   let queryUrl = url;
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development') {ß
     // queryUrl = `/cjj-api${url}`; // 开发环境
     queryUrl = `/vehicle-pre${url}`;
     // queryUrl = `/vehicle/${url}`;
@@ -77,7 +77,7 @@ request.interceptors.request.use((url, options = {}) => {
     queryUrl = `/api${url}`;    // 正式环境
     if(process.env.REACT_APP_ENV === 'buildtest'){
       // queryUrl = `/vehicle-pre${url}`;   // 测试环境
-      queryUrl = `http://localh/${url}`;   // 测试环境
+      queryUrl = `http://localhost:8080${url}`;   // 测试环境
     }
   }
   return {
