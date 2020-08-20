@@ -6,6 +6,8 @@ import { connect } from 'umi'
 import { INIT_ADMIN } from '../../../../globalConstant';
 const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login }) => {
     const { confirm } = Modal;
+    const [pageSize, setPageSize] = useState(authorityList.pageSize)
+    const [pageIndex, setPageIndex] = useState(authorityList.pageIndex)
     // table
     const columns = [
         {
@@ -120,14 +122,10 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
     }
     // 条数
     // console.log('page', authorityList);
-    const [pageSize, setPageSize] = useState(authorityList.pageSize)
-    const [pageIndex, setPageIndex] = useState(authorityList.pageIndex)
-    useEffect(() => {
-        setPageSize(authorityList.pageSize)
-        setPageIndex(authorityList.pageIndex)
-    }, [authorityList.pageSize, authorityList.pageIndex]);
-    // 分页
+  
+  
     const handlePaginationChange = (pageIndex) => {
+        setPageIndex(pageIndex)
         getList({ ...authorityList.filterValue, pageIndex, pageSize, })
     }
 
@@ -160,6 +158,7 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
     }
     return (
         <div className='mt-32'>
+  
             <Row justify='end'>
                 <Col>
                     <Button onClick={() => { handleAdd('add') }} className='btn-green' icon={<PlusOutlined />} type='primary'>新增</Button>
@@ -167,7 +166,6 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
             </Row>
             <div className='mt-16'>
                 <Table
-                    key={authorityList.pageIndex + new Date().getTime()}
                     loading={tableLoading}
                     rowKey='id'
                     dataSource={authorityList.data ? authorityList.data.content : []}

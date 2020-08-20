@@ -81,11 +81,41 @@ export default defineConfig({
             },
             {
               name: '目录管理',
-              icon: 'https://electric.sxwinstar.net/plateSale/mlgl.png',
               path: '/catalog',
-              component: './catalogManage',
+              icon: 'https://electric.sxwinstar.net/plateSale/mlgl.png',
               authority: ['admin'],
+              routes: [
+                { path: '/catalog', redirect: '/catalog/catalog2' },
+                { path: '/catalog/catalog2', name: '型号审批', component: './catalogManage', exact: true, },
+                {
+                  path: '/catalog/snapprove',
+                  name: 'SN审批',
+                  routes: [
+                    {
+                      path: '/catalog/snapprove',
+                      redirect: '/catalog/snapprove/list'
+                    },
+                    {
+                      path: '/catalog/snapprove/list',
+                      name: 'SN审批',
+                      component: './SnApprove',
+                      hideInMenu: true,
+                      hideInBreadcrumb: true,
+                    },
+                    {
+                      path: '/catalog/snapprove/detail',
+                      name: 'SN审批详情',
+                      component: './SnApprove/detail',
+                      hideInMenu: true,
+                    }
+                    ,]
+                  // component: './SnApprove',
+                },
+                { path: '/catalog/catalogmange', name: '目录明细', component: './catalogManage', exact: true, },
+
+              ],
             },
+
             {
               name: '车辆管理',
               icon: 'https://electric.sxwinstar.net/plateSale/clgl.png',
@@ -120,7 +150,7 @@ export default defineConfig({
               component: './recordDetail',
               authority: ['admin', 'police'],
               hideInMenu: true,
-            }, 
+            },
             {
               name: '权限管理',
               icon: 'https://electric.sxwinstar.net/plateSale/bagl.png',
