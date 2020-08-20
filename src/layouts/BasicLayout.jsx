@@ -94,10 +94,14 @@ const BasicLayout = props => {
       )}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
-        if (menuItemProps.isUrl || menuItemProps.children || !menuItemProps.path) {
+        console.log('menuItemProps', menuItemProps)
+        console.log('defaultDom', defaultDom)
+        if (menuItemProps.isUrl || !menuItemProps.path) {
           return defaultDom;
         }
-        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+        return (
+            <Link Link to={menuItemProps.path}>{defaultDom}</Link>
+        );
       }}
       breadcrumbRender={(routers = []) => {
         return [
@@ -113,7 +117,7 @@ const BasicLayout = props => {
         return last ? (
           <span>{route.breadcrumbName}</span>
         ) : (
-            <Link to={`/${paths.join('/')}`}>{route.breadcrumbName}</Link>
+            <Link to={`/${paths[paths.length - 1]}`}> {route.breadcrumbName}</Link>
           );
       }}
       footerRender={() => defaultFooterDom}
@@ -125,7 +129,7 @@ const BasicLayout = props => {
       <Authorized authority={authorized.authority} noMatch={noMatch}>
         {children}
       </Authorized>
-    </ProLayout>
+    </ProLayout >
   );
 };
 

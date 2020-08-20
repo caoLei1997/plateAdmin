@@ -12,10 +12,6 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
         const { brandid = '', brandname = '' } = agent
         const formValue = form.getFieldsValue()
         let payload
-
-        console.log(rows);
-
-
         if (rows === null) {
             payload = {
                 ...formValue,
@@ -124,10 +120,12 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
+        {/* { authorityList.rolesList } */}
+
                 <Form
                     labelCol={{ span: 4 }}
                     form={form}
-                    initialValues={{ ...rows, type: rows && rows.role, agentOutletsId: rows && rows.brandname }}
+                    initialValues={{ ...rows, type: rows && rows.roleArea, agentOutletsId: rows && rows.brandname }}
                 >
                     <Form.Item rules={[{ required: true, message: '姓名不能为空' }]} label='姓名' name='name'>
                         <Input placeholder='姓名' />
@@ -144,7 +142,7 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                             }
                         </Select>
                     </Form.Item>
-                    <Form.Item label='所属支队'>
+                    {/* <Form.Item label='所属支队'>
                         <Select placeholder='选择所属支队'>
                             <Option value="jack">Jack</Option>
                             <Option value="lucy">Lucy</Option>
@@ -170,7 +168,7 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                                 <Option value="Yiminghe">yiminghe</Option>
                             </Select>
                         </div>
-                    </Form.Item>
+                    </Form.Item> */}
 
                     {
                         authority == '品牌厂家' && (
