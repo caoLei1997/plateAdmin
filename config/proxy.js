@@ -6,8 +6,7 @@
  * https://pro.ant.design/docs/deploy
  */
 export default {
-  dev: {
-    '/cjj-api/': {
+  dev: {    '/cjj-api/': {
       target: 'http://192.168.118.21:8080',
       changeOrigin: true,
       pathRewrite: {
