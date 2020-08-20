@@ -142,7 +142,7 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                             }
                         </Select>
                     </Form.Item>
-                    <Form.Item label='所属支队'>
+                    {/* <Form.Item label='所属支队'>
                         <Select placeholder='选择所属支队'>
                             <Option value="jack">Jack</Option>
                             <Option value="lucy">Lucy</Option>
@@ -168,7 +168,7 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                                 <Option value="Yiminghe">yiminghe</Option>
                             </Select>
                         </div>
-                    </Form.Item>
+                    </Form.Item> */}
 
                     {
                         authority == '品牌厂家' && (

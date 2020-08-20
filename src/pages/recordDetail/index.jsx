@@ -46,7 +46,6 @@ class index extends Component {
         let { match, dispatch } = this.props;
         const recordList = JSON.parse(localStorage.getItem('recordList')).data.ids;
         const activeIdIndex = recordList.findIndex(item => item === Number(match.params.id));
-
         let { id } = match.params
         // dispatch({
         //     type: 'recordDetail/getDetail',
@@ -59,9 +58,6 @@ class index extends Component {
         }
         return recordList[activeIdIndex - 1];
     }
-
-
-
     render() {
         const { content, retMsg } = this.props.recordDetail
         const { id } = this.props.match.params
@@ -170,10 +166,6 @@ class index extends Component {
                                     </Panel>
                                 </Collapse>
                             </div>
-
-
-
-
                             <Divider></Divider>
                             <h3>车辆信息</h3>
                             <Divider></Divider>
@@ -301,7 +293,7 @@ class index extends Component {
                             }
                         </Col>
                     </Row>
-                </div >
+                </div>
 
             );
         } else {

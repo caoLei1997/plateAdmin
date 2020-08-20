@@ -79,6 +79,13 @@ export default defineConfig({
               component: './agentManage',
               authority: ['admin'],
             },
+            // {
+            //   name: '目录管理',
+            //   icon: 'https://electric.sxwinstar.net/plateSale/mlgl.png',
+            //   path: '/catalog',
+            //   component: './catalogManage',
+            //   authority: ['admin'],
+            // },
             {
               name: '目录管理',
               path: '/catalog',
