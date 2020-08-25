@@ -25,16 +25,38 @@ export async function getRoles() {
 
 
 export async function getAgent() {
-  return request('/agent/v1.1/DealerPersonnel/getAllBrandAgent', {
+  return request('/agent/v1.1/DealerPersonnel/getAgentOutletsByType?type=1', {
     method: 'GET',
   });
 }
 
 
 export async function reqModifyStatus(data) {
-  return request( `/agent/v1.1/DealerPersonnel/enableOrDisableAccount?${queryJsonToString(data)}`, {
+  return request(`/agent/v1.1/DealerPersonnel/enableOrDisableAccount?${queryJsonToString(data)}`, {
     method: 'GET',
   });
 }
+
+
+export async function reqDetachment() {
+  return request(`/agent/v1.1/DealerPersonnel/getAgentOutletsByType?type=2`, {
+    method: 'GET',
+  });
+}
+
+
+
+export async function getCityTree() {
+  return request(`/agent/v1.1/DealerPersonnel/getCityTree`, {
+    method: 'GET',
+  });
+}
+
+export async function getBrigadeByCityAndRegion(data) {
+  return request(`/web/v1/batchModelWeb/getBrigadeBycityAndRegion?${queryJsonToString(data)}`, {
+    method: 'GET',
+  });
+}
+
 
 

@@ -184,7 +184,7 @@ const SnApprove = () => {
             key: '0-0',
             children: [
                 {
-                    title: '11232 编辑',
+                    title: 'parent 1-0',
                     key: '0-0-0',
                     edit: true
                 },
@@ -203,15 +203,16 @@ const SnApprove = () => {
         return data.map(item => {
             if (!item.children) {
                 return (
-                    <TreeNode
-                        title={
-                            <div className={styles.snTreeContainer}>
-                                {item.title}
-                                {item.edit && <span>编辑</span>}
-                            </div>
-                        }
-                        key={item.key}
-                    />
+                        <TreeNode
+                            title={
+                                <div className={styles.snTreeContainer}>
+                                    {item.title}
+                                    {item.edit && <span className={styles.snTreeEdit}>编辑</span>}
+                                </div>
+                            }
+                            key={item.key}
+                        />
+
                 )
             } else {
                 return (

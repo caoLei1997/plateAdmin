@@ -1,11 +1,20 @@
-import { authorityList, getRoles, getAgent, reqModifyStatus } from '@/services/authority';
+import {
+    authorityList,
+    getRoles,
+    getAgent,
+    reqModifyStatus,
+    reqDetachment,
+    getCityTree,
+    getBrigadeByCityAndRegion
+} from '@/services/authority';
 import { PAGESIZE, RETCODESUCCESS } from '@/globalConstant';
 
 const initialState = {
     total: 0,
     pageSize: PAGESIZE,
     pageIndex: 1,
-    filterValue: {}
+    filterValue: {},
+    brigadeList: []
 }
 
 export default {
@@ -28,9 +37,11 @@ export default {
         *getRoles({ payload }, { call, put }) {
             const res = yield call(getRoles)
             const agent = yield call(getAgent)
+            const detachment = yield call(reqDetachment)
+            const cityTree = yield call(getCityTree)
             yield put({
                 type: 'changeFRoles',
-                payload: { res, agent }
+                payload: { res, agent, detachment, cityTree }
             })
         },
         *modifyStatus({ payload }, { put, call }) {
@@ -42,14 +53,18 @@ export default {
                 })
             }
         },
+
+        *getCityAndRegion({ payload }, { put, call }) {
+            const res = yield call(getBrigadeByCityAndRegion, { ...payload })
+            yield put({
+                type: 'changeBrigade',
+                payload: res.data
+            })
+        }
     },
     reducers: {
         changeList(state, { payload }) {
-        
             let filter = payload.filterValue;
-            console.log('payload',payload);
-            console.log('filter',filter);
-
             return {
                 ...state,
                 ...payload,
@@ -57,8 +72,14 @@ export default {
                 total: payload.data.total
             }
         },
-        changeFRoles(state, { payload: { agent, res } }) {
-            return { ...state, rolesList: res.data, agentList: agent.data }
+        changeFRoles(state, { payload: { agent, res, detachment, cityTree } }) {
+            return {
+                ...state,
+                rolesList: res.data,
+                agentList: agent.data,
+                detachment: detachment.data,
+                cityTree: cityTree.data
+            }
         },
         changeListStatus(state, { payload }) {
             const { data } = state;
@@ -69,6 +90,13 @@ export default {
                 return item
             })
             return { ...state, }
+        },
+        changeBrigade(status, { payload }) {
+            return {
+                ...status,
+                brigadeList: payload
+            }
+
         }
     }
 }

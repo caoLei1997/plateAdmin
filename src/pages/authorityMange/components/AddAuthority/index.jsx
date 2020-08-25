@@ -5,32 +5,30 @@ import { addAccount } from '@/services/authority';
 function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = null, type, rows = null, getList }) {
     const { Option } = Select
     const [form] = Form.useForm()
-    const rolesList = [
-        { label: "超级管理员", value: 0 },
-        { label: "品牌厂家", value: 1 },
-        { label: "支队管理员", value: 2 },
-        { label: "大队管理员", value: 3 }
-    ]
-    let [authority, setAuthority] = useState(rows ? rows.role : null)
+    let [authority, setAuthority] = useState(rows && rows.type)
     const [agent, setAgent] = useState({})
+
+
+    // 选择角色
+    const rolesList = [
+        { label: "超级管理员", value: '0' },
+        { label: "品牌厂家", value: '1' },
+        { label: "支队管理员", value: '2' },
+        { label: "大队管理员", value: '3' }
+    ]
+
+    // 弹窗确定
     const handleOk = async () => {
         const values = await form.validateFields();
-        const { brandid = '', brandname = '' } = agent
         const formValue = form.getFieldsValue()
         let payload
         if (rows === null) {
             payload = {
                 ...formValue,
-                brandId: brandid,
-                brandName: brandname,
             }
         } else {
             payload = {
                 ...formValue,
-                agentOutletsId: rows.agentOutletsId,
-                brandId: brandid || rows.brandId,
-                brandName: brandname || rows.brandName,
-                id: rows && rows.id
             }
         }
         addAccount(payload).then(({ retCode, retMsg }) => {
@@ -51,10 +49,7 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
 
     //选择权限
     const changeAuthority = (value, { label }) => {
-        console.log(value);
-
-        setAuthority(label)
-
+        setAuthority(value)
     }
     // 权限展示
     const authorityArr = [
@@ -65,60 +60,37 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
         { label: '备案管理', value: '备案管理' },
         { label: '权限管理', value: '权限管理' },
     ]
+    // 权限介绍
     const functionDisplay = (authority) => {
-        if (authority === '超级管理员') return '拥有所有权限'
-        if (authority === '品牌厂家') return <Checkbox.Group key='1' disabled options={authorityArr} defaultValue={['车辆管理']} />
-        if (authority != '品牌厂家' && authority != null && authority != '超级管理员') return <Checkbox.Group key='2' disabled options={authorityArr} defaultValue={['备案管理']} />
-
+        if (authority == '0') return '拥有所有权限'
+        if (authority == '1') return <Checkbox.Group key='1' disabled options={authorityArr} defaultValue={['车辆管理']} />
+        if (authority == '2' && authority != null && authority != '超级管理员') return <Checkbox.Group key='2' disabled options={authorityArr} defaultValue={['备案管理']} />
         return '根据角色选择自动匹配'
     }
-
-    const handleAgent = (value, options) => {
-        setAgent(options)
+    // 选择品牌厂家
+    const handleAgent = (value) => {
+        setAgent(value)
     }
-
-    // 级联选择数据
-    const options = [
-        {
-            value: 'zhejiang',
-            label: 'Zhejiang',
-            children: [
-                {
-                    value: 'hangzhou',
-                    label: 'Hangzhou',
-                    children: [
-                        {
-                            value: 'xihu',
-                            label: 'West Lake',
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            value: 'jiangsu',
-            label: 'Jiangsu',
-            children: [
-                {
-                    value: 'nanjing',
-                    label: 'Nanjing',
-                    children: [
-                        {
-                            value: 'zhonghuamen',
-                            label: 'Zhong Hua Men',
-                        },
-                    ],
-                },
-            ],
-        },
-    ];
+    // 选择地区
     function onChange(value) {
-        console.log(value);
+        const [city, region] = value;
+        dispatch({
+            type: 'authorityList/getCityAndRegion',
+            payload: {
+                city,
+                region
+            }
+        })
+
+        dispatch({
+            type: 'authorityList/getCityAndRegion',
+            payload: {
+                "city": city,
+                "region": region
+            },
+
+        })
     }
-
-
-
-    // Just show the latest item.
     function displayRender(label) {
         return label.join('-');
     }
@@ -135,7 +107,7 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                 <Form
                     labelCol={{ span: 4 }}
                     form={form}
-                    initialValues={{ ...rows, type: rows && rows.agentName, agentOutletsId: rows && rows.brandname }}
+                    initialValues={{ ...rows, type: rows && rows.type }}
                 >
                     <Form.Item rules={[{ required: true, message: '姓名不能为空' }]} label='姓名' name='name'>
                         <Input placeholder='姓名' />
@@ -153,12 +125,14 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                         </Select>
                     </Form.Item>
                     {
-                        authority == '品牌厂家' && (
-                            <Form.Item rules={[{ required: true, message: '经销商不能为空' }]} label='经销商' name='agentOutletsId'>
-                                <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder='经销商' onChange={handleAgent} >
+                        authority == '1' && (
+                            <Form.Item rules={[{ required: true, message: '品牌厂家不能为空' }]} label='品牌厂家' name='agentOutletsId'>
+                                <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder='请选择品牌厂家' onChange={handleAgent} >
                                     {
-                                        authorityList.agentList && authorityList.agentList.map((item, index) =>
-                                            <Option brandid={item.brandId} brandname={item.brandName} key={index} value={item.agentOutletId}>{item.brandName}</Option>
+                                        authorityList.agentList
+                                        &&
+                                        authorityList.agentList.map(
+                                            (item, index) => <Option key={index} value={item.agentOutletId}>{item.agentOutlessName}</Option>
                                         )
                                     }
                                 </Select>
@@ -166,23 +140,25 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                         )
                     }
                     {
-                        authority == '支队管理员' && (
-                            <Form.Item label='所属支队'>
+                        authority == '2' && (
+                            <Form.Item label='所属支队' rules={[{ required: true, message: '所属支队不能为空' }]} name='detachment'>
                                 <Select placeholder='选择所属支队'>
-                                    <Option value="jack">Jack</Option>
-                                    <Option value="lucy">Lucy</Option>
-                                    <Option value="Yiminghe">yiminghe</Option>
+                                    {
+                                        authorityList.detachment && authorityList.detachment.map((item, index) =>
+                                            <Option key={index} value={item.agentOutletId}>{item.agentOutlessName}</Option>
+                                        )
+                                    }
                                 </Select>
                             </Form.Item>
                         )
                     }
                     {
-                        authority == '大队管理员' && (
+                        authority == '3' && (
                             <div>
                                 <Form.Item label='所属大队'>
                                     <div>
                                         <Cascader
-                                            options={options}
+                                            options={authorityList.cityTree}
                                             expandTrigger="hover"
                                             displayRender={displayRender}
                                             onChange={onChange}
@@ -193,9 +169,12 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                                 <Form.Item colon={false} label=' '>
                                     <div>
                                         <Select placeholder='选择所属大队'>
-                                            <Option value="jack">Jack</Option>
-                                            <Option value="lucy">Lucy</Option>
-                                            <Option value="Yiminghe">yiminghe</Option>
+                                            {
+                                                authorityList.brigadeList &&
+                                                authorityList.brigadeList.map((item, index) => {
+                                                    <Option key={index} value={item.agentOutlessId}>{item.agentOutlessName}</Option>
+                                                })
+                                            }
                                         </Select>
                                     </div>
                                 </Form.Item>
@@ -211,7 +190,7 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                     </Form.Item>
                 </Form>
             </Modal>
-        </div>
+        </div >
     )
 }
 

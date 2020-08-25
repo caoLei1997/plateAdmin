@@ -24,19 +24,20 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
         },
         {
             title: '角色',
-            dataIndex: 'role',
-            key: 'role',
-            render: (role, recode) => {
-                if (role === '支队管理员') {
-                    return (
-                        <div>
-                            {role}
-                            <div> ({recode.roleArea})</div>
-                        </div>
-                    )
+            dataIndex: 'type',
+            key: 'type',
+            render: (type, recode) => {
+                // 0：超级管理员 1：品牌厂家 2：支队管理员 3：大队管理员
+                function translation(type) {
+                    if (type == 0) return '超级管理员'
+                    if (type == 1) return '品牌厂家'
+                    if (type == 2) return '支队管理员'
+                    if (type == 3) return '大队管理员'
                 }
                 return (
-                    <div>{role} {recode.brandName && <span> ({recode.brandName + '品牌厂家'})</span>} </div>
+                    <div>
+                        {translation(type)} {recode.agentOutletsName && `(${recode.agentOutletsName})`}
+                    </div>
                 )
             }
         },
@@ -122,8 +123,7 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
     }
     // 条数
     // console.log('page', authorityList);
-  
-  
+
     const handlePaginationChange = (pageIndex) => {
         setPageIndex(pageIndex)
         getList({ ...authorityList.filterValue, pageIndex, pageSize, })
@@ -158,7 +158,6 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
     }
     return (
         <div className='mt-32'>
-  
             <Row justify='end'>
                 <Col>
                     <Button onClick={() => { handleAdd('add') }} className='btn-green' icon={<PlusOutlined />} type='primary'>新增</Button>
