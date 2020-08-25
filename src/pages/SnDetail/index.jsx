@@ -1,55 +1,28 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Table, Row, Col, Button } from 'antd';
 import { Link, connect } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './index.less';
 import SnFilter from './components/SnFilter';
+import { PlusOutlined } from '@ant-design/icons';
 const SnApprove = () => {
     const columns = [
         {
-            title: '申报日期',
+            title: '整车编码',
             dataIndex: 'createTime',
             key: 'createTime',
         },
         {
-            title: '品牌厂家',
+            title: '所属型号',
             dataIndex: 'brandManufacturer',
             key: 'brandManufacturer',
         },
         {
-            title: '批次名称',
+            title: '审核状态',
             dataIndex: 'batchName',
             key: 'batchName',
         },
-        {
-            title: '关联型号数',
-            dataIndex: 'relatedNumber',
-            key: 'relatedNumber',
-        },
-        {
-            title: '批次SN数',
-            dataIndex: 'batchSnNumber',
-            key: 'batchSnNumber',
-        },
-        {
-            title: '审核状态',
-            dataIndex: 'reviewStatus',
-            key: 'reviewStatus',
-        },
-        {
-            title: '审核日期',
-            dataIndex: 'reviewTime',
-            key: 'reviewTime',
-        },
-        {
-            title: '不通过原因',
-            dataIndex: 'reasonFail',
-            key: 'reasonFail',
-        },
-        {
-            title: '操作',
-            render: () => (<Link to="/catalog/snapprove/detail">查看详情</Link>)
-        },
+       
     ];
 
     const dataSource = [
@@ -88,7 +61,6 @@ const SnApprove = () => {
                 <Table dataSource={dataSource} columns={columns} pagination={pagination} />
             </div>
         </PageHeaderWrapper>
-
     );
 
 

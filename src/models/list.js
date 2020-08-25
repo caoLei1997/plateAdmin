@@ -21,7 +21,6 @@ export default {
             })
             if (response.retCode === RETCODESUCCESS) {
                 onSuccess(response.data.total);
-
                 localStorage.setItem('recordList', JSON.stringify(response))
 
             }
@@ -43,7 +42,6 @@ export default {
     reducers: {
         changeList(state, { payload }) {
             const { data } = payload;
-            if (!data) return { ...state, content: [], total: 0 };
             return { ...state, ...data };
         },
 

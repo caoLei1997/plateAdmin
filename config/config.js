@@ -79,21 +79,36 @@ export default defineConfig({
               component: './agentManage',
               authority: ['admin'],
             },
-            // {
-            //   name: '目录管理',
-            //   icon: 'https://electric.sxwinstar.net/plateSale/mlgl.png',
-            //   path: '/catalog',
-            //   component: './catalogManage',
-            //   authority: ['admin'],
-            // },
             {
               name: '目录管理',
               path: '/catalog',
               icon: 'https://electric.sxwinstar.net/plateSale/mlgl.png',
               authority: ['admin'],
               routes: [
-                { path: '/catalog', redirect: '/catalog/catalog2' },
-                { path: '/catalog/catalog2', name: '型号审批', component: './catalogManage', exact: true, },
+                { path: '/catalog', redirect: '/catalog/typeapproval' },
+                {
+                  path: '/catalog/typeapproval',
+                  name: '型号审批',
+                  routes: [
+                    {
+                      path: '/catalog/typeapproval',
+                      redirect: '/catalog/typeapproval/list'
+                    },
+                    {
+                      path: '/catalog/typeapproval/list',
+                      name: '型号审批',
+                      component: './TypeApproval',
+                      hideInMenu: true,
+                      hideInBreadcrumb: true,
+                    },
+                    {
+                      path: '/catalog/typeapproval/detail',
+                      name: '型号审批详情',
+                      component: './TypeApproval/detail',
+                      hideInMenu: true,
+                    }
+                  ]
+                },
                 {
                   path: '/catalog/snapprove',
                   name: 'SN审批',
@@ -114,15 +129,31 @@ export default defineConfig({
                       name: 'SN审批详情',
                       component: './SnApprove/detail',
                       hideInMenu: true,
-                    }
-                    ,]
+                    }]
                   // component: './SnApprove',
                 },
-                { path: '/catalog/catalogmange', name: '目录明细', component: './catalogManage', exact: true, },
-
+                { path: '/catalog/catalogmange', name: '目录明细', component: './catalogManage' },
               ],
             },
 
+            {
+              name: 'SN管理',
+              path: '/snmanagement',
+              icon: 'https://electric.sxwinstar.net/plateSale/mlgl.png',
+              routes: [
+                { path: '/snmanagement', redirect: '/snmanagement/declare' },
+                {
+                  path: '/snmanagement/declare',
+                  name: 'SN申报',
+                  component:'./SnDeclare'
+                },
+                {
+                  path: '/snmanagement/detail',
+                  name: 'SN明细',
+                  component:'./SnDetail'
+                },
+              ],
+            },
             {
               name: '车辆管理',
               icon: 'https://electric.sxwinstar.net/plateSale/clgl.png',

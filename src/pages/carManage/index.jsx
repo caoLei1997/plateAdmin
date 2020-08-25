@@ -63,7 +63,6 @@ const CarManage = (props) => {
         ...config
       }
     })
-
     dispatch({
       type: 'subDealer/getList',
       payload: {
@@ -151,5 +150,4 @@ export default connect(({ login, meansList, distributeList }) => ({
   userInfo: login,
   meansListState: meansList,
   distributeListState: distributeList,
-
 }))(CarManage);

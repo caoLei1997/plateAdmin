@@ -10,9 +10,12 @@ class Record extends Component {
     constructor(props) {
         super(props);
         let { recordList } = this.props;
+        console.log(recordList);
+
         this.state = {
             pageSize: recordList.pageSize,
-            pageIndex: recordList.current
+            pageIndex: recordList.current,
+            total: recordList.total
         }
     }
 
@@ -20,11 +23,14 @@ class Record extends Component {
         let { dispatch } = this.props;
         dispatch({
             type: 'recordList/getList',
-           payload : {
+            payload: {
                 "pageIndex": this.state.pageIndex,
                 "pageSize": this.state.pageSize
             },
             onSuccess: (total) => {
+                this.setState({
+                    total: total,
+                })
             }
         })
     }
@@ -41,7 +47,6 @@ class Record extends Component {
     }
 
     render() {
-
         const columns = [
             {
                 title: '申请日期',
@@ -143,14 +148,11 @@ class Record extends Component {
                 ),
             },
         ];
-
         const { recordList, tableLoading } = this.props
-
         let _this = this;
-
         const pagination = {
-            total: recordList.total,
-            current: this.state.current,
+            total: this.state.total,
+            current: this.state.pageIndex,
             pageSize: this.state.pageSize,
             onChange: this.handlePaginationChange,
             showTotal: total => `共${total}条`,
@@ -163,12 +165,11 @@ class Record extends Component {
                 })
             }
         }
-
-
         return (
             <PageHeaderWrapper className={styles.main}>
                 <div>
                     <FilterSearch></FilterSearch>
+                    {this.state.current}
                     <Table rowKey={"id"} columns={columns} dataSource={recordList.content} pagination={pagination} loading={tableLoading} />
                 </div>
             </PageHeaderWrapper>
@@ -177,4 +178,5 @@ class Record extends Component {
     }
 }
 
-export default connect(({ recordList, loading }) => ({ recordList, tableLoading: loading.effects['recordList/getList'] }))(Record) 
+export default connect(
+    ({ recordList, loading }) => ({ recordList, tableLoading: loading.effects['recordList/getList'] }))(Record) 

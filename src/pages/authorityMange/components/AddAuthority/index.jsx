@@ -5,6 +5,12 @@ import { addAccount } from '@/services/authority';
 function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = null, type, rows = null, getList }) {
     const { Option } = Select
     const [form] = Form.useForm()
+    const rolesList = [
+        { label: "超级管理员", value: 0 },
+        { label: "品牌厂家", value: 1 },
+        { label: "支队管理员", value: 2 },
+        { label: "大队管理员", value: 3 }
+    ]
     let [authority, setAuthority] = useState(rows ? rows.role : null)
     const [agent, setAgent] = useState({})
     const handleOk = async () => {
@@ -44,9 +50,11 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
     }
 
     //选择权限
-    const changeAuthority = (value, { key }) => {
-        setAuthority(key)
-        // role = key
+    const changeAuthority = (value, { label }) => {
+        console.log(value);
+
+        setAuthority(label)
+
     }
     // 权限展示
     const authorityArr = [
@@ -108,6 +116,8 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
         console.log(value);
     }
 
+
+
     // Just show the latest item.
     function displayRender(label) {
         return label.join('-');
@@ -120,12 +130,12 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
-        {/* { authorityList.rolesList } */}
+                {/* { authorityList.rolesList } */}
 
                 <Form
                     labelCol={{ span: 4 }}
                     form={form}
-                    initialValues={{ ...rows, type: rows && rows.roleArea, agentOutletsId: rows && rows.brandname }}
+                    initialValues={{ ...rows, type: rows && rows.agentName, agentOutletsId: rows && rows.brandname }}
                 >
                     <Form.Item rules={[{ required: true, message: '姓名不能为空' }]} label='姓名' name='name'>
                         <Input placeholder='姓名' />
@@ -136,40 +146,12 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                     <Form.Item rules={[{ required: true, message: '角色不能为空' }]} label='选择角色' className='mt-8' name='type'>
                         <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder='选择角色' onChange={changeAuthority}>
                             {
-                                authorityList.rolesList && authorityList.rolesList.map(item =>
-                                    <Option key={item.message} value={item.code + ',' + item.type}>{item.message}</Option>
+                                rolesList.map(item =>
+                                    <Option key={item.value} label={item.label} value={item.value}>{item.label}</Option>
                                 )
                             }
                         </Select>
                     </Form.Item>
-                    {/* <Form.Item label='所属支队'>
-                        <Select placeholder='选择所属支队'>
-                            <Option value="jack">Jack</Option>
-                            <Option value="lucy">Lucy</Option>
-                            <Option value="Yiminghe">yiminghe</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item label='所属大队'>
-                        <div>
-                            <Cascader
-                                options={options}
-                                expandTrigger="hover"
-                                displayRender={displayRender}
-                                onChange={onChange}
-                                plplaceholder='选择市区'
-                            />
-                        </div>
-                    </Form.Item>
-                    <Form.Item colon={false} label=' '>
-                        <div>
-                            <Select placeholder='选择所属大队'>
-                                <Option value="jack">Jack</Option>
-                                <Option value="lucy">Lucy</Option>
-                                <Option value="Yiminghe">yiminghe</Option>
-                            </Select>
-                        </div>
-                    </Form.Item> */}
-
                     {
                         authority == '品牌厂家' && (
                             <Form.Item rules={[{ required: true, message: '经销商不能为空' }]} label='经销商' name='agentOutletsId'>
@@ -183,6 +165,44 @@ function AddAuthority({ authorityList, dispatch, isVisible = true, visibleFn = n
                             </Form.Item>
                         )
                     }
+                    {
+                        authority == '支队管理员' && (
+                            <Form.Item label='所属支队'>
+                                <Select placeholder='选择所属支队'>
+                                    <Option value="jack">Jack</Option>
+                                    <Option value="lucy">Lucy</Option>
+                                    <Option value="Yiminghe">yiminghe</Option>
+                                </Select>
+                            </Form.Item>
+                        )
+                    }
+                    {
+                        authority == '大队管理员' && (
+                            <div>
+                                <Form.Item label='所属大队'>
+                                    <div>
+                                        <Cascader
+                                            options={options}
+                                            expandTrigger="hover"
+                                            displayRender={displayRender}
+                                            onChange={onChange}
+                                            plplaceholder='选择市区'
+                                        />
+                                    </div>
+                                </Form.Item>
+                                <Form.Item colon={false} label=' '>
+                                    <div>
+                                        <Select placeholder='选择所属大队'>
+                                            <Option value="jack">Jack</Option>
+                                            <Option value="lucy">Lucy</Option>
+                                            <Option value="Yiminghe">yiminghe</Option>
+                                        </Select>
+                                    </div>
+                                </Form.Item>
+                            </div>
+                        )
+                    }
+
                     <Form.Item label='功能权限'>
                         {
                             functionDisplay(authority)

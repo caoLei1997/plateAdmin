@@ -36,7 +36,7 @@ const MeansFormSearch = ({ dispatch, meansListState, userInfo, subDealerList }) 
     <Col span={8}>
       <Form.Item label='审核状态' name='status'>
         <Select placeholder="审核状态">
-          {examineArr.map(item => item.key !== '3' && <Option key={item.key} value={item.key}>{item.val}</Option>)}
+          {examineArr.map(item => item.key !== '3' && <Option key={item.key + new Date().getTime()} value={item.key}>{item.val}</Option>)}
         </Select>
       </Form.Item>
     </Col>

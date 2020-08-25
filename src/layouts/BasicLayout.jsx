@@ -94,13 +94,11 @@ const BasicLayout = props => {
       )}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
-        console.log('menuItemProps', menuItemProps)
-        console.log('defaultDom', defaultDom)
         if (menuItemProps.isUrl || !menuItemProps.path) {
           return defaultDom;
         }
         return (
-            <Link Link to={menuItemProps.path}>{defaultDom}</Link>
+            <Link to={menuItemProps.path}>{defaultDom}</Link>
         );
       }}
       breadcrumbRender={(routers = []) => {

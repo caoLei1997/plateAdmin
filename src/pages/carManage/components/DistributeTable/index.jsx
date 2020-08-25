@@ -103,5 +103,5 @@ const MeansTable = ({ distributeListState, tableLoading, paginationChange }) => 
 
 export default connect(({ distributeList, loading }) => ({
   distributeListState: distributeList,
-  tableLoading: loading.effects['carMeansList/getList']
+  tableLoading: loading.effects['distributeList/getList']
 }))(MeansTable)

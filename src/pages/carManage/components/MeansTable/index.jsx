@@ -93,10 +93,13 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange, getList })
     },
     dataSource: list
   }
+
+  console.log(tableProps.dataSource);
+  
   return (
     <div className={styles.container}>
       <div id="components-table-demo-basic">
-        <Table loading={tableLoading} {...tableProps}  />
+        <Table key={new Date().getTime()} loading={tableLoading}  {...tableProps} />
       </div>
     </div>
   )
@@ -104,5 +107,5 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange, getList })
 
 export default connect(({ meansList, loading }) => ({
   meansListState: meansList,
-  tableLoading: loading.effects['carMeansList/getList']
+  tableLoading: loading.effects['meansList/getList']
 }))(MeansTable)
