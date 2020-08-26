@@ -5,12 +5,10 @@ import { connect } from 'umi'
 const Filter = ({ dispatch, authorityList, getList }) => {
     const [form] = Form.useForm();
     const { Option } = Select;
-
     const onFinish = () => {
         const filterValue = form.getFieldsValue()
         getList({ ...filterValue, pageIndex: 1 })
     }
-
     const rolesList = [
         { label: "超级管理员", value: '0' },
         { label: "品牌厂家", value: '1' },
@@ -19,7 +17,11 @@ const Filter = ({ dispatch, authorityList, getList }) => {
     ]
     return (
         <div>
-            <Form form={form} name="horizontal_login" onFinish={onFinish}>
+            <Form
+                form={form}
+                name="horizontal_login"
+                onFinish={onFinish}
+            >
                 <Row gutter={20}>
                     <Col span={6}>
                         <Form.Item name='name' label='姓名'>
@@ -51,4 +53,6 @@ const Filter = ({ dispatch, authorityList, getList }) => {
     );
 }
 
-export default connect(({ authorityList }) => ({ authorityList: authorityList }))(Filter);
+export default connect(
+    ({ authorityList }) => ({ authorityList: authorityList })
+)(Filter);

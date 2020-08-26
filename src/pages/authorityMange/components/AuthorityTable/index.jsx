@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Table, Row, Col, Button, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import AddAuthority from '../AddAuthority'
 import { connect } from 'umi'
 import { INIT_ADMIN } from '../../../../globalConstant';
-const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login }) => {
+const AuthorityTable = ({
+    authorityList,
+    dispatch,
+    getList,
+    tableLoading,
+    login
+}) => {
     const { confirm } = Modal;
     const [pageSize, setPageSize] = useState(authorityList.pageSize)
     const [pageIndex, setPageIndex] = useState(authorityList.pageIndex)
@@ -36,7 +42,8 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
                 }
                 return (
                     <div>
-                        {translation(type)} {recode.agentOutletsName && `(${recode.agentOutletsName})`}
+                        {translation(type)}
+                        {recode.agentOutletsName && `(${recode.agentOutletsName})`}
                     </div>
                 )
             }
@@ -51,9 +58,14 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
             dataIndex: 'status',
             key: 'status',
             render: (status) => {
-                return (<div>
-                    {status == 1 ? <a className='font-red'>停用</a> : <a className='font-success'>正常</a>}
-                </div>)
+                return (
+                    <div>
+                        {status == 1
+                            ? <a className='font-red'>停用</a>
+                            : <a className='font-success'>正常</a>
+                        }
+                    </div>
+                )
             }
         },
         {
@@ -76,9 +88,9 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
                         <div>
                             <a onClick={() => { handleAdd('edit', row) }} className='mr-8'>编辑</a>
                             {
-                                row.status == 1 ?
-                                    <a onClick={() => { handleStart(row) }}>启用</a> :
-                                    <a onClick={() => { handleStop(row) }} className='font-red'>停用</a>
+                                row.status == 1
+                                    ? <a onClick={() => { handleStart(row) }}>启用</a>
+                                    : <a onClick={() => { handleStop(row) }} className='font-red'>停用</a>
                             }
                         </div>
                     )
@@ -94,13 +106,10 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
             okText: '确认',
             cancelText: '取消',
             onOk() {
-
                 dispatch({
                     type: 'authorityList/modifyStatus',
                     payload: { status: 1, id }
                 })
-            },
-            onCancel() {
             },
         });
     }
@@ -117,18 +126,19 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
                     payload: { status: 0, id }
                 })
             },
-            onCancel() {
-            },
         });
     }
     // 条数
     // console.log('page', authorityList);
-
     const handlePaginationChange = (pageIndex) => {
         setPageIndex(pageIndex)
-        getList({ ...authorityList.filterValue, pageIndex, pageSize, })
+        getList({
+            ...authorityList.filterValue,
+            pageIndex,
+            pageSize
+        })
     }
-
+    // 分页
     const pagination = {
         total: authorityList.total,
         pageIndex: pageIndex,
@@ -141,12 +151,10 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
             setPageSize(size)
         }
     }
-
     // 弹窗prop
     const [isVisible, setIsVisible] = useState(false);
     const [type, setType] = useState('add');
     const [rows, setRows] = useState(null)
-
     const visibleFn = () => {
         setIsVisible(false)
     }
@@ -160,7 +168,14 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
         <div className='mt-32'>
             <Row justify='end'>
                 <Col>
-                    <Button onClick={() => { handleAdd('add') }} className='btn-green' icon={<PlusOutlined />} type='primary'>新增</Button>
+                    <Button
+                        onClick={() => { handleAdd('add') }}
+                        className='btn-green'
+                        icon={<PlusOutlined />}
+                        type='primary'
+                    >
+                        新增
+                    </Button>
                 </Col>
             </Row>
             <div className='mt-16'>
@@ -172,9 +187,26 @@ const AuthorityTable = ({ authorityList, dispatch, getList, tableLoading, login 
                     pagination={pagination}>
                 </Table>
             </div>
-            <AddAuthority key={rows ? rows.id + new Date().getTime() : 1} type={type} isVisible={isVisible} visibleFn={visibleFn} rows={rows} getList={getList}></AddAuthority>
+            <AddAuthority
+                key={rows ? rows.id + new Date().getTime() : 1}
+                type={type}
+                isVisible={isVisible}
+                visibleFn={visibleFn}
+                rows={rows}
+                getList={getList}
+            >
+            </AddAuthority>
         </div>
     );
 }
 
-export default connect(({ authorityList, loading, login }) => ({ authorityList: authorityList, login, tableLoading: loading.effects['authorityList/getList'] }))(AuthorityTable);
+export default connect(
+    ({ authorityList,
+        loading,
+        login }
+    ) => ({
+        authorityList: authorityList,
+        login,
+        tableLoading: loading.effects['authorityList/getList']
+    })
+)(AuthorityTable);

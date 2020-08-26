@@ -186,12 +186,13 @@ const SnApprove = () => {
                 {
                     title: 'parent 1-0',
                     key: '0-0-0',
-                    edit: true
+                    
+                    edit: false,
                 },
                 {
                     title: 'parent 1-1',
                     key: '0-0-1',
-                    edit: true
+                    edit: false,
                 },
             ],
         },

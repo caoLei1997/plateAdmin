@@ -7,13 +7,13 @@ import { Link, connect } from 'umi';
 const columns = [
     {
         title: '申报日期',
-        dataIndex: 'createTime',
-        key: 'createTime',
+        dataIndex: 'applyAt',
+        key: 'applyAt',
     },
     {
         title: '品牌厂家',
-        dataIndex: 'brandManufacturer',
-        key: 'brandManufacturer',
+        dataIndex: 'agentOutletsName',
+        key: 'agentOutletsName',
     },
     {
         title: '批次名称',
@@ -22,23 +22,23 @@ const columns = [
     },
     {
         title: '批次型号数',
-        dataIndex: 'relatedNumber',
-        key: 'relatedNumber',
+        dataIndex: 'batchModelCount',
+        key: 'batchModelCount',
     },
     {
         title: '审核状态',
-        dataIndex: 'reviewStatus',
-        key: 'reviewStatus',
+        dataIndex: 'approvalStatus',
+        key: 'approvalStatus',
     },
     {
         title: '审核日期',
-        dataIndex: 'reviewTime',
-        key: 'reviewTime',
+        dataIndex: 'approvalAt',
+        key: 'approvalAt',
     },
     {
         title: '不通过原因',
-        dataIndex: 'reasonFail',
-        key: 'reasonFail',
+        dataIndex: 'notPassReason',
+        key: 'notPassReason',
     },
     {
         title: '操作',
@@ -77,9 +77,13 @@ const TypeApproval = () => {
     return (
         <PageHeaderWrapper className={styles.main}>
             <FilterSearch></FilterSearch>
-            <Table dataSource={dataSource} columns={columns} pagination={pagination} />
+            <Table
+                dataSource={dataSource}
+                columns={columns}
+                pagination={pagination}
+            />
         </PageHeaderWrapper>
     );
 }
 
-export default TypeApproval;
+export default connect(() => { })(TypeApproval);
