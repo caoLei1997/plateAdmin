@@ -21,7 +21,6 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
             }
         })
     };
-
     useEffect(() => {
         dispatch({
             type: 'recordList/requestGetCity',
@@ -30,7 +29,6 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
             }
         })
     }, []);
-
     return (
         <div className={styles.filter} >
             <Form
