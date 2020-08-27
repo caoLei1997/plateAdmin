@@ -66,20 +66,24 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
     }, [])
 
     const { detailData } = typeApproval;
-    
+
     return (
         <div>
             <PageHeaderWrapper className={styles.main}>
                 <Descriptions title="" column={1}>
                     <Descriptions.Item label="审核状态">
                         <div className="inline" style={{ display: 'inline-block' }}>
-                            <div className='font-pending'>待审核</div>
-                            <div className='font-success'>通过</div>
-                            <div className='font-red'>未通过</div>
+                            {
+                                detailData.approvalStatus == 1
+                                    ? <div className='font-pending'>待审核</div>
+                                    : (detailData.approvalStatus == 2)
+                                        ? <div className='font-red'>未通过</div>
+                                        : <div className='font-success'>通过</div>
+                            }
                         </div>
                     </Descriptions.Item>
-                    <Descriptions.Item label="批次名称">xxxxxxxxx</Descriptions.Item>
-                    <Descriptions.Item label="批次号数">11137</Descriptions.Item>
+                    <Descriptions.Item label="批次名称">{detailData.batchName}</Descriptions.Item>
+                    <Descriptions.Item label="批次号数">{detailData.batchModelCount}</Descriptions.Item>
                 </Descriptions>
                 <h3>车辆信息</h3>
                 <Divider></Divider>
@@ -106,57 +110,73 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                         <div className={styles.photoContainer}>
 
                             <div className={styles.item}>
-                                <img src={defaultImg} alt="车辆正面照" />
+                                <img src={detailData.frontElectricCarImage || defaultImg} alt="车辆正面照" />
                                 <p>车辆正面照</p>
                             </div>
                             <div className={styles.item}>
-                                <img src={defaultImg} alt="车辆左侧照片" />
+                                <img src={detailData.leftElectricCarImage || defaultImg} alt="车辆左侧照片" />
                                 <p>车辆左侧照片</p>
                             </div>
                             <div className={styles.item}>
-                                <img src={defaultImg} alt="右后方45度整车照片" />
+                                <img src={detailData.rightRearElectricCarImage || defaultImg} alt="右后方45度整车照片" />
                                 <p>右后方45度整车照片</p>
                             </div>
                             <div className={styles.item}>
-                                <img src={defaultImg} alt="车辆合格证" />
+                                <img src={detailData.certificateElectricCarImage || defaultImg} alt="车辆合格证" />
                                 <p>车辆合格证</p>
                             </div>
                             <div className={styles.item}>
-                                <img src={defaultImg} alt="产品认证证书" />
+                                <img src={detailData.productCertificationImage || defaultImg} alt="产品认证证书" />
                                 <p>产品认证证书</p>
                             </div>
                             <div className={styles.item}>
-                                <img src={defaultImg} alt="其他" />
+                                <img src={detailData.otherImage || defaultImg} alt="其他" />
                                 <p>其他</p>
                             </div>
                         </div>
                     </Descriptions.Item>
                 </Descriptions>
-                <h3 className='mt-32'>审核记录</h3>
-                <Divider></Divider>
-                <Table rowKey={"id"} columns={columns} dataSource={dataTable}></Table>
+                {
+                    detailData.approvalStatus != 1 &&
+                    (
+                        <>
+                            <h3 className='mt-32'>审核记录</h3>
+                            <Divider></Divider>
+                            <Table rowKey={"id"} columns={columns} dataSource={detailData.logs}></Table>
+                        </>
+                    )
+                }
             </PageHeaderWrapper>
-            <Row justify="space-between" align="middle" className='mt-32'>
-                <Col span={3}>
-                    {
-                        false
-                            ? <Text className='link-a'> <LeftOutlined />上一条 </Text>
-                            : <Text className='font-size-16' disabled><LeftOutlined />上一条</Text>
-                    }
-                </Col>
-                <Col span={12}>
-                    <div className='inline text-center'>
-                        <AuditPass recordId={1} ></AuditPass>
-                        <AuditBy recordId={1}></AuditBy>
-                    </div>
-                </Col>
-                <Col span={3} style={{ textAlign: 'right' }}>
-                    {false
-                        ? <Text className='link-a'> 下一条 <RightOutlined /> </Text>
-                        : <Text className='font-size-16' disabled>下一条 <RightOutlined /></Text>
-                    }
-                </Col>
-            </Row>
+
+            {
+                detailData.approvalStatus == 1 &&
+                <Row
+                    justify="space-between"
+                    align="middle"
+                    className='mt-32'
+                >
+                    <Col span={3}>
+                        {
+                            false
+                                ? <Text className='link-a'> <LeftOutlined />上一条 </Text>
+                                : <Text className='font-size-16' disabled><LeftOutlined />上一条</Text>
+                        }
+                    </Col>
+                    <Col span={12}>
+                        <div className='inline text-center'>
+                            <AuditPass id={match.params.id} ></AuditPass>
+                            <AuditBy id={match.params.id}></AuditBy>
+                        </div>
+                    </Col>
+                    <Col span={3} style={{ textAlign: 'right' }}>
+                        {false
+                            ? <Text className='link-a'> 下一条 <RightOutlined /> </Text>
+                            : <Text className='font-size-16' disabled>下一条 <RightOutlined /></Text>
+                        }
+                    </Col>
+                </Row>
+            }
+
         </div>
     );
 }
