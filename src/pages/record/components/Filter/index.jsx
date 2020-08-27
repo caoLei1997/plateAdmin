@@ -3,15 +3,22 @@ import { Form, Row, Col, Input, Button, Select, DatePicker } from 'antd';
 import { connect } from 'umi';
 import styles from './index.less';
 const { RangePicker } = DatePicker;
+import { formatData } from '@/commonFun'
 
 const FilterSearch = ({ dispatch, recordList, login }) => {
     const [form] = Form.useForm();
-
     const onFinish = data => {
+        console.log(data);
+        let { applyTimeStart, auditTimeStart } = data
+
         dispatch({
             type: 'recordList/getList',
             payload: {
                 ...data,
+                applyTimeStart: applyTimeStart && formatData(applyTimeStart[0]),
+                applyTimeEnd: applyTimeStart && formatData(applyTimeStart[1]),
+                auditTimeStart: auditTimeStart && formatData(auditTimeStart[0]),
+                auditTimeEnd: auditTimeStart && formatData(auditTimeStart[1]),
                 "pageIndex": recordList.current,
                 "pageSize": recordList.pageSize,
             },
@@ -29,6 +36,7 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
             }
         })
     }, []);
+    const dateFormat = 'YYYY/MM/DD';
     return (
         <div className={styles.filter} >
             <Form
@@ -42,7 +50,7 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
                     <Col span={6}>
                         <Form.Item label='归属地' name='city'>
                             <Select placeholder='归属地'>
-                                {recordList.city.map(item=> <Select.Option key={item.cityId} value={item.label}>{item.value}</Select.Option>)}
+                                {recordList.city.map(item => <Select.Option key={item.cityId} value={item.label}>{item.value}</Select.Option>)}
                             </Select>
                         </Form.Item>
                     </Col>
@@ -79,12 +87,12 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
                     </Col>
                     <Col span={6}>
                         <Form.Item label='申请日期' name='applyTimeStart'>
-                            <RangePicker></RangePicker>
+                            <RangePicker format={dateFormat}></RangePicker>
                         </Form.Item>
                     </Col>
                     <Col span={6}>
                         <Form.Item label='审核日期' name='auditTimeStart'>
-                            <RangePicker></RangePicker>
+                            <RangePicker format='YYYY/MM/DD'></RangePicker>
                         </Form.Item>
                     </Col>
                 </Row>

@@ -1,13 +1,22 @@
-import React from 'react';
-import { Table, Divider, Descriptions, Select, Form ,Typography,Row,Col } from 'antd'
+import React, { useEffect } from 'react';
+import {
+    Table,
+    Divider,
+    Descriptions,
+    Select,
+    Form,
+    Typography,
+    Row,
+    Col
+} from 'antd'
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './index.less'
 import defaultImg from '../../../assets/default.png'
 import AuditPass from '../components/AuditPass'
 import AuditBy from '../components/AuditBy'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Link, connect } from 'umi';
 const Text = Typography;
-
 const columns = [
     {
         title: '审核人',
@@ -24,7 +33,9 @@ const columns = [
         title: '审核结果',
         dataIndex: 'auditStatus',
         key: 'auditStatus',
-        render: auditStatus => auditStatus == 1 ? <div className='font-success'>通过</div> : <div className='font-red'>不通过</div>,
+        render: auditStatus => auditStatus == 1
+            ? <div className='font-success'>通过</div>
+            : <div className='font-red'>不通过</div>,
     },
     {
         title: '不通过原因',
@@ -32,8 +43,6 @@ const columns = [
         key: 'notPassReason',
     }
 ]
-
-
 const dataTable = [
     {
         auditName: '张三',
@@ -43,14 +52,30 @@ const dataTable = [
         id: 0
     }
 ]
-const TypeApprovalDetail = () => {
+const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
+    const reqDetail = (data) => {
+        dispatch({
+            type: 'typeApproval/reqDetail',
+            payload: {
+                ...data
+            }
+        })
+    }
+    useEffect(() => {
+        reqDetail({ id: match.params.id })
+    }, [])
+
+    const { detailData } = typeApproval;
+    
     return (
         <div>
             <PageHeaderWrapper className={styles.main}>
                 <Descriptions title="" column={1}>
                     <Descriptions.Item label="审核状态">
                         <div className="inline" style={{ display: 'inline-block' }}>
-                            <div>待审核</div> <div className='font-success'>通过</div><div className='font-red'>未通过</div>
+                            <div className='font-pending'>待审核</div>
+                            <div className='font-success'>通过</div>
+                            <div className='font-red'>未通过</div>
                         </div>
                     </Descriptions.Item>
                     <Descriptions.Item label="批次名称">xxxxxxxxx</Descriptions.Item>
@@ -64,16 +89,16 @@ const TypeApprovalDetail = () => {
                     </Select>
                 </Form.Item>
                 <Descriptions title="" column={2}>
-                    <Descriptions.Item label="车辆中文商标">xxxxxxxxx</Descriptions.Item>
-                    <Descriptions.Item label="车辆型号">TD1033TH</Descriptions.Item>
-                    <Descriptions.Item label="车身长度">xxxxxxxxx</Descriptions.Item>
-                    <Descriptions.Item label="车身宽度">xxxxxxxxx</Descriptions.Item>
-                    <Descriptions.Item label="车身高度">xxxxxxxxx</Descriptions.Item>
-                    <Descriptions.Item label="续航里程">xxxxxxxxx</Descriptions.Item>
-                    <Descriptions.Item label="整车质量">xxxxxxxxx</Descriptions.Item>
-                    <Descriptions.Item label="最高设设计时速">xxxxxxxxx</Descriptions.Item>
-                    <Descriptions.Item label="整车编码位置">xxxxxxxxx</Descriptions.Item>
-                    <Descriptions.Item label="铭牌固定位置">xxxxxxxxx</Descriptions.Item>
+                    <Descriptions.Item label="车辆中文商标">{detailData.electrombileChineseTradeMark}</Descriptions.Item>
+                    <Descriptions.Item label="车辆型号">{detailData.modelName}</Descriptions.Item>
+                    <Descriptions.Item label="车身长度">{detailData.electrombileLength}</Descriptions.Item>
+                    <Descriptions.Item label="车身宽度">{detailData.electrombileWidth}</Descriptions.Item>
+                    <Descriptions.Item label="车身高度">{detailData.electrombileHeight}</Descriptions.Item>
+                    <Descriptions.Item label="续航里程">{detailData.enduranceMileage}</Descriptions.Item>
+                    <Descriptions.Item label="整车质量">{detailData.totalWeight}</Descriptions.Item>
+                    <Descriptions.Item label="最高设设计时速">{detailData.maximumDesignedSpeed}</Descriptions.Item>
+                    <Descriptions.Item label="整车编码">{detailData.codeOnFrame}</Descriptions.Item>
+                    <Descriptions.Item label="铭牌固定位置">{detailData.fixedPositionName}</Descriptions.Item>
                 </Descriptions>
 
                 <Descriptions title="" column={1}>
@@ -107,7 +132,6 @@ const TypeApprovalDetail = () => {
                         </div>
                     </Descriptions.Item>
                 </Descriptions>
-
                 <h3 className='mt-32'>审核记录</h3>
                 <Divider></Divider>
                 <Table rowKey={"id"} columns={columns} dataSource={dataTable}></Table>
@@ -137,4 +161,6 @@ const TypeApprovalDetail = () => {
     );
 }
 
-export default TypeApprovalDetail;
+export default connect(
+    ({ typeApproval }) => ({ typeApproval })
+)(TypeApprovalDetail);

@@ -15,3 +15,7 @@ export const queryJsonToString = (obj) => {
     })
     return res.substr(1);
 }
+
+export function formatData(date) {
+    return date.format('YYYY-MM-DD')
+}

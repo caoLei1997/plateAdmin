@@ -11,7 +11,6 @@ class Record extends Component {
         super(props);
         let { recordList } = this.props;
         console.log(recordList);
-
         this.state = {
             pageSize: recordList.pageSize,
             pageIndex: recordList.current,

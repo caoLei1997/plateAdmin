@@ -102,7 +102,7 @@ export default defineConfig({
                       hideInBreadcrumb: true,
                     },
                     {
-                      path: '/catalog/typeapproval/detail',
+                      path: '/catalog/typeapproval/detail/:id',
                       name: '型号审批详情',
                       component: './TypeApproval/detail',
                       hideInMenu: true,
@@ -145,12 +145,12 @@ export default defineConfig({
                 {
                   path: '/snmanagement/declare',
                   name: 'SN申报',
-                  component:'./SnDeclare'
+                  component: './SnDeclare'
                 },
                 {
                   path: '/snmanagement/detail',
                   name: 'SN明细',
-                  component:'./SnDetail'
+                  component: './SnDetail'
                 },
               ],
             },

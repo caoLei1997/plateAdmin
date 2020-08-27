@@ -3,13 +3,23 @@ import { Form, Row, Col, Input, Button, Select, DatePicker } from 'antd';
 import { connect } from 'umi';
 import styles from './index.less';
 const { RangePicker } = DatePicker;
+import { formatData } from '@/commonFun'
 
-const FilterSearch = ({ dispatch, recordList, login }) => {
+
+const FilterSearch = ({ dispatch, typeApproval, login, getList }) => {
     const [form] = Form.useForm();
     const onFinish = data => {
-
+        let { applyTimeStart, auditTimeStart } = data
+        const filter = {
+            ...data,
+            applyTimeStart: applyTimeStart && formatData(applyTimeStart[0]),
+            applyTimeEnd: applyTimeStart && formatData(applyTimeStart[1]),
+            auditTimeStart: auditTimeStart && formatData(auditTimeStart[0]),
+            auditTimeEnd: auditTimeStart && formatData(auditTimeStart[1]),
+        }
+        if (filter === undefined || filter === null) return
+        getList({ pageIndex: 1, pageSize: typeApproval.pageSize, filter })
     };
-
     return (
         <div className={styles.filter} >
             <Form
@@ -20,14 +30,14 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
             >
                 <Row gutter={24}>
                     <Col span={6}>
-                        <Form.Item label='品牌厂家' name='city'>
+                        <Form.Item label='品牌厂家' name='agentOutletsId'>
                             <Select placeholder='品牌厂家'>
                                 <Select.Option>123</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
                     <Col span={6}>
-                        <Form.Item label='批次名称' name='userName'>
+                        <Form.Item label='批次名称' name='batchName'>
                             <Input placeholder='批次名称'></Input>
                         </Form.Item>
                     </Col>
@@ -37,7 +47,7 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
                         </Form.Item>
                     </Col>
                     <Col span={6}>
-                        <Form.Item label='审核状态' name='city'>
+                        <Form.Item label='审核状态' name='approvalStatus'>
                             <Select placeholder='审核状态'>
                                 <Select.Option>123</Select.Option>
                             </Select>
@@ -65,4 +75,6 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
     );
 };
 
-export default connect(({ recordList, login }) => ({ recordList, login }))(FilterSearch) 
+export default connect(
+    ({ typeApproval }) => ({ typeApproval })
+)(FilterSearch) 
