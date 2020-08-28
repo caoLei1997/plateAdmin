@@ -1,4 +1,10 @@
-import { typeApproveList, typeApproveDetail } from '@/services/typeApproval';
+import {
+    typeApproveList,
+    typeApproveDetail,
+    typeApprovalAgree,
+    typeApprovalNo,
+    typeApprovalModel
+} from '@/services/typeApproval';
 import { PAGESIZE } from '@/globalConstant';
 
 const initialState = {
@@ -6,7 +12,8 @@ const initialState = {
     pageIndex: 1,
     pageSize: PAGESIZE,
     content: [], //列表
-    detailData: {}
+    detailData: {},//详情信息
+    detailModelList: [] //选择型号列表
 }
 
 export default {
@@ -26,6 +33,25 @@ export default {
                 type: 'changeDetail',
                 payload: res
             })
+        },
+        *reqApprovalAgree({ payload, onSuccess }, { call }) {
+            const res = yield call(typeApprovalAgree, { ...payload })
+            if (res.retCode == '0000') {
+                onSuccess(res)
+            }
+        },
+        *reqApprovalNo({ payload, onSuccess }, { call }) {
+            const res = yield call(typeApprovalNo, { ...payload })
+            if (res.retCode == '0000') {
+                onSuccess(res)
+            }
+        },
+        *reqApprovalModel({ payload }, { call, put }) {
+            const res = yield call(typeApprovalModel, { ...payload })
+            yield put({
+                type: 'changeDetailModel',
+                payload: res
+            })
         }
     },
     reducers: {
@@ -39,6 +65,10 @@ export default {
                 ...state,
                 detailData: data
             }
+        },
+        changeDetailModel(state, { payload }) {
+            const { data } = payload
+            return { ...state, detailModelList: data }
         }
     }
 }

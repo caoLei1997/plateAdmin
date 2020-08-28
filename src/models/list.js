@@ -13,14 +13,14 @@ export default {
     namespace: 'recordList',
     state: { ...initialState },
     effects: {
-        *getList({ payload, onSuccess }, { call, put }) {
+        *getList({ payload }, { call, put }) {
             const response = yield call(requestRecordList, { ...payload, pageIndex: payload.pageIndex - 1 });
             yield put({
                 type: 'changeList',
                 payload: response
             })
             if (response.retCode === RETCODESUCCESS) {
-                onSuccess(response.data.total);
+                // onSuccess(response.data.total);
                 localStorage.setItem('recordList', JSON.stringify(response))
 
             }

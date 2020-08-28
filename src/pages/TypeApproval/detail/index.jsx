@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Table,
     Divider,
@@ -20,22 +20,23 @@ const Text = Typography;
 const columns = [
     {
         title: '审核人',
-        dataIndex: 'auditName',
-        key: 'auditName',
+        dataIndex: 'approvalPeople',
+        key: 'approvalPeople',
     },
     {
         title: '审核日期',
-        dataIndex: 'auditedAt',
-        key: 'auditedAt',
-
+        dataIndex: 'approvalAt',
+        key: 'approvalAt',
     },
     {
         title: '审核结果',
-        dataIndex: 'auditStatus',
-        key: 'auditStatus',
-        render: auditStatus => auditStatus == 1
+        dataIndex: 'delStatus',
+        key: 'delStatus',
+        render: delStatus => delStatus == 3
             ? <div className='font-success'>通过</div>
-            : <div className='font-red'>不通过</div>,
+            : (delStatus == 2
+                ? <div div className='font-red' > 不通过</div>
+                : null)
     },
     {
         title: '不通过原因',
@@ -43,16 +44,10 @@ const columns = [
         key: 'notPassReason',
     }
 ]
-const dataTable = [
-    {
-        auditName: '张三',
-        auditedAt: '2020-10-15',
-        auditStatus: 1,
-        notPassReason: '12321',
-        id: 0
-    }
-]
+
 const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
+    const [modelName, setModelName] = useState(null);
+    // 获取页面详情
     const reqDetail = (data) => {
         dispatch({
             type: 'typeApproval/reqDetail',
@@ -61,11 +56,24 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
             }
         })
     }
+    // 获取型号
+    const reqModel = () => {
+        dispatch({
+            type: 'typeApproval/reqApprovalModel',
+            payload: {
+                modelBatchId: match.params.id
+            }
+        })
+    }
     useEffect(() => {
-        reqDetail({ id: match.params.id })
+        reqDetail({ id: match.params.id, modelName })
+    }, [modelName])
+
+    useEffect(() => {
+        reqModel()
     }, [])
 
-    const { detailData } = typeApproval;
+    const { detailData, detailModelList } = typeApproval;
 
     return (
         <div>
@@ -88,8 +96,20 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                 <h3>车辆信息</h3>
                 <Divider></Divider>
                 <Form.Item label="选择型号">
-                    <Select defaultValue="TD1033TH" style={{ width: '220px' }}>
-                        <Select.Option value="TD1033TH">TD1033TH</Select.Option>
+                    <Select
+                        placeholder='请选择型号'
+                        onChange={(val) => { setModelName(val) }}
+                        style={{ width: '220px' }}
+                    >
+                        {
+                            detailModelList.map(item => <Select.Option
+                                key={item.id}
+                                value={item.modelName}
+                            >
+                                {item.modelName}
+                            </Select.Option>)
+                        }
+
                     </Select>
                 </Form.Item>
                 <Descriptions title="" column={2}>
@@ -147,6 +167,7 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                     )
                 }
             </PageHeaderWrapper>
+            {/* {detailData.approvalStatus} */}
 
             {
                 detailData.approvalStatus == 1 &&
