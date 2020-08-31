@@ -169,7 +169,13 @@ class Record extends Component {
                 <div>
                     <FilterSearch></FilterSearch>
                     {this.state.current}
-                    <Table rowKey={"id"} columns={columns} dataSource={recordList.content} pagination={pagination} loading={tableLoading} />
+                    <Table
+                        rowKey={"id"}
+                        columns={columns}
+                        dataSource={recordList.content}
+                        pagination={pagination}
+                        loading={tableLoading}
+                    />
                 </div>
             </PageHeaderWrapper>
 
@@ -178,4 +184,11 @@ class Record extends Component {
 }
 
 export default connect(
-    ({ recordList, loading }) => ({ recordList, tableLoading: loading.effects['recordList/getList'] }))(Record) 
+    ({
+        recordList,
+        loading
+    }) => ({
+        recordList,
+        tableLoading: loading.effects['recordList/getList']
+    })
+)(Record) 

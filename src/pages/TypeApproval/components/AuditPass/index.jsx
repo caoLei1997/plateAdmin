@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'umi'
-import { Button, Modal, Form, Input,message } from 'antd'
+import { Button, Modal, Form, Input, message } from 'antd'
 const { TextArea } = Input;
 
 const AuditPass = ({ dispatch, id }) => {
@@ -16,8 +16,9 @@ const AuditPass = ({ dispatch, id }) => {
     }
     const onFinish = async values => {
         dispatch({
-            type: 'typeApproval/reqApprovalAgree',
+            type: 'typeApproval/reqApprovalNo',
             payload: {
+                ...values,
                 modelBatchId: id
             },
             onSuccess: handleSuccess
@@ -84,9 +85,4 @@ const AuditPass = ({ dispatch, id }) => {
     );
 }
 
-export default connect(
-    ({
-        recordDetail,
-        login
-    }) => ({ recordDetail, login })
-)(AuditPass);
+export default connect()(AuditPass);

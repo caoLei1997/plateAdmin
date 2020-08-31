@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Form, Row, Col, Input, Button, Select, DatePicker } from 'antd';
 import { connect } from 'umi';
 import styles from './index.less';
@@ -6,7 +6,7 @@ const { RangePicker } = DatePicker;
 import { formatData } from '@/commonFun'
 
 
-const FilterSearch = ({ dispatch, typeApproval, login, getList }) => {
+const FilterSearch = ({ typeApproval, getList }) => {
     const [form] = Form.useForm();
     const onFinish = data => {
         let { applyTimeStart, auditTimeStart } = data
@@ -20,6 +20,7 @@ const FilterSearch = ({ dispatch, typeApproval, login, getList }) => {
         if (filter === undefined || filter === null) return
         getList({ pageIndex: 1, pageSize: typeApproval.pageSize, filter })
     };
+    const { agentList } = typeApproval;
     return (
         <div className={styles.filter} >
             <Form
@@ -32,7 +33,14 @@ const FilterSearch = ({ dispatch, typeApproval, login, getList }) => {
                     <Col span={6}>
                         <Form.Item label='品牌厂家' name='agentOutletsId'>
                             <Select placeholder='品牌厂家'>
-                                <Select.Option>123</Select.Option>
+                                {
+                                    agentList.map(item => <Select.Option
+                                        key={item.id}
+                                        value={item.id}
+                                    >
+                                        {item.name}
+                                    </Select.Option>)
+                                }
                             </Select>
                         </Form.Item>
                     </Col>

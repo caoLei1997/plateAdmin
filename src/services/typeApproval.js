@@ -33,3 +33,8 @@ export async function typeApprovalModel(data) {
     method: 'GET',
   });
 }
+export async function typeApproveAgent() {
+  return request(`/agent/v1.1/DistributePlateNumberRecordController/getAllFirstAgentOutlets`, {
+    method: 'GET',
+  });
+}

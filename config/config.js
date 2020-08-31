@@ -125,7 +125,7 @@ export default defineConfig({
                       hideInBreadcrumb: true,
                     },
                     {
-                      path: '/catalog/snapprove/detail',
+                      path: '/catalog/snapprove/detail/:id',
                       name: 'SN审批详情',
                       component: './SnApprove/detail',
                       hideInMenu: true,

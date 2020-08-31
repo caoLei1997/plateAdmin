@@ -67,7 +67,8 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
     }
     useEffect(() => {
         reqDetail({ id: match.params.id, modelName })
-    }, [modelName])
+        window.scrollTo(0, 0);
+    }, [modelName, match.params.id])
 
     useEffect(() => {
         reqModel()
@@ -75,8 +76,31 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
 
     const { detailData, detailModelList } = typeApproval;
 
+    // 上下页是否禁用
+    const getPagePrev = (type = 'first') => {
+        let ids = JSON.parse(window.localStorage.getItem('ids'))
+        const activeIdIndex = ids.findIndex(item => item === Number(match.params.id));
+        if (type === 'last') {
+            if (activeIdIndex === (ids.length - 1)) return false;
+            return true;
+        }
+        if (activeIdIndex === 0) return false;
+        return true;
+    }
+
+    // 获取上下页ID
+    const getId = (type) => {
+        let ids = JSON.parse(window.localStorage.getItem('ids'))
+        const activeIdIndex = ids.findIndex(item => item === Number(match.params.id));
+        if (type === 'first') {
+            return activeIdIndex == 0 ? ids[activeIdIndex] : ids[activeIdIndex - 1]
+        } else if (type === 'last') {
+            return activeIdIndex == ids.length - 1 ? ids[activeIdIndex] : ids[activeIdIndex + 1]
+        }
+    }
+
     return (
-        <div>
+        <div key={match.params.id}>
             <PageHeaderWrapper className={styles.main}>
                 <Descriptions title="" column={1}>
                     <Descriptions.Item label="审核状态">
@@ -128,7 +152,6 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                 <Descriptions title="" column={1}>
                     <Descriptions.Item label="车辆照片">
                         <div className={styles.photoContainer}>
-
                             <div className={styles.item}>
                                 <img src={detailData.frontElectricCarImage || defaultImg} alt="车辆正面照" />
                                 <p>车辆正面照</p>
@@ -168,36 +191,34 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                 }
             </PageHeaderWrapper>
             {/* {detailData.approvalStatus} */}
-
-            {
-                detailData.approvalStatus == 1 &&
-                <Row
-                    justify="space-between"
-                    align="middle"
-                    className='mt-32'
-                >
-                    <Col span={3}>
-                        {
-                            false
-                                ? <Text className='link-a'> <LeftOutlined />上一条 </Text>
-                                : <Text className='font-size-16' disabled><LeftOutlined />上一条</Text>
-                        }
-                    </Col>
+            <Row
+                justify="space-between"
+                align="middle"
+                className='mt-32'
+            >
+                <Col span={3}>
+                    {
+                        getPagePrev('first')
+                            ? <Link to={`/catalog/typeapproval/detail/${getId('first')}`}><LeftOutlined />上一条 </Link>
+                            : <Text className='font-size-16 cur-not' disabled><LeftOutlined />上一条</Text>
+                    }
+                </Col>
+                {
+                    detailData.approvalStatus == 1 &&
                     <Col span={12}>
                         <div className='inline text-center'>
                             <AuditPass id={match.params.id} ></AuditPass>
                             <AuditBy id={match.params.id}></AuditBy>
                         </div>
                     </Col>
-                    <Col span={3} style={{ textAlign: 'right' }}>
-                        {false
-                            ? <Text className='link-a'> 下一条 <RightOutlined /> </Text>
-                            : <Text className='font-size-16' disabled>下一条 <RightOutlined /></Text>
-                        }
-                    </Col>
-                </Row>
-            }
-
+                }
+                <Col span={3} style={{ textAlign: 'right' }}>
+                    {getPagePrev('last')
+                        ? <Link to={`/catalog/typeapproval/detail/${getId('last')}`}> 下一条 <RightOutlined /> </Link>
+                        : <Text className='font-size-16 cur-not' disabled>下一条 <RightOutlined /></Text>
+                    }
+                </Col>
+            </Row>
         </div>
     );
 }

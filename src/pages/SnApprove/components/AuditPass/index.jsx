@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'umi'
-import { Button, Modal, Form, Input } from 'antd'
+import { Button, Modal, Form, Input, message } from 'antd'
 const { TextArea } = Input;
-import { requestAudit } from '@/services/recordDetail'
-import { router } from 'umi';
-import { notification } from 'antd';
-const AuditPass = (props) => {
+
+const AuditPass = ({ dispatch, id }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [passValue, setPassValue] = useState(0);
-    const { recordDetail, login, dispatch } = props
-    const recordList = JSON.parse(localStorage.getItem('recordList'));
     const [form] = Form.useForm();
     const toggleModalVisible = visible => {
         setModalVisible(visible);
@@ -19,32 +15,27 @@ const AuditPass = (props) => {
         setModalVisible(visible);
     }
     const onFinish = async values => {
-        const payload = {
-            "id": recordDetail.content.licensedSalesRecordApplyRecordId,
-            "plateNumberApplyId": recordDetail.content.id,
-            "driverLicenseId": recordDetail.content.driverLicense,
-            "notPassReason": values.notPassReason,
-            "auditName": login.name,
-            "auditPhone": login.phone
-        }
-        let data = await requestAudit(payload)
-        if (data.retCode === '0000') {
-            dispatch({
-                type: 'recordDetail/getDetail',
-                payload: {
-                    id: props.recordId
-                }
-            })
-            handlePass()
-        } else {
-            notification.error(data.retMsg)
-        }
+        dispatch({
+            type: 'snApprove/reqApproveNo',
+            payload: {
+                ...values,
+                snBatchId: id
+            },
+            onSuccess: handleSuccess
+        })
     };
+    const handleSuccess = (data) => {
+        message.success(data.retMsg);
+        dispatch({
+            type: 'snApprove/reqDetail',
+            payload: {
+                id
+            }
+        })
+    }
 
     const handleChange = e => {
-        console.log(e);
         setPassValue(e.notPassReason)
-
     }
     return (
         <div>
@@ -58,7 +49,6 @@ const AuditPass = (props) => {
                     initialValues={
                         { notPassReason: '' }
                     }
-
                     onValuesChange={(e) => { handleChange(e) }}
                 // onFinishFailed={onFinishFailed}
                 >
@@ -76,7 +66,6 @@ const AuditPass = (props) => {
                             rows={4}
                             placeholder="请填写审核不通过理由"
                             maxLength={30}
-
                         />
                     </Form.Item>
                     <div style={{ "textAlign": "right", 'margin': '-10px 0 10px' }}>
@@ -96,4 +85,4 @@ const AuditPass = (props) => {
     );
 }
 
-export default connect(({ recordDetail, login }) => ({ recordDetail, login }))(AuditPass);
+export default connect()(AuditPass);

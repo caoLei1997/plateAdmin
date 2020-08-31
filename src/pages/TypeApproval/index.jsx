@@ -4,18 +4,17 @@ import FilterSearch from './components/FilterSearch'
 import styles from './index.less'
 import { Table } from 'antd';
 import { Link, connect } from 'umi';
-import { formatData } from '@/commonFun'
 const TypeApproval = ({ dispatch, typeApproval }) => {
     // 获取列表数据
     const getList = ({
         pageIndex = typeApproval.pageIndex,
         pageSize = typeApproval.pageSize,
-        filter = {}
+        filter = typeApproval.filter
     }) => {
         dispatch({
             type: 'typeApproval/reqList',
             payload: {
-                ...filter,
+                filter: { ...filter },
                 pageIndex,
                 pageSize
             }
@@ -80,18 +79,14 @@ const TypeApproval = ({ dispatch, typeApproval }) => {
         total: typeApproval.total,
         current: typeApproval.pageIndex,
         pageSize: typeApproval.pageSize,
-        // onChange: this.handlePaginationChange,
+        onChange: (pageIndex) => { getList({ pageIndex }) },
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
         showQuickJumper: true,
-        // onShowSizeChange: (current, size) => {
-        //     _this.setState({
-        //         pageIndex: current,
-        //         pageSize: size
-        //     })
-        // }
+        onShowSizeChange: (pageIndex, pageSize) => {
+            getList({ pageIndex, pageSize })
+        }
     }
-
     return (
         <PageHeaderWrapper className={styles.main}>
             <FilterSearch getList={getList}></FilterSearch>
@@ -100,11 +95,15 @@ const TypeApproval = ({ dispatch, typeApproval }) => {
                 columns={columns}
                 pagination={pagination}
                 rowKey='id'
+                loading={typeApproval.tableLoadings}
             />
         </PageHeaderWrapper>
     );
 }
 
 export default connect(
-    ({ typeApproval }) => ({ typeApproval })
+    ({ typeApproval, loading }) => ({
+        typeApproval,
+        tableLoading: loading.effects['typeApproval/reqList']
+    })
 )(TypeApproval);

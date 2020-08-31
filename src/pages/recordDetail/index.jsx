@@ -95,8 +95,6 @@ class index extends Component {
             }
         ]
 
-
-
         if (content) {
             return (
                 <div>

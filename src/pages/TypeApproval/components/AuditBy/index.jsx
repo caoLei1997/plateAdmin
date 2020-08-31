@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { Button, Modal,message } from 'antd'
+import React from 'react';
+import { Button, Modal, message } from 'antd'
 import { connect } from 'umi'
-// import router from 'umi/router';
-const AuditBy = ({ dispatch, login, typeApproval, id }) => {
+const AuditBy = ({ dispatch, id }) => {
     const confirmOnOK = () => {
         dispatch({
             type: 'typeApproval/reqApprovalAgree',
@@ -39,12 +38,4 @@ const AuditBy = ({ dispatch, login, typeApproval, id }) => {
     );
 }
 
-export default connect(
-    ({
-        typeApproval,
-        login
-    }) => ({
-        typeApproval,
-        login
-    })
-)(AuditBy);
+export default connect()(AuditBy);
