@@ -1,11 +1,10 @@
-import React from 'react';
-import { Table, Row, Col, Button } from 'antd';
-import { Link, connect } from 'umi';
+import React, { useEffect } from 'react';
+import { Table } from 'antd';
+import { connect } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './index.less';
 import SnFilter from './components/SnFilter';
-import { PlusOutlined } from '@ant-design/icons';
-const SnApprove = () => {
+const SnDetail = ({ dispatch, snDetail, tableLoading }) => {
     const columns = [
         {
             title: '整车编码',
@@ -22,8 +21,27 @@ const SnApprove = () => {
             dataIndex: 'batchName',
             key: 'batchName',
         },
-       
+
     ];
+
+    const getList = ({
+        pageIndex = snDetail.pageIndex,
+        pageSize = snDetail.pageSize,
+        filter = snDetail.filter
+    }) => {
+        dispatch({
+            type: 'snDetail/reqList',
+            payload: {
+                pageIndex,
+                pageSize,
+                filter
+            }
+        })
+    }
+
+    useEffect(() => {
+        getList({})
+    }, [])
 
     const dataSource = [
         {
@@ -38,27 +56,29 @@ const SnApprove = () => {
     ];
 
     const pagination = {
-        total: 2,
-        current: 1,
-        pageSize: '10',
-        // onChange: this.handlePaginationChange,
+        total: snDetail.total,
+        current: snDetail.pageIndex,
+        pageSize: snDetail.pageSize,
+        onChange: (pageIndex) => { getList({ pageIndex }) },
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
         showQuickJumper: true,
-        // onShowSizeChange: (current, size) => {
-        //     _this.setState({
-        //         pageIndex: current,
-        //         pageSize: size
-        //     })
-        // }
+        onShowSizeChange: (pageIndex, pageSize) => {
+            getList({ pageIndex, pageSize })
+        }
     }
 
 
     return (
         <PageHeaderWrapper className={styles.main}>
             <div>
-                <SnFilter></SnFilter>
-                <Table dataSource={dataSource} columns={columns} pagination={pagination} />
+                <SnFilter getList={getList}></SnFilter>
+                <Table
+                    dataSource={dataSource}
+                    columns={columns}
+                    pagination={pagination}
+                    loading={tableLoading}
+                />
             </div>
         </PageHeaderWrapper>
     );
@@ -66,4 +86,11 @@ const SnApprove = () => {
 
 }
 
-export default SnApprove;
+export default connect(
+    ({ snDetail,
+        loading
+    }) => ({
+        snDetail,
+        tableLoading: loading.effects['snDetail/reqList']
+    })
+)(SnDetail);

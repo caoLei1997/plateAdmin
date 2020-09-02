@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './index.less'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Descriptions, Divider, Table, Button, Row, Col, Typography, Collapse } from 'antd';
+import { Descriptions, Divider, Table, Row, Col, Typography, Collapse, Image } from 'antd';
 import AuditPass from './components/AuditPass'
 import AuditBy from './components/AuditBy'
 import defaultImg from '../../assets/default.png'
@@ -104,7 +104,7 @@ class index extends Component {
                                 <span>审核状态： </span>
                                 <div className="inline" style={{ display: 'inline-block' }}>
                                     {
-                                        content.recordStatus == 2 ? <div>待审核</div> : (content.recordStatus == 4 ? <div className='font-success'>通过</div> : <div className='font-red'>未通过</div>)
+                                        content.recordStatus == 2 ? <div className='font-pending'>待审核</div> : (content.recordStatus == 4 ? <div className='font-success'>通过</div> : <div className='font-red'>未通过</div>)
                                     }
                                 </div>
                             </div>
@@ -199,53 +199,131 @@ class index extends Component {
                             {/* 车辆照片 */}
                             <Descriptions title="" column={1}>
                                 <Descriptions.Item label="车辆照片">
-                                    <div className={styles.photoContainer}>
-                                        <div className={styles.item}>
-                                            <img src={content.idCardFrontImageBase64 || defaultImg} alt="身份证正面" />
-                                            <p>身份证正面</p>
-                                        </div>
-                                        <div className={styles.item}>
-                                            <img src={content.idCardEndImageBase64 || defaultImg} alt="身份证反面" />
-                                            <p>身份证反面</p>
-                                        </div>
-                                        <div className={styles.item}>
-                                            <img src={content.electrombileImageBase64 || defaultImg} alt="右后方45度整车照片" />
-                                            <p>右后方45度整车照片</p>
-                                        </div>
-                                        <div className={styles.item}>
-                                            <img src={content.electrombileNumberImageBase64 || defaultImg} alt="整车编码" />
-                                            <p>整车编码</p>
-                                        </div>
-                                        <div className={styles.item}>
-                                            <img src={content.electricNumberImageBase64 || defaultImg} alt="电机编码" />
-                                            <p>电机编码</p>
-                                        </div>
-                                        <div className={styles.item}>
-                                            <img src={content.otherImage1Base64 || defaultImg} alt="其它1" />
-                                            <p>其它1</p>
-                                        </div>
-                                        <div className={styles.item}>
-                                            <img src={content.otherImage2Base64 || defaultImg} alt="其它2" />
-                                            <p>其它2</p>
-                                        </div>
-                                    </div>
-                                </Descriptions.Item>
 
-                                <Descriptions.Item label="购车凭证">
                                     <div className={styles.photoContainer}>
-                                        <div className={styles.item}>
-                                            <img src={content.invoiceImageBase64 || defaultImg} alt="购车凭证" />
-                                        </div>
-                                    </div>
-                                </Descriptions.Item>
+                                        {
+                                            content.idCardFrontImageBase64 &&
+                                            <div className={styles.item}>
+                                                <Image
+                                                    src={content.idCardFrontImageBase64}
+                                                    alt='身份证正面'
+                                                    width={200}
+                                                    height={165}
+                                                />
+                                                <p>身份证正面</p>
+                                            </div>
+                                        }
 
-                                <Descriptions.Item label="带牌车辆照片">
-                                    <div className={styles.photoContainer}>
-                                        <div className={styles.item}>
-                                            <img src={content.licensePlatePhotoBase64 || defaultImg} alt="带牌车辆照片" />
-                                        </div>
+                                        {
+                                            content.idCardEndImageBase64 &&
+                                            <div className={styles.item}>
+                                                <Image
+                                                    src={content.idCardEndImageBase64}
+                                                    alt='身份证反面'
+                                                    width={200}
+                                                    height={165}
+                                                />
+                                                <p>身份证反面</p>
+                                            </div>
+                                        }
+                                        {
+                                            content.electrombileImageBase64 &&
+                                            <div className={styles.item}>
+                                                <Image
+                                                    src={content.electrombileImageBase64}
+                                                    alt='右后方45度整车照片'
+                                                    width={200}
+                                                    height={165}
+                                                />
+                                                <p>右后方45度整车照片</p>
+                                            </div>
+                                        }
+                                        {
+                                            content.electrombileNumberImageBase64 &&
+                                            <div className={styles.item}>
+                                                <Image
+                                                    src={content.electrombileNumberImageBase64}
+                                                    alt='整车编码'
+                                                    width={200}
+                                                    height={165}
+                                                />
+                                                <p>整车编码</p>
+                                            </div>
+                                        }
+                                        {
+                                            content.electricNumberImageBase64 &&
+                                            <div className={styles.item}>
+                                                <Image
+                                                    src={content.electricNumberImageBase64}
+                                                    alt='电机编码'
+                                                    width={200}
+                                                    height={165}
+                                                />
+                                                <p>电机编码</p>
+                                            </div>
+                                        }
+
+                                        {
+                                            content.otherImage1Base64 &&
+                                            <div className={styles.item}>
+                                                <Image
+                                                    src={content.otherImage1Base64}
+                                                    alt='其它1'
+                                                    width={200}
+                                                    height={165}
+                                                />
+                                                <p>其它1</p>
+                                            </div>
+                                        }
+
+                                        {
+                                            content.otherImage2Base64 &&
+                                            <div className={styles.item}>
+                                                <Image
+                                                    src={content.otherImage2Base64}
+                                                    alt='其它2'
+                                                    width={200}
+                                                    height={165}
+                                                />
+                                                <p>其它2</p>
+                                            </div>
+                                        }
                                     </div>
+
                                 </Descriptions.Item>
+                                {
+                                    content.invoiceImageBase64 &&
+                                    <Descriptions.Item label="购车凭证">
+                                        <div className={styles.photoContainer}>
+                                            <div className={styles.item}>
+                                                <Image
+                                                    src={content.invoiceImageBase64}
+                                                    alt='购车凭证'
+                                                    width={200}
+                                                    height={165}
+                                                />
+                                            </div>
+                                        </div>
+                                    </Descriptions.Item>
+                                }
+
+                                {
+                                    content.licensePlatePhotoBase64 &&
+                                    <Descriptions.Item label="带牌车辆照片">
+                                        <div className={styles.photoContainer}>
+                                            <div className={styles.item}>
+                                                <Image
+                                                    src={content.licensePlatePhotoBase64}
+                                                    alt='带牌车辆照片'
+                                                    width={200}
+                                                    height={165}
+                                                />
+                                            </div>
+                                        </div>
+                                    </Descriptions.Item>
+
+                                }
+
                             </Descriptions>
                             <h3>车主信息</h3>
                             <Divider></Divider>

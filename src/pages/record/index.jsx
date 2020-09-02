@@ -150,7 +150,7 @@ class Record extends Component {
         const { recordList, tableLoading } = this.props
         let _this = this;
         const pagination = {
-            total: this.state.total,
+            total: recordList.total,
             current: this.state.pageIndex,
             pageSize: this.state.pageSize,
             onChange: this.handlePaginationChange,
