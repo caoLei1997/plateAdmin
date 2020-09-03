@@ -153,7 +153,10 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
         formData.append('file', file);
         dispatch({
             type: 'snDeclare/reqUpload',
-            payload: { formData }
+            payload: { formData },
+            onSuccess: () => {
+                getList({});
+            }
         })
     }
 

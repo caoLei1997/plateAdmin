@@ -21,6 +21,9 @@ const initialState = {
     batchSearch: '',// 批次SN搜索
     batchPageSize: PAGESIZE,
     batchTotal: 0,//总条数
+    errorData: [], // 错误excelData
+    errorNum: 0, //错误条数
+    uploadStatus: 0,//成功
 }
 export default {
     namespace: 'snDeclare',
@@ -60,10 +63,11 @@ export default {
             })
         },
         *reqUpload({ payload }, { call, put }) {
-            console.log(payload);
-            
-            const res = yield call(snUpload, { file: payload.formData })
-            console.log(res);
+            const res = yield call(snUpload, payload.formData)
+            yield put({
+                type: 'changeUpload',
+                payload: res
+            })
         }
     },
     reducers: {
@@ -103,5 +107,23 @@ export default {
                 batchTotal: data.totalElements
             }
         },
+
+        changeUpload(state, { payload }) {
+            const data = payload;
+            return {
+                ...state,
+                ...data.data,
+                uploadStatus: data.retCode == '0000' ? 1 : 0
+            }
+        },
+        clearExcelData(state) {
+            return {
+                ...state,
+                errorData: [],
+                errorNum: 0,
+                uploadStatus: 0
+            }
+
+        }
     }
 } 

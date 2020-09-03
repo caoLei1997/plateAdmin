@@ -15,6 +15,8 @@ export async function snBatchList(data) {
 }
 
 export async function snUpload(data) {
+    console.log(data);
+    
     return request(`/web/v1/batchSNWeb/snExcelUpload`, {
         method: 'POST',
         requestType: 'form',

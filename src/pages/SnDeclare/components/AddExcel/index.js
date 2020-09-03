@@ -1,27 +1,58 @@
-import React, { useState, useEffect } from 'react'
-import { Row, Col, Button, Modal, Form, Upload, Alert } from 'antd';
+import React, { useState } from 'react'
+import { Row, Col, Button, Modal, Form, Upload, Alert, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import styles from '../../index.less';
 import ExcelUtil from '@/utils/excel';
-export default function AddExcel({ uploadSnExcel }) {
-    const [addSnVisible, setAddSnVisible] = useState(true);
+import { connect } from 'umi'
+
+const { Text } = Typography;
+
+function AddExcel({ uploadSnExcel, snDeclare, uploadLoading, dispatch }) {
+    const [addSnVisible, setAddSnVisible] = useState(false);
     const [fileList, setFileList] = useState([]);
     const [form] = Form.useForm();
     const uploadExcelAttr = {
         accept: '.xls',
         showUploadList: true,
-        onRemove: () => {
+        onRemove: (file) => {
             setFileList([]);
+            dispatch({
+                type: 'snDeclare/clearExcelData'
+            })
         },
         beforeUpload: file => {
             setFileList([file]);
             return false;
-        }
+        },
+        fileList
     }
 
     const handleAddSnVisible = async () => {
-        const res = await form.validateFields()
+        if (!fileList || fileList.length === 0) {
+            setFileList([]);
+            return;
+        }
         await uploadSnExcel(fileList[0])
+    }
+    const { errorData, errorNum,uploadStatus } = snDeclare
+    const excelColumns = [
+        {
+            title: '整车编码SN',
+            dataIndex: 'electrombileNumber',
+            key: 'electrombileNumber'
+        }, {
+            title: '错误原因',
+            dataIndex: 'errorMsg',
+            key: 'errorMsg',
+        },
+        {
+            title: '示例',
+            dataIndex: 'modelName',
+            key: 'modelName',
+        }
+    ]
+    const exportExcel = () => {
+        ExcelUtil.exportExcel(excelColumns, errorData, '品牌厂家SN申报模板-报错表.xlsx')
     }
     return (
         <div>
@@ -43,6 +74,9 @@ export default function AddExcel({ uploadSnExcel }) {
                 <Form
                     labelCol={{ span: 5, }}
                     form={form}
+                    initialValues={{
+                        snFile: null
+                    }}
                 >
                     <Alert className='mb-16' message="请先下载模版，按照模版要求填写完成后在下方上传" type="warning" />
                     <div className={styles.formAddEls} >
@@ -52,17 +86,58 @@ export default function AddExcel({ uploadSnExcel }) {
                             rules={[{ required: true, message: '请选择上传文件' }]}
                         >
                             <Upload {...uploadExcelAttr}>
-                                <Button>上传文件</Button>
+                                <Button loading={uploadLoading}>上传文件</Button>
                             </Upload>
+                            {(fileList && fileList.length === 0) && <Text type="danger">请选择excel文件！</Text>}
                         </Form.Item>
                         <div className={styles.uploadFile}>
                             <p className='mt-8'>
-                                <a href='/plateSale/snDeclare.xls' download='SN申报导入模板' className='font-underline'>模板下载</a>
+                                <a href='/plateSale/snDeclare.xls' download='品牌厂家SN申报模板' className='font-underline'>模板下载</a>
                             </p>
                         </div>
                     </div>
+                    {
+                        errorNum >= 1 && (
+                            <>
+                                <Alert
+                                    message="提交失败"
+                                    type="error"
+                                    showIcon
+                                />
+                                <h3 className='mt-8 mb-24'>
+                                    <Text type="danger">导入失败{errorNum}条，
+                                         <Text underline>
+                                            <a onClick={exportExcel}>下载查看</a>
+                                        </Text>
+                                         &nbsp;&nbsp;查看失败原因
+                                    </Text>
+                                </h3>
+                            </>
+                        )
+
+                    }
+                    {
+                        uploadStatus == 1 && (
+                            <>
+                                <Alert
+                                    message="提交成功"
+                                    type="success"
+                                    showIcon
+                                />
+                            </>
+                        )
+                    }
+
+
                 </Form>
             </Modal>
         </div>
     )
 }
+
+export default connect(
+    ({ snDeclare, loading }) => ({
+        snDeclare,
+        uploadLoading: loading.effects['snDeclare/reqUpload']
+    })
+)(AddExcel)
