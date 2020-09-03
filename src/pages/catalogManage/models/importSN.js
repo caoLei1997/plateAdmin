@@ -12,6 +12,10 @@ export default {
     },
     effects: {
         *upload({ payload, onSuccess }, { call, put }) {
+            console.log(payload.formData);
+            console.log(payload);
+            
+            
             const reponse = yield call(requestCatalogUploadSN, payload.formData);
             yield put({
                 type: 'changeUpdateStatus',

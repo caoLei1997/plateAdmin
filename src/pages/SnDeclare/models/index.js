@@ -1,6 +1,8 @@
 import { PAGESIZE } from "@/globalConstant"
 import {
     snDeclareList,
+    snBatchList,
+    snUpload
 } from '@/services/snDeclare';
 
 import {
@@ -17,7 +19,8 @@ const initialState = {
     batchList: [],// 批次SN列表,
     batchPageIndex: 1, //批次SN列表页数，
     batchSearch: '',// 批次SN搜索
-    batchPageSize: '10'
+    batchPageSize: PAGESIZE,
+    batchTotal: 0,//总条数
 }
 export default {
     namespace: 'snDeclare',
@@ -41,7 +44,7 @@ export default {
             })
         },
 
-        *reqBatch({ payload, onSuccess }, { call, put }) {
+        *reqBatch({ payload }, { call, put }) {
             const { pageIndex, electrombileNumber } = payload;
             yield put({
                 type: 'changeBatch',
@@ -50,10 +53,18 @@ export default {
                     batchSearch: electrombileNumber
                 }
             })
-
-            const res = call()
+            const res = yield call(snBatchList, { ...payload })
+            yield put({
+                type: 'changeBatchList',
+                payload: res
+            })
+        },
+        *reqUpload({ payload }, { call, put }) {
+            console.log(payload);
+            
+            const res = yield call(snUpload, { file: payload.formData })
+            console.log(res);
         }
-
     },
     reducers: {
         changeList(state, { payload }) {
@@ -65,10 +76,32 @@ export default {
         },
         changeAgentList(state, { payload }) {
             const { data } = payload;
-            return { ...state, agentList: data }
+            return {
+                ...state,
+                agentList: data
+            }
         },
         changeFilter(state, { payload }) {
-            return { ...state, ...payload }
+            return {
+                ...state,
+                ...payload
+            }
+        },
+
+        changeBatch(state, { payload }) {
+            return {
+                ...state,
+                ...payload
+            }
+
+        },
+        changeBatchList(state, { payload }) {
+            const { data } = payload
+            return {
+                ...state,
+                batchList: data.content,
+                batchTotal: data.totalElements
+            }
         },
     }
-}
+} 

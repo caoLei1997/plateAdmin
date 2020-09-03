@@ -9,8 +9,15 @@ export async function snDeclareList(data) {
 }
 
 export async function snBatchList(data) {
-    return request(`/web/v1/batchSNWeb/batchSnList`, {
+    return request(`/web/v1/batchSNWeb/batchSnList?${queryJsonToString(data)}`, {
+        method: 'GET',
+    })
+}
+
+export async function snUpload(data) {
+    return request(`/web/v1/batchSNWeb/snExcelUpload`, {
         method: 'POST',
+        requestType: 'form',
         data
     })
 }

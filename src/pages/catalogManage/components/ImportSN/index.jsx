@@ -19,6 +19,8 @@ const ImportSN = (props) => {
     }
 
     const handleUpload = (file) => {
+        console.log(file);
+        
         const formData = new FormData();
         formData.append('file', file, file.name);
         formData.append('account', userInfo.phone);

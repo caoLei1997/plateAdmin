@@ -1,27 +1,27 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Row, Col, Button, Modal, Form, Upload, Alert } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import styles from '../../index.less';
-export default function AddExcel() {
-    const [addSnVisible, setAddSnVisible] = useState(false);
-    const [fileList, setFileList] = useState(null);
+import ExcelUtil from '@/utils/excel';
+export default function AddExcel({ uploadSnExcel }) {
+    const [addSnVisible, setAddSnVisible] = useState(true);
+    const [fileList, setFileList] = useState([]);
     const [form] = Form.useForm();
     const uploadExcelAttr = {
         accept: '.xls',
         showUploadList: true,
         onRemove: () => {
-            setFileList(null);
+            setFileList([]);
         },
         beforeUpload: file => {
             setFileList([file]);
-            form.setFieldsValue({ snFile: file.name })
             return false;
         }
     }
 
-    const handleAddSnVisible = () => {
-        form.validateFields()
-        const formValue = form.getFieldsValue();
+    const handleAddSnVisible = async () => {
+        const res = await form.validateFields()
+        await uploadSnExcel(fileList[0])
     }
     return (
         <div>
@@ -30,7 +30,7 @@ export default function AddExcel() {
                     span={24}
                     style={{ textAlign: 'right', marginBottom: '16px' }}
                 >
-                    <Button icon={<PlusOutlined />}>新增SN申报</Button>
+                    <Button onClick={() => { setAddSnVisible(true) }} icon={<PlusOutlined />}>新增SN申报</Button>
                 </Col>
             </Row>
             <Modal

@@ -5,9 +5,8 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './index.less';
 import SnFilter from './components/SnFilter';
 import AddExcel from './components/AddExcel'
-const SnDeclare = ({ snDeclare, tableLoading, dispatch }) => {
+const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
     const [batchVisible, setBatchVisible] = useState(false)
-    const [search, setSearch] = useState('');
     const [id, setId] = useState(null);
     const { Search } = Input;
 
@@ -112,7 +111,6 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch }) => {
     useEffect(() => {
         if (batchVisible) {
             getBatch({})
-
         }
     }, [batchVisible])
 
@@ -120,7 +118,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch }) => {
     const getBatch = ({
         electrombileNumber = snDeclare.batchSearch,
         pageIndex = snDeclare.batchPageIndex,
-        pageSize = snDeclare.batchPageSizes,
+        pageSize = snDeclare.batchPageSize,
         snBatchId = id
     }) => {
         dispatch({
@@ -147,18 +145,25 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch }) => {
         '202890111',
     ];
 
-    const handleBatchSearch = (e) => {
-        console.log(e);
-    }
     // 批次SN数弹出层结束
 
-    const { content } = snDeclare;
+    // 上传SN申报
+    const uploadSnExcel = (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        dispatch({
+            type: 'snDeclare/reqUpload',
+            payload: { formData }
+        })
+    }
+
+    const { content, batchTotal, batchList } = snDeclare;
 
     return (
         <PageHeaderWrapper className={styles.main}>
             <div>
                 <SnFilter getList={getList}></SnFilter>
-                <AddExcel></AddExcel>
+                <AddExcel uploadSnExcel={uploadSnExcel}></AddExcel>
                 <Table
                     rowKey='id'
                     dataSource={content}
@@ -171,27 +176,30 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch }) => {
                     visible={batchVisible}
                     onOk={handleBatchVisible}
                     onCancel={() => { setBatchVisible(false) }}
+                    key={id}
                 >
-                    <p>批次SN数：128</p>
+                    <p>批次SN数：{JSON.stringify(batchTotal)}</p>
                     <Search
-                        placeholder="input search text"
+                        placeholder="请输入查询SN数"
                         onSearch={
                             value => {
                                 getBatch({ electrombileNumber: value, pageIndex: 1 })
                             }
                         }
                     />
+                    {}
                     <List
                         className='mt-16'
                         size="small"
                         pagination={{
-                            onChange: page => {
-                                console.log(page)
+                            onChange: pageIndex => {
+                                getBatch({ pageIndex })
                             },
                             pageSize: 10,
                         }}
-                        dataSource={data}
-                        renderItem={item => <List.Item>{item}</List.Item>}
+                        dataSource={batchList}
+                        loading={listLoading}
+                        renderItem={item => <List.Item>{item.electrombileNumber}</List.Item>}
                     />
                 </Modal>
             </div>
@@ -202,6 +210,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch }) => {
 export default connect(
     ({ snDeclare, loading }) => ({
         snDeclare,
-        tableLoading: loading.effects['snDeclare/reqList']
+        tableLoading: loading.effects['snDeclare/reqList'],
+        listLoading: loading.effects['snDeclare/reqBatch']
     })
 )(SnDeclare);

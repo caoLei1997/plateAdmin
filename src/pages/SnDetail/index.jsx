@@ -8,18 +8,23 @@ const SnDetail = ({ dispatch, snDetail, tableLoading }) => {
     const columns = [
         {
             title: '整车编码',
-            dataIndex: 'createTime',
-            key: 'createTime',
+            dataIndex: 'electrombileNumber',
+            key: 'electrombileNumber',
         },
         {
             title: '所属型号',
-            dataIndex: 'brandManufacturer',
-            key: 'brandManufacturer',
+            dataIndex: 'modelName',
+            key: 'modelName',
         },
         {
             title: '审核状态',
-            dataIndex: 'batchName',
-            key: 'batchName',
+            dataIndex: 'approvalStatus',
+            key: 'approvalStatus',
+            render: (approvalStatus) => {
+                if (approvalStatus == 1) return <div className='font-pending'>待审核</div>
+                if (approvalStatus == 2) return <div className='font-danger'>未通过</div>
+                if (approvalStatus == 3) return <div className='font-success'>已通过</div>
+            }
         },
 
     ];
@@ -43,18 +48,6 @@ const SnDetail = ({ dispatch, snDetail, tableLoading }) => {
         getList({})
     }, [])
 
-    const dataSource = [
-        {
-            key: '1',
-            createTime: '2020/12/12',
-
-        },
-        {
-            key: '2',
-            createTime: '2020/12/12',
-        },
-    ];
-
     const pagination = {
         total: snDetail.total,
         current: snDetail.pageIndex,
@@ -68,16 +61,18 @@ const SnDetail = ({ dispatch, snDetail, tableLoading }) => {
         }
     }
 
+    const { content } = snDetail;
 
     return (
         <PageHeaderWrapper className={styles.main}>
             <div>
                 <SnFilter getList={getList}></SnFilter>
                 <Table
-                    dataSource={dataSource}
+                    dataSource={content}
                     columns={columns}
                     pagination={pagination}
                     loading={tableLoading}
+                    rowKey='id'
                 />
             </div>
         </PageHeaderWrapper>
@@ -87,7 +82,8 @@ const SnDetail = ({ dispatch, snDetail, tableLoading }) => {
 }
 
 export default connect(
-    ({ snDetail,
+    ({
+        snDetail,
         loading
     }) => ({
         snDetail,
