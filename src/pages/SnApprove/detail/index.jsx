@@ -23,20 +23,20 @@ const Text = Typography;
 const columns = [
     {
         title: '审核人',
-        dataIndex: 'auditName',
-        key: 'auditName',
+        dataIndex: 'approvalPeople',
+        key: 'approvalPeople',
     },
     {
         title: '审核日期',
-        dataIndex: 'auditedAt',
-        key: 'auditedAt',
+        dataIndex: 'approvalAt',
+        key: 'approvalAt',
 
     },
     {
         title: '审核结果',
-        dataIndex: 'auditStatus',
-        key: 'auditStatus',
-        render: auditStatus => auditStatus == 1 ? <div className='font-success'>通过</div> : <div className='font-red'>不通过</div>,
+        dataIndex: 'approvalResult',
+        key: 'approvalResult',
+        render: approvalResult => approvalResult != '不通过' ? <div className='font-success'>{approvalResult}</div> : <div className='font-red'>{approvalResult}</div>,
     },
     {
         title: '不通过原因',
@@ -45,25 +45,6 @@ const columns = [
     }
 ]
 
-const dataTable = [
-    {
-        auditName: '张三',
-        auditedAt: '2020-10-15',
-        auditStatus: 1,
-        notPassReason: '12321',
-        id: 0
-    }
-]
-
-const data = [
-    '202028908190',
-    '202028908191',
-    '202028908192',
-    '202028908193',
-    '202028908194',
-    '202028908194',
-    '202028908194',
-];
 const SnApproveDetail = ({ dispatch, match, snApprove }) => {
     const id = match.params.id
     const ids = JSON.parse(window.localStorage.getItem('snApprove'))

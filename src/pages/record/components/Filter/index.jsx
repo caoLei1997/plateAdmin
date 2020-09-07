@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Row, Col, Input, Button, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, Button, Select, DatePicker, Cascader } from 'antd';
 import { connect } from 'umi';
 import styles from './index.less';
 const { RangePicker } = DatePicker;
@@ -9,12 +9,14 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
     const [form] = Form.useForm();
     const onFinish = data => {
         console.log(data);
-        let { applyTimeStart, auditTimeStart } = data
+        let { applyTimeStart, auditTimeStart, city } = data
 
         dispatch({
             type: 'recordList/getList',
             payload: {
                 ...data,
+                citys: city ? city[0] : '',
+                region: city ? city[1] : '',
                 applyTimeStart: applyTimeStart && formatData(applyTimeStart[0]),
                 applyTimeEnd: applyTimeStart && formatData(applyTimeStart[1]),
                 auditTimeStart: auditTimeStart && formatData(auditTimeStart[0]),
@@ -36,6 +38,20 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
             }
         })
     }, []);
+
+    function displayRender(label) {
+        return label.join('-');
+    }
+    function onChange(value) {
+        const [city, region] = value;
+        dispatch({
+            type: 'recordList/getCityAndRegion',
+            payload: {
+                "city": city,
+                "region": region
+            },
+        })
+    }
     const dateFormat = 'YYYY/MM/DD';
     return (
         <div className={styles.filter} >
@@ -44,16 +60,51 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
                 name="advanced_search"
                 className="ant-advanced-search-form"
                 onFinish={onFinish}
-
             >
+
                 <Row gutter={24}>
                     <Col span={6}>
-                        <Form.Item label='归属地' name='city'>
-                            <Select placeholder='归属地'>
-                                {recordList.city.map(item => <Select.Option key={item.cityId} value={item.label}>{item.value}</Select.Option>)}
+
+                        <Form.Item
+                            name='city'
+                            label='所属大队'
+                        >
+                            <Cascader
+                                options={recordList.city}
+                                expandTrigger="hover"
+                                displayRender={displayRender}
+                                onChange={onChange}
+                                placeholder='选择市区'
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                        <Form.Item
+                            colon={false}
+                            label=' '
+                            name='agentOutlesId'
+                        >
+                            <Select
+                                placeholder='选择所属大队'
+                            >
+                                {
+                                    recordList.brigadeList.length &&
+                                    recordList.brigadeList.map((item, index) => {
+                                        return <Option
+                                            key={index}
+                                            agentOutletsName={item.agentOutlesName}
+                                            value={item.agentOutlesId}
+                                        >
+                                            {item.agentOutlesName}
+                                        </Option>
+                                    })
+                                }
                             </Select>
                         </Form.Item>
                     </Col>
+                </Row>
+
+                <Row gutter={24}>
                     <Col span={6}>
                         <Form.Item label='登记人' name='userName'>
                             <Input placeholder='登记人'></Input>

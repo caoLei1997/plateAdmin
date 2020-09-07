@@ -116,48 +116,93 @@ class index extends Component {
                                 >
                                     <Panel className='collapse' header="厂家型号信息" key="1">
                                         <Descriptions title="" column={2}>
-                                            <Descriptions.Item label="车辆中文商标"></Descriptions.Item>
-                                            <Descriptions.Item label="登记车辆型号序号"></Descriptions.Item>
-                                            <Descriptions.Item label="车身长度"></Descriptions.Item>
-                                            <Descriptions.Item label="车身宽度"></Descriptions.Item>
-                                            <Descriptions.Item label="车身高度"></Descriptions.Item>
-                                            <Descriptions.Item label="续航里程"></Descriptions.Item>
-                                            <Descriptions.Item label="整车质量"></Descriptions.Item>
-                                            <Descriptions.Item label="最高设计时速"></Descriptions.Item>
-                                            <Descriptions.Item label="整车编码位置"></Descriptions.Item>
-                                            <Descriptions.Item label="铭牌固定位置"></Descriptions.Item>
+                                            <Descriptions.Item label="车辆中文商标">{content.electrombileChineseTradeMark}</Descriptions.Item>
+                                            <Descriptions.Item label="车辆型号">{content.modelName}</Descriptions.Item>
+                                            <Descriptions.Item label="车身长度">{content.electrombileLength}</Descriptions.Item>
+                                            <Descriptions.Item label="车身宽度">{content.electrombileWidth}</Descriptions.Item>
+                                            <Descriptions.Item label="车身高度">{content.electrombileHeight}</Descriptions.Item>
+                                            <Descriptions.Item label="续航里程">{content.enduranceMileage}</Descriptions.Item>
+                                            <Descriptions.Item label="整车质量">{content.totalWeight}</Descriptions.Item>
+                                            <Descriptions.Item label="最高设计时速">{content.maximumDesignedSpeed}</Descriptions.Item>
+                                            <Descriptions.Item label="整车编码位置">{content.codeOnFrame}</Descriptions.Item>
+                                            <Descriptions.Item label="铭牌固定位置">{content.fixedPositionName}</Descriptions.Item>
                                         </Descriptions>
                                         <Descriptions title="" column={1}>
                                             <Descriptions.Item label="车辆照片">
                                                 <div className={styles.photoContainer}>
-                                                    <div className={styles.item}>
-                                                        <img src={content.idCardFrontImageBase64 || defaultImg} alt="身份证正面" />
-                                                        <p>身份证正面</p>
-                                                    </div>
-                                                    <div className={styles.item}>
-                                                        <img src={content.idCardEndImageBase64 || defaultImg} alt="身份证反面" />
-                                                        <p>身份证反面</p>
-                                                    </div>
-                                                    <div className={styles.item}>
-                                                        <img src={content.electrombileImageBase64 || defaultImg} alt="右后方45度整车照片" />
-                                                        <p>右后方45度整车照片</p>
-                                                    </div>
-                                                    <div className={styles.item}>
-                                                        <img src={content.electrombileNumberImageBase64 || defaultImg} alt="整车编码" />
-                                                        <p>整车编码</p>
-                                                    </div>
-                                                    <div className={styles.item}>
-                                                        <img src={content.electricNumberImageBase64 || defaultImg} alt="电机编码" />
-                                                        <p>电机编码</p>
-                                                    </div>
-                                                    <div className={styles.item}>
-                                                        <img src={content.otherImage1Base64 || defaultImg} alt="其它1" />
-                                                        <p>其它1</p>
-                                                    </div>
-                                                    <div className={styles.item}>
-                                                        <img src={content.otherImage2Base64 || defaultImg} alt="其它2" />
-                                                        <p>其它2</p>
-                                                    </div>
+                                                    {
+                                                        content.frontElectricCarImage &&
+
+                                                        <div className={styles.item}>
+                                                            <Image
+                                                                src={content.frontElectricCarImage}
+                                                                alt='车辆正面照'
+                                                                width={200}
+                                                                height={165}
+                                                            />
+                                                            <p>车辆正面照</p>
+                                                        </div>
+                                                    }
+                                                    {
+                                                        content.leftElectricCarImage &&
+                                                        <div className={styles.item}>
+                                                            <Image
+                                                                src={content.leftElectricCarImage}
+                                                                alt='车辆左侧照片'
+                                                                width={200}
+                                                                height={165}
+                                                            />
+                                                            <p>车辆左侧照片</p>
+                                                        </div>
+                                                    }
+                                                    {
+                                                        content.rightRearElectricCarImage &&
+                                                        <div className={styles.item}>
+                                                            <Image
+                                                                src={content.rightRearElectricCarImage}
+                                                                alt='右后方45度整车照片'
+                                                                width={200}
+                                                                height={165}
+                                                            />
+                                                            <p>右后方45度整车照片</p>
+                                                        </div>
+                                                    }
+                                                    {
+                                                        content.certificateElectricCarImage &&
+                                                        <div className={styles.item}>
+                                                            <Image
+                                                                src={content.certificateElectricCarImage}
+                                                                alt='车辆合格证'
+                                                                width={200}
+                                                                height={165}
+                                                            />
+                                                            <p>车辆合格证</p>
+                                                        </div>
+                                                    }
+                                                    {
+                                                        content.productCertificationImage &&
+                                                        <div className={styles.item}>
+                                                            <Image
+                                                                src={content.productCertificationImage}
+                                                                alt='产品认证书'
+                                                                width={200}
+                                                                height={165}
+                                                            />
+                                                            <p>产品认证书</p>
+                                                        </div>
+                                                    }
+                                                    {
+                                                        content.otherImage &&
+                                                        <div className={styles.item}>
+                                                            <Image
+                                                                src={content.otherImage}
+                                                                alt='其它1'
+                                                                width={200}
+                                                                height={165}
+                                                            />
+                                                            <p>其它1</p>
+                                                        </div>
+                                                    }
                                                 </div>
                                             </Descriptions.Item>
                                         </Descriptions>
@@ -369,7 +414,7 @@ class index extends Component {
                             }
                         </Col>
                     </Row>
-                </div>
+                </div >
 
             );
         } else {

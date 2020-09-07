@@ -7,11 +7,11 @@ import {
     Form,
     Typography,
     Row,
-    Col
+    Col,
+    Image
 } from 'antd'
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './index.less'
-import defaultImg from '../../../assets/default.png'
 import AuditPass from '../components/AuditPass'
 import AuditBy from '../components/AuditBy'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
@@ -30,13 +30,11 @@ const columns = [
     },
     {
         title: '审核结果',
-        dataIndex: 'delStatus',
-        key: 'delStatus',
-        render: delStatus => delStatus == 3
+        dataIndex: 'approvalResult',
+        key: 'approvalResult',
+        render: approvalResult => approvalResult == '通过'
             ? <div className='font-success'>通过</div>
-            : (delStatus == 2
-                ? <div div className='font-red' > 不通过</div>
-                : null)
+            : <div className='font-red' > 不通过</div>
     },
     {
         title: '不通过原因',
@@ -152,30 +150,79 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                 <Descriptions title="" column={1}>
                     <Descriptions.Item label="车辆照片">
                         <div className={styles.photoContainer}>
-                            <div className={styles.item}>
-                                <img src={detailData.frontElectricCarImage || defaultImg} alt="车辆正面照" />
-                                <p>车辆正面照</p>
-                            </div>
-                            <div className={styles.item}>
-                                <img src={detailData.leftElectricCarImage || defaultImg} alt="车辆左侧照片" />
-                                <p>车辆左侧照片</p>
-                            </div>
-                            <div className={styles.item}>
-                                <img src={detailData.rightRearElectricCarImage || defaultImg} alt="右后方45度整车照片" />
-                                <p>右后方45度整车照片</p>
-                            </div>
-                            <div className={styles.item}>
-                                <img src={detailData.certificateElectricCarImage || defaultImg} alt="车辆合格证" />
-                                <p>车辆合格证</p>
-                            </div>
-                            <div className={styles.item}>
-                                <img src={detailData.productCertificationImage || defaultImg} alt="产品认证证书" />
-                                <p>产品认证证书</p>
-                            </div>
-                            <div className={styles.item}>
-                                <img src={detailData.otherImage || defaultImg} alt="其他" />
-                                <p>其他</p>
-                            </div>
+                            {
+                                detailData.frontElectricCarImage &&
+                                <div className={styles.item}>
+                                    <Image
+                                        src={detailData.frontElectricCarImage}
+                                        alt='车辆正面照'
+                                        width={200}
+                                        height={165}
+                                    />
+                                    <p>车辆正面照</p>
+                                </div>
+                            }
+                            {
+                                detailData.leftElectricCarImage &&
+                                <div className={styles.item}>
+                                    <Image
+                                        src={detailData.leftElectricCarImage}
+                                        alt='车辆左侧照片'
+                                        width={200}
+                                        height={165}
+                                    />
+                                    <p>车辆左侧照片</p>
+                                </div>
+                            }
+                            {
+                                detailData.rightRearElectricCarImage &&
+                                <div className={styles.item}>
+                                    <Image
+                                        src={detailData.rightRearElectricCarImage}
+                                        alt='右后方45度整车照片'
+                                        width={200}
+                                        height={165}
+                                    />
+                                    <p>右后方45度整车照片</p>
+                                </div>
+                            }
+                            {
+                                detailData.certificateElectricCarImage &&
+                                <div className={styles.item}>
+                                    <Image
+                                        src={detailData.certificateElectricCarImage}
+                                        alt='车辆合格证'
+                                        width={200}
+                                        height={165}
+                                    />
+                                    <p>车辆合格证</p>
+                                </div>
+                            }
+                            {
+                                detailData.productCertificationImage &&
+                                <div className={styles.item}>
+                                    <Image
+                                        src={detailData.productCertificationImage}
+                                        alt='产品认证证书'
+                                        width={200}
+                                        height={165}
+                                    />
+                                    <p>产品认证证书</p>
+                                </div>
+                            }
+
+                            {
+                                detailData.otherImage &&
+                                <div className={styles.item}>
+                                    <Image
+                                        src={detailData.otherImage}
+                                        alt='其他'
+                                        width={200}
+                                        height={165}
+                                    />
+                                    <p>其他</p>
+                                </div>
+                            }
                         </div>
                     </Descriptions.Item>
                 </Descriptions>
@@ -185,7 +232,12 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                         <>
                             <h3 className='mt-32'>审核记录</h3>
                             <Divider></Divider>
-                            <Table rowKey={"id"} columns={columns} dataSource={detailData.logs}></Table>
+                            <Table
+                                rowKey={"id"}
+                                columns={columns}
+                                dataSource={detailData.logs}
+                            >
+                            </Table>
                         </>
                     )
                 }

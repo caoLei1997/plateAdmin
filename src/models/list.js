@@ -1,6 +1,10 @@
 import { requestRecordList, requestGetCity } from '@/services/record';
 import { PAGESIZE, RETCODESUCCESS } from '@/globalConstant';
 
+import {
+    getBrigadeByCityAndRegion
+} from '@/services/authority';
+
 const initialState = {
     total: 0,
     pageSize: PAGESIZE,
@@ -8,13 +12,14 @@ const initialState = {
     content: [],
     ids: [],
     city: [],
+    brigadeList: []
 }
 export default {
     namespace: 'recordList',
     state: { ...initialState },
     effects: {
         *getList({ payload }, { call, put }) {
-            const response = yield call(requestRecordList, { ...payload, pageIndex: payload.pageIndex - 1 });
+            const response = yield call(requestRecordList, { ...payload, pageIndex: payload.pageIndex  });
             yield put({
                 type: 'changeList',
                 payload: response
@@ -31,12 +36,14 @@ export default {
                 type: 'changeCity',
                 payload: response
             })
-            // if (response.retCode === RETCODESUCCESS) {
-            //     onSuccess(response.data.total);
 
-            //     localStorage.setItem('recordList', JSON.stringify(response))
-
-            // }
+        },
+        *getCityAndRegion({ payload }, { put, call }) {
+            const res = yield call(getBrigadeByCityAndRegion, { ...payload })
+            yield put({
+                type: 'changeBrigade',
+                payload: res.data
+            })
         }
     },
     reducers: {
@@ -49,6 +56,14 @@ export default {
             const { data } = payload;
             return { ...state, city: [...data] };
         },
+        changeBrigade(status, { payload }) {
+            console.log(payload);
+            
+            return {
+                ...status,
+                brigadeList: payload
+            }
+        }
 
     }
 

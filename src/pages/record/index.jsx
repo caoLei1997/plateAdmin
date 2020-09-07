@@ -6,11 +6,9 @@ import FilterSearch from './components/Filter';
 import styles from './index.less';
 import { connect } from 'umi';
 class Record extends Component {
-
     constructor(props) {
         super(props);
         let { recordList } = this.props;
-        console.log(recordList);
         this.state = {
             pageSize: recordList.pageSize,
             pageIndex: recordList.current,
@@ -19,12 +17,15 @@ class Record extends Component {
     }
 
     getList = () => {
-        let { dispatch } = this.props;
+        let { dispatch,recordList } = this.props;
+        const {current} = recordList;
+        console.log(current);
+        
         dispatch({
             type: 'recordList/getList',
             payload: {
-                "pageIndex": this.state.pageIndex,
-                "pageSize": this.state.pageSize
+                "pageIndex":recordList.current,
+                "pageSize": recordList.pageSize
             },
             onSuccess: (total) => {
                 this.setState({

@@ -139,6 +139,7 @@ export default defineConfig({
             {
               name: 'SN管理',
               path: '/snmanagement',
+              authority: ['agent'],
               icon: 'https://electric.sxwinstar.net/plateSale/mlgl.png',
               routes: [
                 { path: '/snmanagement', redirect: '/snmanagement/declare' },

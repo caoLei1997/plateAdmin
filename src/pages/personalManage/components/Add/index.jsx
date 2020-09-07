@@ -13,7 +13,7 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
     const [list, setList] = useState([]);
     const [form] = Form.useForm();
 
-    console.log(form.getFieldsValue());
+
 
     const toggleModalVisible = visible => {
         form.resetFields();
@@ -45,6 +45,9 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
     const add = (values) => {
         if (!checkSelect(values)) return false;
         toggleShowForm(true);
+
+
+
         setList([...list, {
             ...values,
             agentOutletsId: values.outlets.split('-')[0],
@@ -59,6 +62,10 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
             message.error('请先添加人员');
             return;
         };
+
+        const fromData = form.getFieldsValue();
+        // const { isEnableAccount } = form.getF÷ieldsValue();
+
         const data = [];
         list.forEach((item) => {
             data.push({
@@ -71,7 +78,7 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
         })
         dispatch({
             type: 'personalList/add',
-            payload: { list: data },
+            payload: { list: data, isEnableAccount: fromData.isEnableAccount },
             onSuccess: (res) => {
                 let { data } = res;
                 console.log(res);
@@ -156,7 +163,7 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
                         onFinish={add}
                         form={form}
                         initialValues={
-                            { outletsVal: '' }
+                            { outletsVal: '', isEnableAccount: false }
                         }
                     >
                         <Row gutter={12}>
@@ -178,11 +185,9 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
                             <Button loading={addLoading} type="primary" htmlType="submit" className='search-button mr-8'>添加</Button>
                             <Button className='search-button' onClick={() => toggleShowForm(false)}>取消</Button>
                         </div>
-                        <div>
-                            <Form.Item name='allRun'>
-                                <Checkbox value='全部启用' >全部启用</Checkbox>
-                            </Form.Item>
-                        </div>
+                        <Form.Item name="isEnableAccount" valuePropName="checked">
+                            <Checkbox>全部启用</Checkbox>
+                        </Form.Item>
                     </Form>
                     :
                     <p className={styles.add_text} onClick={() => toggleShowForm(true)}>
