@@ -8,14 +8,14 @@
 export default {
   dev: {
     '/cjj-api/': {
-      target: 'http://192.168.118.21:9090',
+      target: 'http://vehicle.natapp1.cc/',
       changeOrigin: true,
       pathRewrite: {
         '/cjj-api/': '',
       },
     },
     '/vehicle-pre/': {
-      target: 'http://vehicle.sxeccellentdriving.com',
+      target: 'http://vehicle.natapp1.cc/',
       // target: 'http://wechat.sxeccellentdriving.com',
       // target: '113.142.56.124:8080',
       changeOrigin: true,

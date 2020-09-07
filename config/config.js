@@ -16,8 +16,8 @@ export default defineConfig({
   devServer: {
     prot: 4200,
   },
-  publicPath: '/plateSale/',
-  outputPath: '/plateSale',
+  publicPath: './',
+  outputPath: 'plateSale',
   antd: {},
   analytics: GA_KEY
     ? {
