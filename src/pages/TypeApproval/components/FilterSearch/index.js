@@ -34,6 +34,8 @@ const FilterSearch = ({ typeApproval, getList }) => {
                         <Form.Item label='品牌厂家' name='agentOutletsId'>
                             <Select placeholder='品牌厂家'>
                                 {
+                                    agentList &&
+                                    agentList.length &&
                                     agentList.map(item => <Select.Option
                                         key={item.id}
                                         value={item.id}

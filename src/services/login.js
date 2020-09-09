@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 export async function fakeAccountLogin(params) {
-  let url = '/agent/v1/agentOutlets/loginByVerify';
+  let url = '/manager/v1/agentOutlets/loginByVerify';
   let data = {
     'serialNumber': params.serialNumber,
     'phoneNumber': params.mobile,
@@ -10,7 +10,7 @@ export async function fakeAccountLogin(params) {
   }
 
   if (process.env.NODE_ENV === 'development' || process.env.REACT_APP_ENV === 'buildtest') {
-    url = '/agent/v1/agentOutlets/login';
+    url = '/manager/v1/agentOutlets/login';
     data = {
       userName: params.mobile,
       password: params.captcha,

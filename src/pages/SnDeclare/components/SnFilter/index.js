@@ -29,20 +29,6 @@ const FilterSearch = ({ snDeclare, getList }) => {
             >
                 <Row gutter={24}>
                     <Col span={6}>
-                        <Form.Item label='品牌厂家' name='agentOutletsId'>
-                            <Select placeholder='品牌厂家'>
-                                {
-                                    agentList.map(item => <Select.Option
-                                        key={item.id}
-                                        value={item.id}
-                                    >
-                                        {item.name}
-                                    </Select.Option>)
-                                }
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
                         <Form.Item label='批次名称' name='batchName'>
                             <Input placeholder='批次名称'></Input>
                         </Form.Item>

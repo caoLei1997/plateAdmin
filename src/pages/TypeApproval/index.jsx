@@ -54,8 +54,8 @@ const TypeApproval = ({ dispatch, typeApproval }) => {
                     return <div className='font-pending'>待审核</div>
                 } else if (approvalStatus == 2) {
                     return <div className='font-red'>未通过</div>
-                } else {
-                    return <div className='font-success'>通过</div>
+                } else if (approvalStatus == 3) {
+                    return <div className='font-success'>已通过</div>
                 }
             }
         },

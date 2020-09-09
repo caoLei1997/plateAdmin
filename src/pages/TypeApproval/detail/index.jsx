@@ -124,6 +124,8 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                         style={{ width: '220px' }}
                     >
                         {
+                            detailModelList &&
+                            detailModelList.length &&
                             detailModelList.map(item => <Select.Option
                                 key={item.id}
                                 value={item.modelName}

@@ -53,7 +53,7 @@ function AddAuthority({
         addAccount(payload).then(({ retCode, retMsg }) => {
             if (retCode == '0000') {
                 Message.success(retMsg)
-                getList()
+                getList({ pageIndex: 1 })
                 visibleFn()
                 form.resetFields()
             }
@@ -77,6 +77,7 @@ function AddAuthority({
         { label: '车辆管理', value: '车辆管理' },
         { label: '备案管理', value: '备案管理' },
         { label: '权限管理', value: '权限管理' },
+        { label: 'SN管理', value: 'SN管理' },
     ]
     // 权限介绍
     const functionDisplay = (authority) => {
@@ -86,10 +87,10 @@ function AddAuthority({
                 key='1'
                 disabled
                 options={authorityArr}
-                defaultValue={['车辆管理']}
+                defaultValue={['车辆管理', 'SN管理']}
             />
         }
-        if (authority == '2' && authority != null && authority != '超级管理员') {
+        if ((authority == '2' || authority == '3') && authority != null && authority != '超级管理员') {
             return <Checkbox.Group
                 key='2'
                 disabled

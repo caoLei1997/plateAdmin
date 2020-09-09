@@ -62,12 +62,13 @@ export default {
                 payload: res
             })
         },
-        *reqUpload({ payload }, { call, put }) {
+        *reqUpload({ payload, onSuccess }, { call, put }) {
             const res = yield call(snUpload, payload.formData)
             yield put({
                 type: 'changeUpload',
                 payload: res
             })
+            onSuccess()
         }
     },
     reducers: {

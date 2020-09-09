@@ -1,14 +1,14 @@
 import request from '@/utils/request';
 import { queryJsonToString } from '@/commonFun';
 export async function authorityList(data) {
-  return request('/agent/v1.1/DealerPersonnel/accountList', {
+  return request('/manager/v1.1/DealerPersonnel/accountList', {
     method: 'POST',
     data
   });
 }
 
 export async function addAccount(data) {
-  return request('/agent/v1.1/DealerPersonnel/addLicenseSalesManagementAccount', {
+  return request('/manager/v1.1/DealerPersonnel/addLicenseSalesManagementAccount', {
     method: 'POST',
     data
   });
@@ -17,7 +17,7 @@ export async function addAccount(data) {
 
 
 export async function getRoles() {
-  return request('/agent/v1.1/DealerPersonnel/getRoles', {
+  return request('/manager/v1.1/DealerPersonnel/getRoles', {
     method: 'GET',
   });
 }
@@ -25,21 +25,21 @@ export async function getRoles() {
 
 
 export async function getAgent() {
-  return request('/agent/v1.1/DealerPersonnel/getAgentOutletsByType?type=1', {
+  return request('/manager/v1.1/DealerPersonnel/getAgentOutletsByType?type=1', {
     method: 'GET',
   });
 }
 
 
 export async function reqModifyStatus(data) {
-  return request(`/agent/v1.1/DealerPersonnel/enableOrDisableAccount?${queryJsonToString(data)}`, {
+  return request(`/manager/v1.1/DealerPersonnel/enableOrDisableAccount?${queryJsonToString(data)}`, {
     method: 'GET',
   });
 }
 
 
 export async function reqDetachment() {
-  return request(`/agent/v1.1/DealerPersonnel/getAgentOutletsByType?type=2`, {
+  return request(`/manager/v1.1/DealerPersonnel/getAgentOutletsByType?type=2`, {
     method: 'GET',
   });
 }
@@ -47,13 +47,13 @@ export async function reqDetachment() {
 
 
 export async function getCityTree() {
-  return request(`/agent/v1.1/DealerPersonnel/getCityTree`, {
+  return request(`/manager/v1.1/DealerPersonnel/getCityTree`, {
     method: 'GET',
   });
 }
 
 export async function getBrigadeByCityAndRegion(data) {
-  return request(`/web/v1/batchModelWeb/getBrigadeBycityAndRegion?${queryJsonToString(data)}`, {
+  return request(`/manager/web/v1/batchModelWeb/getBrigadeBycityAndRegion?${queryJsonToString(data)}`, {
     method: 'GET',
   });
 }

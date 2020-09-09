@@ -23,13 +23,21 @@ export default {
     effects: {
         *getList({ payload }, { call, put }) {
             let { pageSize, pageIndex, filterValue } = payload;
+
+            console.log(payload);
+            
+            yield put({
+                type: 'changeFilter',
+                payload: {
+                    filterValue,
+                    pageIndex,
+                    pageSize,
+                }
+            })
             const res = yield call(authorityList, { pageSize, pageIndex, ...filterValue })
             yield put({
                 type: 'changeList',
                 payload: {
-                    filterValue: filterValue,
-                    pageIndex,
-                    pageSize,
                     ...res
                 }
             })
@@ -64,12 +72,19 @@ export default {
     },
     reducers: {
         changeList(state, { payload }) {
-            let filter = payload.filterValue;
+
             return {
                 ...state,
                 ...payload,
-                pageIndex: filter.pageIndex ? filter.pageIndex : payload.pageIndex,
                 total: payload.data.total
+            }
+        },
+
+        changeFilter(state, { payload }) {
+        
+            return {
+                ...state,
+                ...payload,
             }
         },
         changeFRoles(state, { payload: { agent, res, detachment, cityTree } }) {

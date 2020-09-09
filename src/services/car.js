@@ -15,60 +15,60 @@ export async function getMeansList() {
 
 
 export async function requestCarMeansList(data) {
-  return request('/agent/v1.1/VehicleManageController/vehicleManagePageList', {
+  return request('/manager/v1.1/VehicleManageController/vehicleManagePageList', {
     method: 'POST',
     data
   });
 }
 
 export async function requestCarMeansDetail(data) {
-  return request(`/agent/v1.1/VehicleManageController/getVehicleDetail?${queryJsonToString(data)}`, {
+  return request(`/manager/v1.1/VehicleManageController/getVehicleDetail?${queryJsonToString(data)}`, {
     method: 'GET'
   });
 }
 
 export async function requestCarMeansDetailPass(data) {
-  return request(`/agent/v1.1/VehicleManageController/vehicleAuditPass`, {
+  return request(`/manager/v1.1/VehicleManageController/vehicleAuditPass`, {
     method: 'POST',
     data
   });
 }
 
 export async function requestCarMeansDetailNotPass(data) {
-  return request(`/agent/v1.1/VehicleManageController/vehicleAuditFaildToPass`, {
+  return request(`/manager/v1.1/VehicleManageController/vehicleAuditFaildToPass`, {
     method: 'POST',
     data
   });
 }
 
 export async function requestCarPlateAndName(data) {
-  return request(`/agent/v1.1/VehicleManageController/getNumberByCityName?${queryJsonToString(data)}`, {
+  return request(`/manager/v1.1/VehicleManageController/getNumberByCityName?${queryJsonToString(data)}`, {
     method: 'GET'
   });
 }
 
 export async function requestCarDistributeList(data) {
-  return request('/agent/v1.1/DistributePlateNumberRecordController/pageList', {
+  return request('/manager/v1.1/DistributePlateNumberRecordController/pageList', {
     method: 'POST',
     data
   });
 }
 
 export async function requestCarDistributeCensus(data) {
-  return request(`/agent/v1.1/DistributePlateNumberRecordController/distributionInfo?${queryJsonToString(data)}`, {
+  return request(`/manager/v1.1/DistributePlateNumberRecordController/distributionInfo?${queryJsonToString(data)}`, {
     method: 'GET'
   });
 }
 
 export async function requestCarDistributeSurplus(data) {
-  return request(`/agent/v1.1/DistributePlateNumberRecordController/inventorPageListByPlateNumber`, {
+  return request(`/manager/v1.1/DistributePlateNumberRecordController/inventorPageListByPlateNumber`, {
     method: 'POST',
     data
   });
 }
 
 export async function requestCarPlatePrefixList() {
-  return request(`/agent/v1.1/DistributePlateNumberRecordController/getAllPrefix`, {
+  return request(`/manager/v1.1/DistributePlateNumberRecordController/getAllPrefix`, {
     method: 'GET'
   });
 }

@@ -17,11 +17,6 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
             key: 'applyAt',
         },
         {
-            title: '品牌厂家',
-            dataIndex: 'agentOutletsName',
-            key: 'agentOutletsName',
-        },
-        {
             title: '批次名称',
             dataIndex: 'batchName',
             key: 'batchName',
@@ -148,17 +143,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
     // 批次SN数弹出层结束
 
     // 上传SN申报
-    const uploadSnExcel = (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        dispatch({
-            type: 'snDeclare/reqUpload',
-            payload: { formData },
-            onSuccess: () => {
-                getList({});
-            }
-        })
-    }
+  
 
     const { content, batchTotal, batchList } = snDeclare;
 
@@ -166,7 +151,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
         <PageHeaderWrapper className={styles.main}>
             <div>
                 <SnFilter getList={getList}></SnFilter>
-                <AddExcel uploadSnExcel={uploadSnExcel}></AddExcel>
+                <AddExcel></AddExcel>
                 <Table
                     rowKey='id'
                     dataSource={content}

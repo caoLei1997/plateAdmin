@@ -8,7 +8,7 @@
 export default {
   dev: {
     '/cjj-api/': {
-      target: 'http://vehicle.natapp1.cc/',
+      target: 'http://vehicle.natapp1.cc/agent',
       changeOrigin: true,
       pathRewrite: {
         '/cjj-api/': '',

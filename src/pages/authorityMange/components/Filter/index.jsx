@@ -2,12 +2,12 @@ import React from 'react';
 import { Form, Input, Button, Select, Row, Col } from 'antd';
 import { connect } from 'umi'
 
-const Filter = ({ dispatch, authorityList, getList }) => {
+const Filter = ({ getList }) => {
     const [form] = Form.useForm();
     const { Option } = Select;
     const onFinish = () => {
         const filterValue = form.getFieldsValue()
-        getList({ ...filterValue, pageIndex: 1 })
+        getList({ filterValue, pageIndex: 1 })
     }
     const rolesList = [
         { label: "超级管理员", value: '0' },
@@ -53,6 +53,4 @@ const Filter = ({ dispatch, authorityList, getList }) => {
     );
 }
 
-export default connect(
-    ({ authorityList }) => ({ authorityList: authorityList })
-)(Filter);
+export default Filter;

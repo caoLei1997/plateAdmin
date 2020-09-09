@@ -12,8 +12,7 @@ const AuthorityTable = ({
     login
 }) => {
     const { confirm } = Modal;
-    const [pageSize, setPageSize] = useState(authorityList.pageSize)
-    const [pageIndex, setPageIndex] = useState(authorityList.pageIndex)
+    const [id, setId] = useState('2020-22');
     // table
     const columns = [
         {
@@ -120,35 +119,38 @@ const AuthorityTable = ({
             content: '启用后该管理员将恢复账号角色对应管理权限，确认要启用吗？',
             cancelText: '取消',
             okText: '确认',
-            onOk() {
+            onOk: () => {
                 dispatch({
                     type: 'authorityList/modifyStatus',
                     payload: { status: 0, id }
                 })
+
+                setId(id + new Date().getTime())
+                getList({})
             },
         });
     }
     // 条数
     // console.log('page', authorityList);
     const handlePaginationChange = (pageIndex) => {
-        setPageIndex(pageIndex)
         getList({
-            ...authorityList.filterValue,
             pageIndex,
-            pageSize
         })
     }
     // 分页
     const pagination = {
         total: authorityList.total,
-        pageIndex: pageIndex,
-        pageSize: pageSize,
+        pageIndex: authorityList.pageIndex,
+        pageSize: authorityList.pageSize,
         onChange: handlePaginationChange,
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
         showQuickJumper: true,
-        onShowSizeChange: (pageIndex, size) => {
-            setPageSize(size)
+        onShowSizeChange: (pageIndex, pageSize) => {
+            getList({
+                pageIndex,
+                pageSize
+            })
         }
     }
     // 弹窗prop
@@ -165,7 +167,7 @@ const AuthorityTable = ({
         setIsVisible(true)
     }
     return (
-        <div className='mt-32'>
+        <div className='mt-32' key={id}>
             <Row justify='end'>
                 <Col>
                     <Button

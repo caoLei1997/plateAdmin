@@ -5,8 +5,11 @@ import AuthorityTable from './components/AuthorityTable'
 import { connect } from 'umi'
 import styles from './index.less';
 const AuthorityManage = ({ authorityList, dispatch }) => {
-    const getList = (filterValue = {}) => {
-        const { pageIndex, pageSize } = authorityList
+    const getList = ({
+        filterValue = authorityList.filterValue,
+        pageIndex = authorityList.pageIndex,
+        pageSize = authorityList.pageSize
+    }) => {
         dispatch({
             type: 'authorityList/getList',
             payload: {
@@ -21,13 +24,10 @@ const AuthorityManage = ({ authorityList, dispatch }) => {
             type: 'authorityList/getRoles'
         })
     }
-
     useEffect(() => {
-        getList()
+        getList({pageIndex:1})
         getRoles()
     }, [])
-
-
     return (
         <PageHeaderWrapper className={styles.main}>
             <div>

@@ -7,15 +7,20 @@ import { connect } from 'umi'
 
 const { Text } = Typography;
 
-function AddExcel({ uploadSnExcel, snDeclare, uploadLoading, dispatch }) {
+function AddExcel({  snDeclare, uploadLoading, dispatch }) {
     const [addSnVisible, setAddSnVisible] = useState(false);
-    const [fileList, setFileList] = useState([]);
+    const [fileList, setFileList] = useState(null);
     const [form] = Form.useForm();
+
+    const handleCancel = () => {
+        setFileList(null);
+        setAddSnVisible(false)
+    }
     const uploadExcelAttr = {
         accept: '.xls',
         showUploadList: true,
         onRemove: (file) => {
-            setFileList([]);
+            setFileList(null);
             dispatch({
                 type: 'snDeclare/clearExcelData'
             })
@@ -27,6 +32,20 @@ function AddExcel({ uploadSnExcel, snDeclare, uploadLoading, dispatch }) {
         fileList
     }
 
+
+    const uploadSnExcel = (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        dispatch({
+            type: 'snDeclare/reqUpload',
+            payload: { formData },
+            onSuccess: () => {
+                getList({});
+                setAddSnVisible(false)
+            }
+        })
+    }
+    
     const handleAddSnVisible = async () => {
         if (!fileList || fileList.length === 0) {
             setFileList([]);
@@ -34,7 +53,9 @@ function AddExcel({ uploadSnExcel, snDeclare, uploadLoading, dispatch }) {
         }
         await uploadSnExcel(fileList[0])
     }
-    const { errorData, errorNum,uploadStatus } = snDeclare
+
+
+    const { errorData, errorNum, uploadStatus } = snDeclare
     const excelColumns = [
         {
             title: '整车编码SN',
@@ -68,7 +89,7 @@ function AddExcel({ uploadSnExcel, snDeclare, uploadLoading, dispatch }) {
                 title="新增SN申报"
                 visible={addSnVisible}
                 onOk={handleAddSnVisible}
-                onCancel={() => { setAddSnVisible(false) }}
+                onCancel={handleCancel}
                 okText='导入'
             >
                 <Form
@@ -92,7 +113,7 @@ function AddExcel({ uploadSnExcel, snDeclare, uploadLoading, dispatch }) {
                         </Form.Item>
                         <div className={styles.uploadFile}>
                             <p className='mt-8'>
-                                <a href='/plateSale/snDeclare.xls' download='品牌厂家SN申报模板' className='font-underline'>模板下载</a>
+                                <a href='./snDeclare.xls' download='品牌厂家SN申报模板' className='font-underline'>模板下载</a>
                             </p>
                         </div>
                     </div>

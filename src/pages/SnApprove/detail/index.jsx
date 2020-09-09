@@ -147,6 +147,8 @@ const SnApproveDetail = ({ dispatch, match, snApprove }) => {
                          </div>
                         <Collapse>
                             {
+                                detail.modelSnList &&
+                                detail.modelSnList.length &&
                                 detail.modelSnList.map((item, index) =>
                                     (
                                         <Panel

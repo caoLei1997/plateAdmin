@@ -67,7 +67,7 @@ const FormAddOrEidtBrand = ({ toggleVisible, submitFun, loading, snData }) => {
                 <Button>选择文件</Button>
             </Upload>
             {(fileList && fileList.length === 0) && <Text type="danger">请选择excel文件！</Text>}
-            <p className='mt-8'><a href='/plateSale/excelTemplate.xls' download='经销商SN导入模板' className='font-underline'>模板下载</a></p>
+            <p className='mt-8'><a href='./excelTemplate.xls' download='经销商SN导入模板' className='font-underline'>模板下载</a></p>
         </Form.Item>
         {snData.uploadStatus &&
             <div>
