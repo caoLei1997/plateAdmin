@@ -12,7 +12,7 @@ const DealerSelect = (props) => {
   const [outletsVal, setOutletsVal] = useState('6666666');
   const { city = {}, level = {}, dealer = {} } = formProps;
 
-  
+
   const getCityList = () => {
     dispatch({
       type: 'personalDealer/getCityList'
@@ -68,9 +68,9 @@ const DealerSelect = (props) => {
           <Form.Item name='city' label={city.label || ''} className='mb-16'>
             <Select placeholder={city.placeholder || "选择市区"} onSelect={value => handleSelect(value, 'city')}>
               {showAll && <Option value="">全部市区</Option>}
-              {personalDealerState.city && personalDealerState.city.map(item => (
+              {personalDealerState.city && personalDealerState.city.map((item, index) => (
                 <OptGroup label={item.value}>
-                  {item.children.length > 0 && item.children.map(sItem => <Option value={`${item.value}-${sItem.value}`}>{sItem.value}</Option>)}
+                  {item.children.length > 0 && item.children.map((sItem, sIndex) => <Option key={index + '-' + sIndex} value={`${item.value}-${sItem.value}`}>{sItem.value}</Option>)}
                 </OptGroup>
               ))}
             </Select>
@@ -90,12 +90,12 @@ const DealerSelect = (props) => {
             {isAddPersonal ?
               <Select placeholder={dealer.placeholder || "选择所属商户"} onSelect={value => handleSelect(value, 'outlets')}>
                 {showAll && <Option value="">全部网点</Option>}
-                {personalDealerState.outlets && personalDealerState.outlets.map(item => <Option value={`${item.id}-${item.name}`}>{item.name}</Option>)}
+                {personalDealerState.outlets && personalDealerState.outlets.map((item,index) => <Option key={index} value={`${item.id}-${item.name}`}>{item.name}</Option>)}
               </Select>
               :
               <Select placeholder={dealer.placeholder || "选择所属商户"} onSelect={value => handleSelect(value, 'outlets')}>
                 {showAll && <Option value="">全部网点</Option>}
-                {personalDealerState.outlets && personalDealerState.outlets.map(item => <Option value={item.id}>{item.name}</Option>)}
+                {personalDealerState.outlets && personalDealerState.outlets.map((item,index) => <Option key={index} value={item.id}>{item.name}</Option>)}
               </Select>
             }
           </Form.Item>

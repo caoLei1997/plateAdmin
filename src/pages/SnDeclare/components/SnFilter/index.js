@@ -41,6 +41,7 @@ const FilterSearch = ({ snDeclare, getList }) => {
                     <Col span={6}>
                         <Form.Item label='审核状态' name='approvalStatus'>
                             <Select placeholder='审核状态'>
+                                <Select.Option value=''>全部</Select.Option>
                                 <Select.Option value='1'>待审核</Select.Option>
                                 <Select.Option value='2'>未通过</Select.Option>
                                 <Select.Option value='3'>已通过</Select.Option>

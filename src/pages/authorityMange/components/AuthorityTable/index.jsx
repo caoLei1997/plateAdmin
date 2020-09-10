@@ -9,11 +9,8 @@ const AuthorityTable = ({
     dispatch,
     getList,
     tableLoading,
-    login
 }) => {
     const { confirm } = Modal;
-    const [id, setId] = useState('2020-22');
-    // table
     const columns = [
         {
             title: '姓名',
@@ -42,7 +39,9 @@ const AuthorityTable = ({
                 return (
                     <div>
                         {translation(type)}
-                        {recode.agentOutletsName && `(${recode.agentOutletsName})`}
+                        <p>
+                            {recode.agentOutletsName && `(${recode.agentOutletsName})`}
+                        </p>
                     </div>
                 )
             }
@@ -107,7 +106,10 @@ const AuthorityTable = ({
             onOk() {
                 dispatch({
                     type: 'authorityList/modifyStatus',
-                    payload: { status: 1, id }
+                    payload: { status: 1, id },
+                    onSuccess: () => {
+                        getList({})
+                    }
                 })
             },
         });
@@ -122,11 +124,13 @@ const AuthorityTable = ({
             onOk: () => {
                 dispatch({
                     type: 'authorityList/modifyStatus',
-                    payload: { status: 0, id }
+                    payload: { status: 0, id },
+                    onSuccess: () => {
+                        getList({})
+                    }
                 })
 
-                setId(id + new Date().getTime())
-                getList({})
+                // setId(id + new Date().getTime())
             },
         });
     }
@@ -135,18 +139,22 @@ const AuthorityTable = ({
     const handlePaginationChange = (pageIndex) => {
         getList({
             pageIndex,
+            pageSize: size
         })
     }
+
+    const [size, setSize] = useState(authorityList.pageSize);
     // 分页
     const pagination = {
         total: authorityList.total,
         pageIndex: authorityList.pageIndex,
-        pageSize: authorityList.pageSize,
         onChange: handlePaginationChange,
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
         showQuickJumper: true,
+        pageSize: size,
         onShowSizeChange: (pageIndex, pageSize) => {
+            setSize(pageSize)
             getList({
                 pageIndex,
                 pageSize
@@ -167,7 +175,8 @@ const AuthorityTable = ({
         setIsVisible(true)
     }
     return (
-        <div className='mt-32' key={id}>
+        // <div className='mt-32' key={id}>
+        <div className='mt-32'>
             <Row justify='end'>
                 <Col>
                     <Button
@@ -184,17 +193,17 @@ const AuthorityTable = ({
                 <Table
                     loading={tableLoading}
                     rowKey='id'
-                    dataSource={authorityList.data ? authorityList.data.content : []}
+                    dataSource={authorityList.content ? authorityList.content : []}
                     columns={columns}
                     pagination={pagination}>
                 </Table>
             </div>
             <AddAuthority
-                key={rows ? rows.id + new Date().getTime() : 1}
+                key={rows ? rows.id + new Date().getTime() : ''}
                 type={type}
                 isVisible={isVisible}
                 visibleFn={visibleFn}
-                rows={rows}
+                rowss={rows}
                 getList={getList}
             >
             </AddAuthority>
@@ -203,12 +212,12 @@ const AuthorityTable = ({
 }
 
 export default connect(
-    ({ authorityList,
+    ({
         loading,
-        login }
-    ) => ({
-        authorityList: authorityList,
-        login,
-        tableLoading: loading.effects['authorityList/getList']
+        authorityList
+
+    }) => ({
+        authorityList,
+        tableLoading: loading.effects['authorityList/getList'],
     })
 )(AuthorityTable);

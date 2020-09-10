@@ -1,9 +1,11 @@
-import { PAGESIZE } from "@/globalConstant"
+import { PAGESIZE, RETCODESUCCESS } from "@/globalConstant"
 import {
     snDeclareList,
     snBatchList,
     snUpload
 } from '@/services/snDeclare';
+
+import { message } from 'antd';
 
 import {
     typeApproveAgent
@@ -12,7 +14,7 @@ import {
 const initialState = {
     pageIndex: 1,
     total: 0,
-    pageSize: PAGESIZE,
+    pageSize: '20',
     content: [],//列表
     filter: {},//过滤条件
     agentList: [],//经销商列表
@@ -68,7 +70,11 @@ export default {
                 type: 'changeUpload',
                 payload: res
             })
-            onSuccess()
+            if (res.retCode === '0000') {
+                message.success(`导入成功`);
+                onSuccess()
+            }
+
         }
     },
     reducers: {

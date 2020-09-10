@@ -57,6 +57,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
             title: '不通过原因',
             dataIndex: 'notPassReason',
             key: 'notPassReason',
+            width: 300
         },
         // {
         //     title: '操作',
@@ -83,16 +84,17 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
     useEffect(() => {
         getList({})
     }, [])
-
+    const [size, setSize] = useState(snDeclare.pageSize);
     const pagination = {
         total: snDeclare.total,
         current: snDeclare.pageIndex,
-        pageSize: snDeclare.pageSize,
-        onChange: (pageIndex) => { getList({ pageIndex }) },
+        pageSize: size,
+        onChange: (pageIndex) => { getList({ pageIndex, pageSize: size }) },
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
         showQuickJumper: true,
         onShowSizeChange: (pageIndex, pageSize) => {
+            setSize(pageSize)
             getList({ pageIndex, pageSize })
         }
     }
@@ -143,7 +145,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
     // 批次SN数弹出层结束
 
     // 上传SN申报
-  
+
 
     const { content, batchTotal, batchList } = snDeclare;
 
@@ -151,7 +153,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
         <PageHeaderWrapper className={styles.main}>
             <div>
                 <SnFilter getList={getList}></SnFilter>
-                <AddExcel></AddExcel>
+                <AddExcel getList={getList}></AddExcel>
                 <Table
                     rowKey='id'
                     dataSource={content}
@@ -174,6 +176,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
                                 getBatch({ electrombileNumber: value, pageIndex: 1 })
                             }
                         }
+                        value=''
                     />
                     {}
                     <List

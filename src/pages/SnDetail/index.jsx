@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { Table } from 'antd';
 import { connect } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -48,15 +48,17 @@ const SnDetail = ({ dispatch, snDetail, tableLoading }) => {
         getList({})
     }, [])
 
+    const [size, setSize] = useState(snDetail.pageSize);
     const pagination = {
         total: snDetail.total,
         current: snDetail.pageIndex,
-        pageSize: snDetail.pageSize,
-        onChange: (pageIndex) => { getList({ pageIndex }) },
+        pageSize: size,
+        onChange: (pageIndex) => { getList({ pageIndex, pageSize: size }) },
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
         showQuickJumper: true,
         onShowSizeChange: (pageIndex, pageSize) => {
+            setSize(pageSize)
             getList({ pageIndex, pageSize })
         }
     }

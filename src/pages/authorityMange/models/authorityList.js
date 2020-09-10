@@ -14,7 +14,8 @@ const initialState = {
     pageSize: PAGESIZE,
     pageIndex: 1,
     filterValue: {},
-    brigadeList: []
+    brigadeList: [],
+    content: []
 }
 
 export default {
@@ -23,9 +24,6 @@ export default {
     effects: {
         *getList({ payload }, { call, put }) {
             let { pageSize, pageIndex, filterValue } = payload;
-
-            console.log(payload);
-            
             yield put({
                 type: 'changeFilter',
                 payload: {
@@ -37,9 +35,7 @@ export default {
             const res = yield call(authorityList, { pageSize, pageIndex, ...filterValue })
             yield put({
                 type: 'changeList',
-                payload: {
-                    ...res
-                }
+                payload: res
             })
         },
         *getRoles({ payload }, { call, put }) {
@@ -52,36 +48,36 @@ export default {
                 payload: { res, agent, detachment, cityTree }
             })
         },
-        *modifyStatus({ payload }, { put, call }) {
+        *modifyStatus({ payload, onSuccess }, { put, call }) {
             const res = yield call(reqModifyStatus, { ...payload })
             if (res.retCode == '0000') {
                 yield put({
                     type: 'changeListStatus',
                     payload: payload
                 })
+                onSuccess()
             }
         },
 
-        *getCityAndRegion({ payload }, { put, call }) {
-            const res = yield call(getBrigadeByCityAndRegion, { ...payload })
-            yield put({
-                type: 'changeBrigade',
-                payload: res.data
-            })
-        }
+        // *getCityAndRegion({ payload }, { put, call }) {
+        //     const res = yield call(getBrigadeByCityAndRegion, { ...payload })
+        //     yield put({
+        //         type: 'changeBrigade',
+        //         payload: res.data
+        //     })
+        // }
     },
     reducers: {
         changeList(state, { payload }) {
-
+            const { data } = payload;
+            console.log(data);
             return {
                 ...state,
-                ...payload,
-                total: payload.data.total
+                ...data,
             }
         },
 
         changeFilter(state, { payload }) {
-        
             return {
                 ...state,
                 ...payload,
@@ -97,8 +93,8 @@ export default {
             }
         },
         changeListStatus(state, { payload }) {
-            const { data } = state;
-            data.content.map(item => {
+            const { content } = state;
+            content.map(item => {
                 if (item.id == payload.id) {
                     item.status = payload.status
                 }
@@ -106,12 +102,14 @@ export default {
             })
             return { ...state, }
         },
-        changeBrigade(status, { payload }) {
-            return {
-                ...status,
-                brigadeList: payload
-            }
+        // changeBrigade(state, { payload }) {
+        //     console.log('222',state,payload);
+        //     return {
+        //         ...state,
+        //         // brigadeList: payload
+        //     }
 
-        }
+
+        // }
     }
 }

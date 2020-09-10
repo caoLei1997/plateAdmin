@@ -104,7 +104,7 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                     <Descriptions.Item label="审核状态">
                         <div className="inline" style={{ display: 'inline-block' }}>
                             {
-                                detailData.approvalStatus == 1
+                                detailData.approvalStatus && detailData.approvalStatus == 1
                                     ? <div className='font-pending'>待审核</div>
                                     : (detailData.approvalStatus == 2)
                                         ? <div className='font-red'>未通过</div>
@@ -229,6 +229,7 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                     </Descriptions.Item>
                 </Descriptions>
                 {
+                    detailData.approvalStatus &&
                     detailData.approvalStatus != 1 &&
                     (
                         <>
@@ -238,6 +239,7 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                                 rowKey={"id"}
                                 columns={columns}
                                 dataSource={detailData.logs}
+                                pagination={false}
                             >
                             </Table>
                         </>
@@ -258,6 +260,7 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                     }
                 </Col>
                 {
+                    detailData.approvalStatus &&
                     detailData.approvalStatus == 1 &&
                     <Col span={12}>
                         <div className='inline text-center'>

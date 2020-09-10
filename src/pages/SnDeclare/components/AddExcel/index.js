@@ -7,7 +7,7 @@ import { connect } from 'umi'
 
 const { Text } = Typography;
 
-function AddExcel({  snDeclare, uploadLoading, dispatch }) {
+function AddExcel({  snDeclare, dispatch,getList }) {
     const [addSnVisible, setAddSnVisible] = useState(false);
     const [fileList, setFileList] = useState(null);
     const [form] = Form.useForm();
@@ -31,8 +31,6 @@ function AddExcel({  snDeclare, uploadLoading, dispatch }) {
         },
         fileList
     }
-
-
     const uploadSnExcel = (file) => {
         const formData = new FormData();
         formData.append('file', file);
@@ -107,7 +105,7 @@ function AddExcel({  snDeclare, uploadLoading, dispatch }) {
                             rules={[{ required: true, message: '请选择上传文件' }]}
                         >
                             <Upload {...uploadExcelAttr}>
-                                <Button loading={uploadLoading}>上传文件</Button>
+                                <Button>上传文件</Button>
                             </Upload>
                             {(fileList && fileList.length === 0) && <Text type="danger">请选择excel文件！</Text>}
                         </Form.Item>
@@ -135,21 +133,7 @@ function AddExcel({  snDeclare, uploadLoading, dispatch }) {
                                 </h3>
                             </>
                         )
-
                     }
-                    {
-                        uploadStatus == 1 && (
-                            <>
-                                <Alert
-                                    message="提交成功"
-                                    type="success"
-                                    showIcon
-                                />
-                            </>
-                        )
-                    }
-
-
                 </Form>
             </Modal>
         </div>
@@ -159,6 +143,5 @@ function AddExcel({  snDeclare, uploadLoading, dispatch }) {
 export default connect(
     ({ snDeclare, loading }) => ({
         snDeclare,
-        uploadLoading: loading.effects['snDeclare/reqUpload']
     })
 )(AddExcel)

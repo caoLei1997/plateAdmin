@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import FilterSearch from './components/FilterSearch'
 import styles from './index.less'
@@ -75,15 +75,17 @@ const TypeApproval = ({ dispatch, typeApproval }) => {
         },
     ];
     // tab 分页
+    const [size, setSize] = useState(typeApproval.pageSize);
     const pagination = {
         total: typeApproval.total,
         current: typeApproval.pageIndex,
-        pageSize: typeApproval.pageSize,
-        onChange: (pageIndex) => { getList({ pageIndex }) },
+        pageSize: size,
+        onChange: (pageIndex) => { getList({ pageIndex, pageSize: size }) },
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
         showQuickJumper: true,
         onShowSizeChange: (pageIndex, pageSize) => {
+            setSize(pageSize)
             getList({ pageIndex, pageSize })
         }
     }

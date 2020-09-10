@@ -54,6 +54,7 @@ const SnApprove = ({ dispatch, snApprove, tableLoading }) => {
             title: '不通过原因',
             dataIndex: 'notPassReason',
             key: 'notPassReason',
+            width: 300,
         },
         {
             title: '操作',
@@ -80,17 +81,19 @@ const SnApprove = ({ dispatch, snApprove, tableLoading }) => {
     }, [])
 
     const { content } = snApprove;
+    const [size, setSize] = useState(snApprove.pageSize);
     const pagination = {
         total: snApprove.total,
         current: snApprove.pageIndex,
-        pageSize: snApprove.pageSize,
+        pageSize: size,
         onChange: (pageIndex) => {
-            getList({ pageIndex })
+            getList({ pageIndex, pageSize: size })
         },
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
         showQuickJumper: true,
         onShowSizeChange: (pageIndex, pageSize) => {
+            setSize(pageSize)
             getList({ pageIndex, pageSize })
         }
     }

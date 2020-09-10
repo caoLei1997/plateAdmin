@@ -4,6 +4,7 @@ import Filter from './components/Filter'
 import AuthorityTable from './components/AuthorityTable'
 import { connect } from 'umi'
 import styles from './index.less';
+import login from '../user/login';
 const AuthorityManage = ({ authorityList, dispatch }) => {
     const getList = ({
         filterValue = authorityList.filterValue,
@@ -27,6 +28,7 @@ const AuthorityManage = ({ authorityList, dispatch }) => {
     useEffect(() => {
         getList({pageIndex:1})
         getRoles()
+      
     }, [])
     return (
         <PageHeaderWrapper className={styles.main}>
@@ -38,4 +40,4 @@ const AuthorityManage = ({ authorityList, dispatch }) => {
     );
 }
 
-export default connect(({ authorityList }) => ({ authorityList: authorityList }))(AuthorityManage);
+export default connect(({ authorityList }) => ({ authorityList }))(AuthorityManage);

@@ -8,21 +8,28 @@ import {
     Message,
     Cascader
 } from 'antd'
+
+
 import { connect } from 'umi';
-import { addAccount } from '@/services/authority';
+import { addAccount, getBrigadeByCityAndRegion } from '@/services/authority';
 function AddAuthority({
     authorityList,
     dispatch,
     isVisible = true,
     visibleFn = null,
     type,
-    rows = null,
+    rowss = null,
     getList
 }) {
+ 
+    const rows = rowss ? { ...rowss } : null
+
+
     const { Option } = Select
     const [form] = Form.useForm()
     let [authority, setAuthority] = useState(rows && rows.type)
-    const [agentOutlesName, setAgentOutlesName] = useState(rows && rows.agentOutlesName)
+    const [agentOutlesName, setAgentOutlesName] = useState(rows ? rows.agentOutlesName : undefined)
+    // const [isVisible, setIsVisible] = useState(true)
     // 选择角色
     const rolesList = [
         { label: "超级管理员", value: '0' },
@@ -30,7 +37,6 @@ function AddAuthority({
         { label: "支队管理员", value: '2' },
         { label: "大队管理员", value: '3' }
     ]
-
     // 弹窗确定
     const handleOk = async () => {
         // const values = await form.validateFields();
@@ -53,7 +59,7 @@ function AddAuthority({
         addAccount(payload).then(({ retCode, retMsg }) => {
             if (retCode == '0000') {
                 Message.success(retMsg)
-                getList({ pageIndex: 1 })
+                getList({})
                 visibleFn()
                 form.resetFields()
             }
@@ -105,15 +111,13 @@ function AddAuthority({
         setAgentOutlesName(agentOutletsName)
     }
     // 选择地区
-    function onChange(value) {
+    const [brigadeList, setBrigadeList] = useState([]);
+    function handleCityArea(value) {
         const [city, region] = value;
-        dispatch({
-            type: 'authorityList/getCityAndRegion',
-            payload: {
-                "city": city,
-                "region": region
-            },
-        })
+        form.setFieldsValue({ agentOutletsId: undefined })
+        getBrigadeByCityAndRegion({ city, region }).then((res => {
+            setBrigadeList(res.data)
+        }))
     }
     function displayRender(label) {
         return label.join('-');
@@ -161,9 +165,9 @@ function AddAuthority({
                             onChange={changeAuthority}
                         >
                             {
-                                rolesList.map(item =>
+                                rolesList.map((item, index) =>
                                     <Option
-                                        key={item.value}
+                                        key={index}
                                         label={item.label}
                                         value={item.value}
                                     >
@@ -186,8 +190,8 @@ function AddAuthority({
                                     onChange={handleAgent}
                                 >
                                     {
-                                        authorityList.agentList
-                                        &&
+                                        authorityList.agentList &&
+                                        authorityList.agentList.length &&
                                         authorityList.agentList.map(
                                             (item, index) =>
                                                 <Option
@@ -241,7 +245,7 @@ function AddAuthority({
                                         options={authorityList.cityTree}
                                         expandTrigger="hover"
                                         displayRender={displayRender}
-                                        onChange={onChange}
+                                        onChange={handleCityArea}
                                         placeholder='选择市区'
                                     />
                                 </Form.Item>
@@ -253,14 +257,13 @@ function AddAuthority({
                                 >
                                     <Select
                                         placeholder='选择所属大队'
-                                        onChange={handleAgent}
                                     >
                                         {
-                                            authorityList.brigadeList.length &&
-                                            authorityList.brigadeList.map((item, index) => {
+                                            brigadeList &&
+                                            brigadeList.length &&
+                                            brigadeList.map((item) => {
                                                 return <Option
-                                                    key={index}
-                                                    agentOutletsName={item.agentOutlesName}
+                                                    key={item.agentOutlesId}
                                                     value={item.agentOutlesId}
                                                 >
                                                     {item.agentOutlesName}
@@ -269,6 +272,7 @@ function AddAuthority({
                                         }
                                     </Select>
                                 </Form.Item>
+
                             </div>
                         )
                     }

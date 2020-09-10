@@ -28,16 +28,26 @@ const FilterSearch = ({ typeApproval, getList }) => {
                 name="advanced_search"
                 className="ant-advanced-search-form"
                 onFinish={onFinish}
+                initialValues={
+                    {
+                        agentOutletsId: undefined,
+                        batchName: undefined,
+                        applyTimeStart: undefined,
+                        approvalStatus: undefined,
+                        auditTimeStart: undefined
+                    }
+                }
             >
                 <Row gutter={24}>
                     <Col span={6}>
                         <Form.Item label='品牌厂家' name='agentOutletsId'>
                             <Select placeholder='品牌厂家'>
+                                <Select.Option value=''>全部</Select.Option>
                                 {
                                     agentList &&
                                     agentList.length &&
-                                    agentList.map(item => <Select.Option
-                                        key={item.id}
+                                    agentList.map((item, index) => <Select.Option
+                                        key={index}
                                         value={item.id}
                                     >
                                         {item.name}
@@ -59,6 +69,7 @@ const FilterSearch = ({ typeApproval, getList }) => {
                     <Col span={6}>
                         <Form.Item label='审核状态' name='approvalStatus'>
                             <Select placeholder='审核状态'>
+                                <Select.Option value=''>全部</Select.Option>
                                 <Select.Option value='1'>待审核</Select.Option>
                                 <Select.Option value='2'>未通过</Select.Option>
                                 <Select.Option value='3'>已通过</Select.Option>
@@ -82,7 +93,7 @@ const FilterSearch = ({ typeApproval, getList }) => {
 
                 </Row>
             </Form>
-        </div>
+        </div >
 
     );
 };
