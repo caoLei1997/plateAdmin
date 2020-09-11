@@ -10,6 +10,7 @@ const Filter = ({ getList }) => {
         getList({ filterValue, pageIndex: 1 })
     }
     const rolesList = [
+        { label: "全部", value: '' },
         { label: "超级管理员", value: '0' },
         { label: "品牌厂家", value: '1' },
         { label: "支队管理员", value: '2' },

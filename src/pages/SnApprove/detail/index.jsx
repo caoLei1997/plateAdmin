@@ -81,6 +81,19 @@ const SnApproveDetail = ({ dispatch, match, snApprove }) => {
         }
     }
 
+    const handleVideo = (url) => {
+        console.log(url);
+        
+        // const urlIndex = url.indexOf(',')
+        // console.log(urlIndex);
+        // // if () { }
+        // {/* (
+        //                                     detail.inspectionValue.split(',').length
+        //                                         ? detail.inspectionValue.split(',').map((item, index) => <div key={index}>{item}</div>)
+        //                                         : detail.inspectionValue
+        //                                 ) */}
+    }
+
     return (
         <div key={id}>
             <PageHeaderWrapper className='mains' style={{ paddingBottom: '20px' }}>
@@ -120,9 +133,13 @@ const SnApproveDetail = ({ dispatch, match, snApprove }) => {
                                 :
                                 <Descriptions.Item label="视频名称">
                                     {
-                                        detail.inspectionType == 2 &&
-                                        (detail.inspectionValue.split(',').map((item, index) => <div key={index}>{item}</div>))
+
+                                        handleVideo(detail.inspectionValue)
+
+
                                     }
+
+
                                 </Descriptions.Item>
 
                         }
