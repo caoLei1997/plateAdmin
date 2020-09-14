@@ -68,7 +68,7 @@ request.interceptors.request.use((url, options = {}) => {
 
   let queryUrl = url;
   if (process.env.NODE_ENV === 'development') {
-    queryUrl = url;
+    queryUrl = `/cjj-api${url}`;
     // queryUrl = `/cjj-api${url}`; // 开发环境
     // queryUrl = `/vehicle-pre${url}`;
     // queryUrl = `/vehicle/${url}`;
