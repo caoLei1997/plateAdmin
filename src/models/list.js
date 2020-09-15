@@ -12,24 +12,31 @@ const initialState = {
     content: [],
     ids: [],
     city: [],
-    brigadeList: []
+    brigadeList: [],
+    filter:{}
 }
 export default {
     namespace: 'recordList',
     state: { ...initialState },
     effects: {
+
         *getList({ payload }, { call, put }) {
-            const response = yield call(requestRecordList, { ...payload, pageIndex: payload.pageIndex  });
+            const { pageIndex, filter, pageSize } = payload;
+            const response = yield call(requestRecordList, { pageIndex, pageSize, ...filter });
+
+            yield put({
+                type: 'changeFilter',
+                payload: { filter, pageIndex, pageSize }
+            })
             yield put({
                 type: 'changeList',
                 payload: response
             })
             if (response.retCode === RETCODESUCCESS) {
-                // onSuccess(response.data.total);
                 localStorage.setItem('recordList', JSON.stringify(response))
-
             }
         },
+       
         *requestGetCity({ payload }, { call, put }) {
             const response = yield call(requestGetCity, { ...payload });
             yield put({
@@ -56,15 +63,20 @@ export default {
             const { data } = payload;
             return { ...state, city: [...data] };
         },
-        changeBrigade(status, { payload }) {
+        changeBrigade(state, { payload }) {
             console.log(payload);
-            
+
             return {
-                ...status,
+                ...state,
                 brigadeList: payload
             }
+        },
+        changeFilter(state,{payload}){
+            return {
+                ...state,
+                ...payload
+            }
         }
-
     }
 
 }

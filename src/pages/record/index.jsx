@@ -22,9 +22,9 @@ class Record extends Component {
         dispatch({
             type: 'recordList/getList',
             payload: {
-                "pageIndex": recordList.current,
-                "pageSize": recordList.pageSize,
-                ...recordList.filter
+                pageIndex: recordList.current,
+                pageSize: recordList.pageSize,
+                filter:recordList.filter
             },
             onSuccess: (total) => {
                 this.setState({

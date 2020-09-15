@@ -9,20 +9,22 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
     const [form] = Form.useForm();
     const onFinish = data => {
         console.log(data);
-        let { applyTimeStart, auditTimeStart, city } = data
-
+        let { applyTimeStart, auditTimeStart, city } = data;
+        let filter = {
+            ...data,
+            citys: city ? city[0] : '',
+            region: city ? city[1] : '',
+            applyTimeStart: applyTimeStart && formatData(applyTimeStart[0]),
+            applyTimeEnd: applyTimeStart && formatData(applyTimeStart[1]),
+            auditTimeStart: auditTimeStart && formatData(auditTimeStart[0]),
+            auditTimeEnd: auditTimeStart && formatData(auditTimeStart[1]),
+        }
         dispatch({
             type: 'recordList/getList',
             payload: {
-                ...data,
-                citys: city ? city[0] : '',
-                region: city ? city[1] : '',
-                applyTimeStart: applyTimeStart && formatData(applyTimeStart[0]),
-                applyTimeEnd: applyTimeStart && formatData(applyTimeStart[1]),
-                auditTimeStart: auditTimeStart && formatData(auditTimeStart[0]),
-                auditTimeEnd: auditTimeStart && formatData(auditTimeStart[1]),
-                "pageIndex": recordList.current,
-                "pageSize": recordList.pageSize,
+                filter: filter,
+                pageIndex: recordList.current,
+                pageSize: recordList.pageSize,
             },
             onSuccess: () => {
                 console.log(1);
