@@ -22,6 +22,9 @@ const TypeApproval = ({ dispatch, typeApproval }) => {
     }
     useEffect(() => {
         getList({})
+        return () => {
+            getList({ filter: {} })
+        }
     }, [])
     // tab 表头
     const columns = [

@@ -17,15 +17,14 @@ class Record extends Component {
     }
 
     getList = () => {
-        let { dispatch,recordList } = this.props;
-        const {current} = recordList;
-        console.log(current);
-        
+        let { dispatch, recordList } = this.props;
+        const { current } = recordList;
         dispatch({
             type: 'recordList/getList',
             payload: {
-                "pageIndex":recordList.current,
-                "pageSize": recordList.pageSize
+                "pageIndex": recordList.current,
+                "pageSize": recordList.pageSize,
+                ...recordList.filter
             },
             onSuccess: (total) => {
                 this.setState({
@@ -34,7 +33,6 @@ class Record extends Component {
             }
         })
     }
-
     handlePaginationChange = (pages) => {
         this.setState({
             pageIndex: pages
@@ -64,6 +62,7 @@ class Record extends Component {
             {
                 title: '登记人',
                 dataIndex: 'userName',
+                width: 80
             },
             {
                 title: '证件类型',
@@ -128,6 +127,7 @@ class Record extends Component {
                 dataIndex: 'auditTime',
                 sorter: (a, b) => a.auditTime - b.auditTime,
                 render: auditTime => {
+                    if (auditTime == '') return '-'
                     let time = new Date(auditTime);
                     return time.getFullYear() + '年' + time.getMonth() + '月' + time.getDate() + '日'
                 },
@@ -136,7 +136,6 @@ class Record extends Component {
             {
                 title: '不通过原因',
                 dataIndex: 'notPassReason',
-                ellipsis: true,
             },
             {
                 title: '操作',
@@ -169,7 +168,6 @@ class Record extends Component {
             <PageHeaderWrapper className={styles.main}>
                 <div>
                     <FilterSearch></FilterSearch>
-                    {this.state.current}
                     <Table
                         rowKey={"id"}
                         columns={columns}

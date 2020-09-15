@@ -26,6 +26,12 @@ const FilterSearch = ({ snApprove, getList }) => {
                 name="advanced_search"
                 className="ant-advanced-search-form"
                 onFinish={onFinish}
+                initialValues={
+                    {
+                        agentOutletsId:'全部',
+                        approvalStatus:'全部'
+                    }
+                }
             >
                 <Row gutter={24}>
                     <Col span={6}>

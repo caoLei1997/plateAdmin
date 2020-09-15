@@ -23,8 +23,6 @@ function AddAuthority({
 }) {
  
     const rows = rowss ? { ...rowss } : null
-
-
     const { Option } = Select
     const [form] = Form.useForm()
     let [authority, setAuthority] = useState(rows && rows.type)
@@ -39,7 +37,7 @@ function AddAuthority({
     ]
     // 弹窗确定
     const handleOk = async () => {
-        // const values = await form.validateFields();
+        const values = await form.validateFields();
         const formValue = form.getFieldsValue();
         let payload
         if (rows === null) {

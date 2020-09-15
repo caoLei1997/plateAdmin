@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Row, Col, Button, Modal, Form, Upload, Alert, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import styles from '../../index.less';
@@ -7,14 +7,16 @@ import { connect } from 'umi'
 
 const { Text } = Typography;
 
-function AddExcel({  snDeclare, dispatch,getList }) {
+function AddExcel({ snDeclare, dispatch, getList }) {
     const [addSnVisible, setAddSnVisible] = useState(false);
     const [fileList, setFileList] = useState(null);
     const [form] = Form.useForm();
-
     const handleCancel = () => {
         setFileList(null);
         setAddSnVisible(false)
+        dispatch({
+            type: "snDeclare/clearExcelData"
+        })
     }
     const uploadExcelAttr = {
         accept: '.xls',
@@ -38,18 +40,26 @@ function AddExcel({  snDeclare, dispatch,getList }) {
             type: 'snDeclare/reqUpload',
             payload: { formData },
             onSuccess: () => {
-                getList({});
                 setAddSnVisible(false)
+                getList({});
             }
         })
     }
-    
-    const handleAddSnVisible = async () => {
+
+    useEffect(() => {
+        return () => {
+            dispatch({
+                type: "snDeclare/clearExcelData"
+            })
+        }
+    }, [])
+
+    const handleAddSnVisible =  () => {
         if (!fileList || fileList.length === 0) {
             setFileList([]);
             return;
         }
-        await uploadSnExcel(fileList[0])
+         uploadSnExcel(fileList[0])
     }
 
 

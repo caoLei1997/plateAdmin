@@ -32,7 +32,7 @@ export default {
     reducers: {
         changeList(state, { payload }) {
             const { data } = payload
-            return { ...state, ...data }
+            return { ...state, ...data, total: data.totalElements }
 
         },
         changeFilter(state, { payload }) {

@@ -65,11 +65,11 @@ const AuditPass = ({ dispatch, id }) => {
                         <TextArea
                             rows={4}
                             placeholder="请填写审核不通过理由"
-                            maxLength={30}
+                            maxLength={50}
                         />
                     </Form.Item>
                     <div style={{ "textAlign": "right", 'margin': '-10px 0 10px' }}>
-                        {passValue.length || 0}/30
+                        {passValue.length || 0}/50
                     </div>
                     <div style={{ textAlign: 'right' }}>
                         <Button

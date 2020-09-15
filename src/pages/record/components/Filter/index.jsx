@@ -130,9 +130,9 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
                     <Col span={6}>
                         <Form.Item label='审核状态' name='recordStatus'>
                             <Select placeholder='审核状态'>
-                                <Select.Option value="2">已审核</Select.Option>
-                                <Select.Option value="4">待审核</Select.Option>
+                                <Select.Option value="2">待审核</Select.Option>
                                 <Select.Option value="3">不通过</Select.Option>
+                                <Select.Option value="4">已通过</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Modal, List, Input, } from 'antd';
+import { Table, Modal, List, Input, Form } from 'antd';
 import { connect } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './index.less';
@@ -9,6 +9,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
     const [batchVisible, setBatchVisible] = useState(false)
     const [id, setId] = useState(null);
     const { Search } = Input;
+    const [form] = Form.useForm()
 
     const columns = [
         {
@@ -113,7 +114,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
 
 
     const getBatch = ({
-        electrombileNumber = snDeclare.batchSearch,
+        electrombileNumber = '',
         pageIndex = snDeclare.batchPageIndex,
         pageSize = snDeclare.batchPageSize,
         snBatchId = id
@@ -165,19 +166,34 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
                     title="整车编码SN"
                     visible={batchVisible}
                     onOk={handleBatchVisible}
-                    onCancel={() => { setBatchVisible(false) }}
+                    onCancel={() => {
+                        setBatchVisible(false)
+                        form.resetFields()
+                    }}
                     key={id}
                 >
                     <p>批次SN数：{JSON.stringify(batchTotal)}</p>
-                    <Search
-                        placeholder="请输入查询SN数"
-                        onSearch={
-                            value => {
-                                getBatch({ electrombileNumber: value, pageIndex: 1 })
+                    <Form
+                        initialValues={
+                            {
+                                search: ''
                             }
                         }
-                        value=''
-                    />
+                        form={form}
+                    >
+                        <Form.Item name='search'>
+                            <Search
+                                placeholder="请输入查询SN数"
+                                onSearch={
+                                    value => {
+                                        console.log(value)
+                                        getBatch({ electrombileNumber: value, pageIndex: 1 })
+                                    }
+                                }
+                            />
+                        </Form.Item>
+                    </Form>
+
                     {}
                     <List
                         className='mt-16'
@@ -187,6 +203,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
                                 getBatch({ pageIndex })
                             },
                             pageSize: 10,
+                            total: JSON.stringify(batchTotal)
                         }}
                         dataSource={batchList}
                         loading={listLoading}

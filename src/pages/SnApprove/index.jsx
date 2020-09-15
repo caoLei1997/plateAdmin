@@ -25,6 +25,8 @@ const SnApprove = ({ dispatch, snApprove, tableLoading }) => {
             title: '关联型号数',
             dataIndex: 'batchModelCount',
             key: 'batchModelCount',
+            width: 120,
+
         },
         {
             title: '批次SN数',
@@ -54,7 +56,7 @@ const SnApprove = ({ dispatch, snApprove, tableLoading }) => {
             title: '不通过原因',
             dataIndex: 'notPassReason',
             key: 'notPassReason',
-            width: 300,
+            width: 200,
         },
         {
             title: '操作',
