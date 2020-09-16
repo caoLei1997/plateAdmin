@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
 import { connect } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -26,7 +26,6 @@ const SnDetail = ({ dispatch, snDetail, tableLoading }) => {
                 if (approvalStatus == 3) return <div className='font-success'>已通过</div>
             }
         },
-
     ];
 
     const getList = ({
@@ -43,9 +42,8 @@ const SnDetail = ({ dispatch, snDetail, tableLoading }) => {
             }
         })
     }
-
     useEffect(() => {
-        getList({})
+        getList({ filter: {} })
     }, [])
 
     const [size, setSize] = useState(snDetail.pageSize);

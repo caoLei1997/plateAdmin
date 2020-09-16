@@ -28,8 +28,8 @@ const FilterSearch = ({ snApprove, getList }) => {
                 onFinish={onFinish}
                 initialValues={
                     {
-                        agentOutletsId:'全部',
-                        approvalStatus:'全部'
+                        agentOutletsId:'',
+                        approvalStatus:''
                     }
                 }
             >

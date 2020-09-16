@@ -15,18 +15,16 @@ export default {
     state: { ...initialState },
     effects: {
         *reqList({ payload }, { put, call }) {
-
             const { pageIndex, pageSize, filter } = payload;
             yield put({
                 type: 'changeFilter',
-                payload: { ...filter }
+                payload: {filter,pageIndex,pageSize }
             })
             const res = yield call(snDetailList, { ...filter, pageIndex, pageSize });
             yield put({
                 type: 'changeList',
                 payload: res
             })
-
         }
     },
     reducers: {
@@ -36,7 +34,9 @@ export default {
 
         },
         changeFilter(state, { payload }) {
-            return { ...state, payload }
+            console.log(payload);
+            
+            return { ...state, ...payload }
         }
     }
 }

@@ -26,7 +26,6 @@ const SnApprove = ({ dispatch, snApprove, tableLoading }) => {
             dataIndex: 'batchModelCount',
             key: 'batchModelCount',
             width: 120,
-
         },
         {
             title: '批次SN数',

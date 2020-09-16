@@ -41,6 +41,7 @@ function AddExcel({ snDeclare, dispatch, getList }) {
             payload: { formData },
             onSuccess: () => {
                 setAddSnVisible(false)
+                setFileList(null);
                 getList({});
             }
         })

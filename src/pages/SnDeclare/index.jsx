@@ -171,6 +171,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
                         form.resetFields()
                     }}
                     key={id}
+                    footer={false}
                 >
                     <p>批次SN数：{JSON.stringify(batchTotal)}</p>
                     <Form

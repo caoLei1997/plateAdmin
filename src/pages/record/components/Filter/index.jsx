@@ -5,7 +5,7 @@ import styles from './index.less';
 const { RangePicker } = DatePicker;
 import { formatData } from '@/commonFun'
 
-const FilterSearch = ({ dispatch, recordList, login }) => {
+const FilterSearch = ({ dispatch, recordList, login, getList }) => {
     const [form] = Form.useForm();
     const onFinish = data => {
         console.log(data);
@@ -19,18 +19,7 @@ const FilterSearch = ({ dispatch, recordList, login }) => {
             auditTimeStart: auditTimeStart && formatData(auditTimeStart[0]),
             auditTimeEnd: auditTimeStart && formatData(auditTimeStart[1]),
         }
-        dispatch({
-            type: 'recordList/getList',
-            payload: {
-                filter: filter,
-                pageIndex: recordList.current,
-                pageSize: recordList.pageSize,
-            },
-            onSuccess: () => {
-                console.log(1);
-
-            }
-        })
+        getList({ filter })
     };
     useEffect(() => {
         dispatch({

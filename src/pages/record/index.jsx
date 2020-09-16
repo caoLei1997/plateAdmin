@@ -16,31 +16,28 @@ class Record extends Component {
         }
     }
 
-    getList = () => {
-        let { dispatch, recordList } = this.props;
+    getList = ({
+        pageIndex = this.props.recordList.pageIndex,
+        pageSize = this.props.recordList.pageSize,
+        filter = this.props.recordList.filter,
+    }
+    ) => {
+        let { dispatch } = this.props;
         dispatch({
             type: 'recordList/getList',
             payload: {
-                pageIndex: recordList.pageIndex,
-                pageSize: recordList.pageSize,
-                filter:recordList.filter
+                pageIndex,
+                pageSize,
+                filter
             },
-            onSuccess: (total) => {
-                this.setState({
-                    total: total,
-                })
-            }
         })
     }
-    handlePaginationChange = (pages) => {
-        this.setState({
-            pageIndex: pages
-        }, () => {
-            this.getList()
-        })
+    handlePaginationChange = (pageIndex) => {
+        const { pageSize } = this.state;
+        this.getList({ pageIndex, pageSize })
     }
     componentDidMount() {
-        this.getList()
+        this.getList({ filter: {} })
     }
 
     render() {
@@ -68,7 +65,7 @@ class Record extends Component {
                 dataIndex: 'certificateType',
                 ellipsis: true,
                 render: (certificateType) => {
-                    <div>
+                    return <div>
                         {
                             certificateType === 0 ? '身份证' :
                                 (certificateType === 1 ? '护照' :
@@ -150,15 +147,14 @@ class Record extends Component {
         let _this = this;
         const pagination = {
             total: recordList.total,
-            current: this.state.pageIndex,
-            pageSize: this.state.pageSize,
+            current: recordList.pageIndex,
+            pageSize: recordList.pageSize,
             onChange: this.handlePaginationChange,
             showTotal: total => `共${total}条`,
             showSizeChanger: true,
             showQuickJumper: true,
             onShowSizeChange: (current, size) => {
                 _this.setState({
-                    pageIndex: current,
                     pageSize: size
                 })
             }
@@ -166,7 +162,7 @@ class Record extends Component {
         return (
             <PageHeaderWrapper className={styles.main}>
                 <div>
-                    <FilterSearch></FilterSearch>
+                    <FilterSearch getList={this.getList}></FilterSearch>
                     <Table
                         rowKey={"id"}
                         columns={columns}

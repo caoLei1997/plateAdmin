@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+
 import styles from './index.less'
 import {
     Descriptions,
@@ -215,7 +216,7 @@ const SnApproveDetail = ({ dispatch, match, snApprove }) => {
                     }
                 </Col>
             </Row>
-        </div >
+        </div>
     );
 }
 
