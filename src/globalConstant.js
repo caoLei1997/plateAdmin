@@ -41,6 +41,8 @@ export const SUPER_UNIQUE = 999999999;
 export const PoliceChannel = 13;
 export const agentChannel = 11;
 
+export const BrigadeChannel = 14;
+
 export const RETCODESUCCESS = '0000';
 export const RETCODE_TOKEN_ERR = 'token_error';
 

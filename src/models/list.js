@@ -8,12 +8,12 @@ import {
 const initialState = {
     total: 0,
     pageSize: PAGESIZE,
-    current: 1,
+    pageIndex: 1,
     content: [],
     ids: [],
     city: [],
     brigadeList: [],
-    filter:{}
+    filter: {}
 }
 export default {
     namespace: 'recordList',
@@ -22,12 +22,13 @@ export default {
 
         *getList({ payload }, { call, put }) {
             const { pageIndex, filter, pageSize } = payload;
-            const response = yield call(requestRecordList, { pageIndex, pageSize, ...filter });
-
+            console.log(pageIndex);
+            
             yield put({
                 type: 'changeFilter',
                 payload: { filter, pageIndex, pageSize }
             })
+            const response = yield call(requestRecordList, { pageIndex, pageSize, ...filter });
             yield put({
                 type: 'changeList',
                 payload: response
@@ -36,7 +37,7 @@ export default {
                 localStorage.setItem('recordList', JSON.stringify(response))
             }
         },
-       
+
         *requestGetCity({ payload }, { call, put }) {
             const response = yield call(requestGetCity, { ...payload });
             yield put({
@@ -71,7 +72,9 @@ export default {
                 brigadeList: payload
             }
         },
-        changeFilter(state,{payload}){
+        changeFilter(state, { payload }) {
+            console.log(payload);
+            
             return {
                 ...state,
                 ...payload

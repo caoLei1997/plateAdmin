@@ -18,11 +18,10 @@ class Record extends Component {
 
     getList = () => {
         let { dispatch, recordList } = this.props;
-        const { current } = recordList;
         dispatch({
             type: 'recordList/getList',
             payload: {
-                pageIndex: recordList.current,
+                pageIndex: recordList.pageIndex,
                 pageSize: recordList.pageSize,
                 filter:recordList.filter
             },

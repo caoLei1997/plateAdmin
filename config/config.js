@@ -180,14 +180,14 @@ export default defineConfig({
               icon: 'https://electric.sxwinstar.net/plateSale/bagl.png',
               path: '/record',
               component: './record',
-              authority: ['admin', 'police'],
+              authority: ['admin', 'police','brigade'],
             },
             {
               name: '备案详情',
               icon: 'smile',
               path: '/record/recordDetail/:id',
               component: './recordDetail',
-              authority: ['admin', 'police'],
+              authority: ['admin', 'police','brigade'],
               hideInMenu: true,
             },
             {
