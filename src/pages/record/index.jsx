@@ -47,7 +47,7 @@ class Record extends Component {
                 dataIndex: 'applyTime',
                 render: applyTime => {
                     let time = new Date(applyTime);
-                    return time.getFullYear() + '年' + time.getMonth()+1 + '月' + time.getDate() + '日'
+                    return time.getFullYear() + '年' + Number(time.getMonth() + 1) + '月' + time.getDate() + '日'
                 },
                 sorter: (a, b) => a.applyTime - b.applyTime,
             },

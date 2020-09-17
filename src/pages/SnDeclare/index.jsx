@@ -83,7 +83,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
     }
 
     useEffect(() => {
-        getList({})
+        getList({ filter: {} })
     }, [])
     const [size, setSize] = useState(snDeclare.pageSize);
     const pagination = {

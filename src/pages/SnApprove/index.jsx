@@ -78,7 +78,7 @@ const SnApprove = ({ dispatch, snApprove, tableLoading }) => {
         })
     }
     useEffect(() => {
-        getList({})
+        getList({filter:{}})
     }, [])
 
     const { content } = snApprove;

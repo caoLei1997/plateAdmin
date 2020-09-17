@@ -12,7 +12,7 @@ function AddExcel({ snDeclare, dispatch, getList }) {
     const [fileList, setFileList] = useState(null);
     const [form] = Form.useForm();
     const handleCancel = () => {
-        setFileList(null);
+        setFileList([]);
         setAddSnVisible(false)
         dispatch({
             type: "snDeclare/clearExcelData"
@@ -22,7 +22,7 @@ function AddExcel({ snDeclare, dispatch, getList }) {
         accept: '.xls',
         showUploadList: true,
         onRemove: (file) => {
-            setFileList(null);
+            setFileList([]);
             dispatch({
                 type: 'snDeclare/clearExcelData'
             })
@@ -41,12 +41,11 @@ function AddExcel({ snDeclare, dispatch, getList }) {
             payload: { formData },
             onSuccess: () => {
                 setAddSnVisible(false)
-                setFileList(null);
+                setFileList([]);
                 getList({});
             }
         })
     }
-
     useEffect(() => {
         return () => {
             dispatch({
