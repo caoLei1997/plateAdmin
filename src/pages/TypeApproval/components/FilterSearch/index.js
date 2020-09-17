@@ -30,10 +30,10 @@ const FilterSearch = ({ typeApproval, getList }) => {
                 onFinish={onFinish}
                 initialValues={
                     {
-                        agentOutletsId: undefined,
+                        agentOutletsId: '',
                         batchName: undefined,
                         applyTimeStart: undefined,
-                        approvalStatus: undefined,
+                        approvalStatus: '',
                         auditTimeStart: undefined
                     }
                 }
