@@ -41,7 +41,7 @@ const AuditPass = ({ dispatch, id }) => {
         <div>
             <Button type='danger' onClick={() => { handlePass(true) }}>审核不通过</Button>
             <Modal title='确认审核不通过吗' visible={modalVisible} footer={null} onCancel={() => toggleModalVisible(false)}>
-                <p>填写审核理由</p>
+                <p>填写审核不通过理由</p>
                 <Form
                     name='catalog-manage-modal-add'
                     onFinish={onFinish}

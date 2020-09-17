@@ -88,7 +88,7 @@ const ModalPlateSN = (props) => {
         rowSelection,
         dataSource: list,
         rowKey: 'id',
-        pagination: { total, current, pageSize, onChange: handlePaginationChange },
+        pagination: { total, current, pageSize, onChange: handlePaginationChange,showSizeChanger:false },
         loading: tableLoading
     }
 

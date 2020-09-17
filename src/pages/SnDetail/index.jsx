@@ -43,7 +43,7 @@ const SnDetail = ({ dispatch, snDetail, tableLoading }) => {
         })
     }
     useEffect(() => {
-        getList({ filter: {} })
+        getList({filter: {}, pageIndex: 1, pageSize: 10  })
     }, [])
 
     const [size, setSize] = useState(snDetail.pageSize);

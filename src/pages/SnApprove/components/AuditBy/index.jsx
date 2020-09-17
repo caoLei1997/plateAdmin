@@ -26,7 +26,7 @@ const AuditBy = ({ dispatch, id }) => {
     const handleBy = () => {
         Modal.confirm({
             title: '审核通过',
-            content: '审核通过后批次申报所有整车编码SN将可用与带牌销售，确认要审核通过吗？',
+            content: '审核通过后批次申报所有整车编码SN将可用于带牌销售，确认要审核通过吗？',
             okText: '确认',
             cancelText: '取消',
             onOk: confirmOnOK,

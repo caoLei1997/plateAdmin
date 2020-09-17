@@ -19,7 +19,7 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
             auditTimeStart: auditTimeStart && formatData(auditTimeStart[0]),
             auditTimeEnd: auditTimeStart && formatData(auditTimeStart[1]),
         }
-        getList({ filter })
+        getList({ filter,pageIndex:1 })
     };
     useEffect(() => {
         dispatch({

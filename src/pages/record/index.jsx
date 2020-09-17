@@ -67,9 +67,9 @@ class Record extends Component {
                 render: (certificateType) => {
                     return <div>
                         {
-                            certificateType === 0 ? '身份证' :
-                                (certificateType === 1 ? '护照' :
-                                    (certificateType === 2 ? '港澳通行证' :
+                            certificateType == 0 ? '身份证' :
+                                (certificateType == 1 ? '护照' :
+                                    (certificateType == 2 ? '港澳通行证' :
                                         '军官证'))
                         }
 
@@ -125,7 +125,7 @@ class Record extends Component {
                 render: auditTime => {
                     if (auditTime == '') return '-'
                     let time = new Date(auditTime);
-                    return time.getFullYear() + '年' + time.getMonth() + '月' + time.getDate() + '日'
+                    return time.getFullYear() + '年' +  Number(time.getMonth() + 1) + '月' + time.getDate() + '日'
                 },
                 filterMultiple: false,
             },

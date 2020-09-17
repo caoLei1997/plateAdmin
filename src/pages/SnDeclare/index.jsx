@@ -83,7 +83,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
     }
 
     useEffect(() => {
-        getList({ filter: {} })
+        getList({ filter: {}, pageIndex: 1, pageSize: 10 })
     }, [])
     const [size, setSize] = useState(snDeclare.pageSize);
     const pagination = {
@@ -149,6 +149,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
 
 
     const { content, batchTotal, batchList } = snDeclare;
+    const [listPageIndex, setListPageIndex] = useState(1);
 
     return (
         <PageHeaderWrapper className={styles.main}>
@@ -169,6 +170,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
                     onCancel={() => {
                         setBatchVisible(false)
                         form.resetFields()
+                        getBatch({pageIndex:1})
                     }}
                     key={id}
                     footer={false}
@@ -202,9 +204,12 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
                         pagination={{
                             onChange: pageIndex => {
                                 getBatch({ pageIndex })
+                                setListPageIndex(Number(pageIndex))
                             },
                             pageSize: 10,
-                            total: JSON.stringify(batchTotal)
+                            total: JSON.stringify(batchTotal),
+                            showSizeChanger: false,
+                            current: snDeclare.batchPageIndex
                         }}
                         dataSource={batchList}
                         loading={listLoading}

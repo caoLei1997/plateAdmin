@@ -23,7 +23,7 @@ const TypeApproval = ({ dispatch, typeApproval }) => {
     useEffect(() => {
         getList({})
         return () => {
-            getList({ filter: {} })
+            getList({ filter: {},pageIndex:1,pageSize:10 })
         }
     }, [])
     // tab 表头
