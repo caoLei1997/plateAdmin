@@ -115,9 +115,9 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
           <Form.Item label='手机号' name='phoneNumber' rules={[{ required: true, len: 11, message: '请输入正确的手机号!' }]}>
             <Input placeholder="手机号" />
           </Form.Item>
-          <Form.Item label='所属商户' name='name'>
+          {/* <Form.Item label='所属商户' name='name'>
             <DealerLinkage isAddPersonal formProps={formProps} span={8} onCallBack={selectChange} defaultLevel={item.level} />
-          </Form.Item>
+          </Form.Item> */}
           <div className='text-right'>
             <Button type="primary" htmlType="submit" className='search-button mr-8'>保存</Button>
             <Button className='search-button' onClick={() => toggleModalVisible(false)}>取消</Button>

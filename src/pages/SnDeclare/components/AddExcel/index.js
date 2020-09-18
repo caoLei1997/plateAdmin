@@ -9,7 +9,7 @@ const { Text } = Typography;
 
 function AddExcel({ snDeclare, dispatch, getList }) {
     const [addSnVisible, setAddSnVisible] = useState(false);
-    const [fileList, setFileList] = useState(null);
+    const [fileList, setFileList] = useState([]);
     const [form] = Form.useForm();
     const handleCancel = () => {
         setFileList([]);
