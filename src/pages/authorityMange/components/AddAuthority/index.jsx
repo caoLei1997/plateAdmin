@@ -107,6 +107,12 @@ function AddAuthority({
     // 选择品牌厂家
     const handleAgent = (value, { agentOutletsName }) => {
         setAgentOutlesName(agentOutletsName)
+        console.log(rows);
+        
+        if(rows && rows.agentOutletsId){
+            console.log(1);
+            rows.agentOutletsId = undefined
+        }
     }
     // 选择地区
     const [brigadeList, setBrigadeList] = useState([]);
@@ -128,6 +134,7 @@ function AddAuthority({
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
+            {JSON.stringify(rows)}
                 <Form
                     labelCol={{ span: 4 }}
                     form={form}

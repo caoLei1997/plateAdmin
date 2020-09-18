@@ -191,9 +191,10 @@ const AuthorityTable = ({
             </Row>
             <div className='mt-16'>
                 <Table
+                    key={authorityList.pageIndex}
                     loading={tableLoading}
                     rowKey='id'
-                    dataSource={authorityList.content ? authorityList.content : []}
+                    dataSource={authorityList.content || []}
                     columns={columns}
                     pagination={pagination}>
                 </Table>

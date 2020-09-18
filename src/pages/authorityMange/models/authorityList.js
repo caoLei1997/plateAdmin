@@ -70,7 +70,7 @@ export default {
     reducers: {
         changeList(state, { payload }) {
             const { data } = payload;
-            console.log(data);
+            console.log(data.content);
             return {
                 ...state,
                 ...data,
@@ -78,6 +78,7 @@ export default {
         },
 
         changeFilter(state, { payload }) {
+            console.log(payload);
             return {
                 ...state,
                 ...payload,
