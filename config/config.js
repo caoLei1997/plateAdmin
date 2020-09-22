@@ -163,7 +163,7 @@ export default defineConfig({
               authority: ['agent', 'admin'],
             },
             {
-              name: '基础详情页',
+              name: '车辆管理详情页',
               path: '/carmanage/details/:id',
               component: './carManage/details',
               hideInMenu: true,

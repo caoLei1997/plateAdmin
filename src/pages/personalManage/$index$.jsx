@@ -30,7 +30,9 @@ const PersonalIndex = (props) => {
 
   useEffect(() => {
     if (params.index) {
-      getList(current, { outlets: Number(params.index) });
+      console.log(1111);
+      
+      getList(1, { outlets: Number(params.index) });
       return;
     }
     getList();

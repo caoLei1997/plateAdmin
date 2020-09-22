@@ -66,7 +66,7 @@ const DealerSelect = (props) => {
       <Row gutter={12}>
         <Col span={12}>
           <Form.Item name='city' label={city.label || ''} className='mb-16'>
-            <Select placeholder={level.placeholder || "选择商户级别"} onSelect={value => handleSelect(value, 'city')}>
+            <Select placeholder={level.placeholder || "选择市区"} onSelect={value => handleSelect(value, 'city')}>
               {showAll && <Option value="">全部市区</Option>}
               {personalDealerState.city && personalDealerState.city.map(item => (
                 <OptGroup label={item.value}>

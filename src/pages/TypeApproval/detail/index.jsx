@@ -113,7 +113,7 @@ const TypeApprovalDetail = ({ dispatch, match, typeApproval }) => {
                         </div>
                     </Descriptions.Item>
                     <Descriptions.Item label="批次名称">{detailData.batchName}</Descriptions.Item>
-                    <Descriptions.Item label="批次号数">{detailData.batchModelCount}</Descriptions.Item>
+                    <Descriptions.Item label="批次型号数">{detailData.batchModelCount}</Descriptions.Item>
                 </Descriptions>
                 <h3>车辆信息</h3>
                 <Divider></Divider>

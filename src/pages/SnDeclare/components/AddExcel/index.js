@@ -29,6 +29,9 @@ function AddExcel({ snDeclare, dispatch, getList }) {
         },
         beforeUpload: file => {
             setFileList([file]);
+            dispatch({
+                type: "snDeclare/clearExcelData"
+            })
             return false;
         },
         fileList
@@ -126,7 +129,7 @@ function AddExcel({ snDeclare, dispatch, getList }) {
                         </div>
                     </div>
                     {
-                        errorNum >= 1 && (
+                        errorNum >= 1 &&  (
                             <>
                                 <Alert
                                     message="提交失败"

@@ -7,7 +7,7 @@ const Filter = ({ getList }) => {
     const { Option } = Select;
     const onFinish = () => {
         const filterValue = form.getFieldsValue()
-        getList({ filterValue, pageIndex: 1 })
+        getList({ filterValue, pageIndex: 1, pageSize: '10' })
     }
     const rolesList = [
         { label: "全部", value: '' },

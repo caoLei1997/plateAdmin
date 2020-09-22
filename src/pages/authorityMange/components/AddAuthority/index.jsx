@@ -14,20 +14,17 @@ import { connect } from 'umi';
 import { addAccount, getBrigadeByCityAndRegion } from '@/services/authority';
 function AddAuthority({
     authorityList,
-    dispatch,
     isVisible = true,
     visibleFn = null,
     type,
-    rowss = null,
+    record = null,
     getList
 }) {
- 
-    const rows = rowss ? { ...rowss } : null
+    const [rows, setRows] = useState(record ? { ...record } : null)
     const { Option } = Select
     const [form] = Form.useForm()
     let [authority, setAuthority] = useState(rows && rows.type)
     const [agentOutlesName, setAgentOutlesName] = useState(rows ? rows.agentOutlesName : undefined)
-    // const [isVisible, setIsVisible] = useState(true)
     // 选择角色
     const rolesList = [
         { label: "超级管理员", value: '0' },
@@ -72,6 +69,12 @@ function AddAuthority({
     //选择权限
     const changeAuthority = (value, { label }) => {
         setAuthority(value)
+        form.setFieldsValue({
+            agentOutletsId: undefined,
+            address: undefined,
+            agentOutletsName: undefined
+        })
+        setRows(pre => ({ ...pre, agentOutletsId: null }))
     }
     // 权限展示
     const authorityArr = [
@@ -108,11 +111,6 @@ function AddAuthority({
     const handleAgent = (value, { agentOutletsName }) => {
         setAgentOutlesName(agentOutletsName)
         console.log(rows);
-        
-        if(rows && rows.agentOutletsId){
-            console.log(1);
-            rows.agentOutletsId = undefined
-        }
     }
     // 选择地区
     const [brigadeList, setBrigadeList] = useState([]);
@@ -123,6 +121,7 @@ function AddAuthority({
             setBrigadeList(res.data)
         }))
     }
+
     function displayRender(label) {
         return label.join('-');
     }
@@ -134,14 +133,15 @@ function AddAuthority({
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
-            {JSON.stringify(rows)}
                 <Form
                     labelCol={{ span: 4 }}
                     form={form}
+                    key={rows && rows.agentOutletsId}
                     initialValues={{
                         ...rows,
                         type: rows && rows.type,
-                        agentOutletsId: rows && rows.agentOutletsId
+                        address: rows && (rows.city && rows.region) ? [rows.city, rows.region] : undefined,
+                        agentOutletsId: rows && (rows.type == '3' ? rows.agentOutletsName:rows.agentOutletsId)
                     }}
                 >
                     <Form.Item

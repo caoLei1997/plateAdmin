@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Table, Row, Col, Button, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import AddAuthority from '../AddAuthority'
@@ -142,12 +142,13 @@ const AuthorityTable = ({
             pageSize: size
         })
     }
-
     const [size, setSize] = useState(authorityList.pageSize);
+
+  
     // 分页
     const pagination = {
         total: authorityList.total,
-        pageIndex: authorityList.pageIndex,
+        current: authorityList.pageIndex,
         onChange: handlePaginationChange,
         showTotal: total => `共${total}条`,
         showSizeChanger: true,
@@ -191,10 +192,9 @@ const AuthorityTable = ({
             </Row>
             <div className='mt-16'>
                 <Table
-                    key={authorityList.pageIndex}
                     loading={tableLoading}
-                    rowKey='id'
-                    dataSource={authorityList.content || []}
+                    rowKey={(record)=>record.id}
+                    dataSource={authorityList.content}
                     columns={columns}
                     pagination={pagination}>
                 </Table>
@@ -204,7 +204,7 @@ const AuthorityTable = ({
                 type={type}
                 isVisible={isVisible}
                 visibleFn={visibleFn}
-                rowss={rows}
+                record={rows}
                 getList={getList}
             >
             </AddAuthority>

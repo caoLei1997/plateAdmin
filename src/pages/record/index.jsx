@@ -12,10 +12,9 @@ class Record extends Component {
         this.state = {
             pageSize: recordList.pageSize,
             pageIndex: recordList.current,
-            total: recordList.total
+            total: recordList.total,
         }
     }
-
     getList = ({
         pageIndex = this.props.recordList.pageIndex,
         pageSize = this.props.recordList.pageSize,
@@ -37,7 +36,7 @@ class Record extends Component {
         this.getList({ pageIndex, pageSize })
     }
     componentDidMount() {
-        this.getList({ filter: {} })
+        this.getList({ filter: {},pageIndex:1,pageSize:'10' })
     }
 
     render() {
@@ -143,7 +142,8 @@ class Record extends Component {
                 ),
             },
         ];
-        const { recordList, tableLoading } = this.props
+        const { recordList, tableLoading,login } = this.props
+        console.log(login);
         let _this = this;
         const pagination = {
             total: recordList.total,
@@ -180,9 +180,11 @@ class Record extends Component {
 export default connect(
     ({
         recordList,
-        loading
+        loading,
+        login
     }) => ({
         recordList,
+        login,
         tableLoading: loading.effects['recordList/getList']
     })
 )(Record) 

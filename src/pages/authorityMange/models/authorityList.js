@@ -74,6 +74,8 @@ export default {
             return {
                 ...state,
                 ...data,
+                content: data ? data.content : [],
+                total: data ? data.total : 0
             }
         },
 

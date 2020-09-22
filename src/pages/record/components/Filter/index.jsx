@@ -8,7 +8,6 @@ import { formatData } from '@/commonFun'
 const FilterSearch = ({ dispatch, recordList, login, getList }) => {
     const [form] = Form.useForm();
     const onFinish = data => {
-        console.log(data);
         let { applyTimeStart, auditTimeStart, city } = data;
         let filter = {
             ...data,
@@ -19,7 +18,7 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
             auditTimeStart: auditTimeStart && formatData(auditTimeStart[0]),
             auditTimeEnd: auditTimeStart && formatData(auditTimeStart[1]),
         }
-        getList({ filter,pageIndex:1 })
+        getList({ filter, pageIndex: 1 })
     };
     useEffect(() => {
         dispatch({
@@ -29,6 +28,10 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
             }
         })
     }, []);
+
+
+    console.log(login);
+
 
     function displayRender(label) {
         return label.join('-');
@@ -51,11 +54,13 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
                 name="advanced_search"
                 className="ant-advanced-search-form"
                 onFinish={onFinish}
+                initialValues={{
+                    city: login.channel == 14 ? [login.city, login.region] : undefined,
+                    agentOutlesId: login.channel == 14 ? login.name : undefined
+                }}
             >
-
                 <Row gutter={24}>
                     <Col span={6}>
-
                         <Form.Item
                             name='city'
                             label='所属大队'
@@ -66,6 +71,7 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
                                 displayRender={displayRender}
                                 onChange={onChange}
                                 placeholder='选择市区'
+                                disabled={login.channel == 14 ? true : false }
                             />
                         </Form.Item>
                     </Col>
@@ -77,6 +83,7 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
                         >
                             <Select
                                 placeholder='选择所属大队'
+                                disabled={login.channel == 14 ? true : false }
                             >
                                 {
                                     recordList.brigadeList.length &&
