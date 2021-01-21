@@ -57,10 +57,14 @@ const columns = [
 
 const MeansTable = ({ distributeListState, tableLoading, paginationChange }) => {
   const { total, current, pageSize, list } = distributeListState;
+  console.log('distributeListState: ', distributeListState)
+
   const [nowPageSize, setNowPageSize] = useState([pageSize]);
 
-  const handlePaginationChange = (page) => {
-    paginationChange(page);
+  const handlePaginationChange = (page, size) => {
+    console.log(111);
+    console.log('filter', distributeListState.filter);
+    paginationChange(page, false, { ...distributeListState.filter, pageIndex: page, pageSize: size[0], });
   }
 
   const exportExcel = () => {
@@ -75,14 +79,16 @@ const MeansTable = ({ distributeListState, tableLoading, paginationChange }) => 
     rowKey: 'id',
     columns,
     pagination: {
-      total, current,
-      pageSize: nowPageSize, onChange: handlePaginationChange,
+      total,
+      current,
+      pageSize: nowPageSize,
+      onChange: handlePaginationChange,
       showTotal: total => `共${total}条`,
       showSizeChanger: true,
       showQuickJumper: true,
       onShowSizeChange: (current, size) => {
+
         setNowPageSize(size);
-        paginationChange(current, false, { pageSize: size });
       }
     },
 

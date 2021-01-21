@@ -1,6 +1,15 @@
 import React from 'react';
 import style from './add.less';
-import { Modal, Button, Table, Input, Select, Cascader, notification } from 'antd';
+import {
+  Modal,
+  Button,
+  Table,
+  Input,
+  Select,
+  Cascader,
+  notification,
+  Checkbox
+} from 'antd';
 const { Option } = Select;
 const children = [];
 import { CloseOutlined } from '@ant-design/icons';
@@ -100,6 +109,7 @@ class App extends React.Component {
       agentAddress: '',
       agentBrand: [],
       brandIds: [],
+      checked: false
     });
   };
 
@@ -116,12 +126,20 @@ class App extends React.Component {
           maskClosable={false}
           width="60%"
         >
-        
-
-          <Table scroll={{ x: 600 }} dataSource={dataSource} columns={columns} pagination={false} />
+          <Table
+            scroll={{ x: 600 }}
+            dataSource={dataSource}
+            columns={columns}
+            pagination={false}
+          />
           <div>
             <div className={style.addInpInLine}>
-              <Input className={style.addInp} value={agentName} onChange={this.agentNameInp} placeholder="商户名称" />
+              <Input
+                className={style.addInp}
+                value={agentName}
+                onChange={this.agentNameInp}
+                placeholder="商户名称"
+              />
               <Cascader
                 options={dropdownData}
                 expandTrigger="hover"
@@ -131,7 +149,12 @@ class App extends React.Component {
                 value={dropdownValue}
               />
             </div>
-            <Input className={style.addInpAddress} value={agentAddress} onChange={this.agentAddressInp} placeholder="商户地址" />
+            <Input
+              className={style.addInpAddress}
+              value={agentAddress}
+              onChange={this.agentAddressInp}
+              placeholder="商户地址"
+            />
             <Select
               style={{ width: '100%' }}
               placeholder="选择代理品牌"
@@ -141,6 +164,7 @@ class App extends React.Component {
             >
               {brandChildren}
             </Select>
+
           </div>
           <Button className={style.addSubBtn} onClick={this.checkAddData} type="primary" block color='#ccc'>+ 添加</Button>
         </Modal>

@@ -71,10 +71,8 @@ export default {
                 payload: res
             })
             if (res.retCode === '0000') {
-                message.success(`导入成功`);
-                onSuccess()
+                onSuccess && onSuccess()
             }
-
         }
     },
     reducers: {

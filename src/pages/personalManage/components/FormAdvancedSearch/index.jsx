@@ -9,14 +9,13 @@ const AdvancedSearchForm = ({ btnLoading, getList, children, defaultOutlets }) =
 
   const handleFinish = values => {
     console.log(values);
-    
+
     const params = { city: '', region: '', level: values.level, agentOutletsId: selectVal.outlets };
     if (values.city) {
-      params.city = values.city.split('-')[0];
-      params.region = values.city.split('-')[1];
+      const [city, region] = values.city;
+      params.city = city;
+      params.region = region;
     }
-
-    
     console.log({ ...values, ...params })
     getList(1, { ...values, ...params });
   }
@@ -31,10 +30,24 @@ const AdvancedSearchForm = ({ btnLoading, getList, children, defaultOutlets }) =
     dealer: { placeholder: '全部网点' },
   }
 
+
+
+  const initialValue = {
+    level: '',
+    outlets: '',
+    city: ['']
+  }
+
+
   return (
     <div className={styles.container}>
       <div id="catalog-list-search-form">
-        <Form  className="ant-advanced-search-form" name='catalog-manage-table-search' onFinish={handleFinish} >
+        <Form
+          className="ant-advanced-search-form"
+          name='catalog-manage-table-search'
+          onFinish={handleFinish}
+          initialValues={initialValue}
+        >
           <div gutter={24}>
             <Form.Item label='所属商户'>
               <DealerLinkage showAll formProps={formProps} span={6} onCallBack={selectChange} />

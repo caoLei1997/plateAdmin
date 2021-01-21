@@ -49,7 +49,16 @@ const DealerSelect = ({ dispatch, userInfo, selectLoading, dealerList, changeCal
           <dt>品牌厂家：</dt>
           <dd>
             {userInfo.id === SUPER_UNIQUE ?
-              <Select style={{ width: 220 }} showSearch loading={selectLoading} placeholder="请选择" optionFilterProp="children" onDropdownVisibleChange={handleDropdown} onChange={handleChange} >
+              <Select
+                style={{ width: 220 }}
+                showSearch
+                loading={selectLoading}
+                placeholder="请选择"
+                optionFilterProp="children"
+                onDropdownVisibleChange={handleDropdown}
+                onChange={handleChange}
+                defaultValue='全部'
+              >
                 {dealerList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
               </Select>
               : userInfo.name

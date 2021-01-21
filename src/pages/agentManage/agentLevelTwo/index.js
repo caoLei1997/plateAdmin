@@ -1,24 +1,53 @@
 import React from 'react';
 import style from './index.less';
-import { Input, Button, Cascader, Table, Modal, Select, Tag, Collapse, Checkbox, Row, Col, notification, Spin, Space } from 'antd';
+import {
+  Input,
+  Form,
+  Button,
+  Cascader as Cascade,
+  Table,
+  Modal,
+  Select,
+  Tag,
+  Collapse,
+  Checkbox,
+  Row,
+  Col,
+  notification,
+  Spin,
+  Space
+} from 'antd';
 import Add from "./add/add"
-import { requestAgentList, useOrStop, getSecondAgentBrand, editSecondAgent } from "@/services/agentManage";
+import {
+  relAgentOutletsBrandList,
+  useOrStop,
+  getSecondAgentBrand,
+  editSecondAgent,
+  typeApproveAgent
+
+} from "@/services/agentManage";
 const { Option } = Select;
 const { Panel } = Collapse;
 import { Link } from 'umi';
 import { PlusOutlined } from '@ant-design/icons';
+import { filterCity } from '@/utils/utils'
+import { connect } from 'umi';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.collapseIndex = null;
-    this.pageIndex = 1;
+    this.pageIndex = 0;
     this.pageSize = 10;
     this.data = {};
     this.allBrandData = [];
     this.state = {
       cityDropdownData: this.props.cityData,
       statusDropdownData: [
+        {
+          value: '',
+          label: '全部',
+        },
         {
           value: '1',
           label: '停用',
@@ -33,8 +62,8 @@ class App extends React.Component {
       statusDropdownValue: [],
       tableDataSource: [],
       tableColumns: [
-        { title: '商户ID', dataIndex: 'agentOutletsId', key: 'agentOutletsId', },
-        { title: '商户名称', dataIndex: 'agentOutletsName', key: 'agentOutletsName' },
+        { title: '商户ID', dataIndex: 'id', key: 'id', },
+        { title: '商户名称', dataIndex: 'name', key: 'name' },
         { title: '级别', dataIndex: 'level', key: 'level', },
         { title: '市区', dataIndex: 'cityRegion', key: 'cityRegion', width: 100 },
         { title: '地址', dataIndex: 'address', key: 'address', width: 200 },
@@ -47,12 +76,12 @@ class App extends React.Component {
       // paginationSeting
       total: null,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 0,
       onChange: (a, b) => {
         console.log(a, b);
         let { pageSize, cityDropdownValue, statusDropdownValue } = this.state;
         this.data = {
-          pageIndex: a,
+          pageIndex: a - 1,
           pageSize: pageSize,
           level: 12,
           brandName: '',
@@ -83,10 +112,12 @@ class App extends React.Component {
       editAgentBrandObjArr: [],
       selectChildren: [],
       spinningStatus: true,
+      agentList: [],
+      brandIdValue: '',
     }
   }
   componentDidMount() {
-    let { agentName, cityDropdownValue, statusDropdownValue, } = this.state;
+    let { agentName, cityDropdownValue, statusDropdownValue } = this.state;
     this.data = {
       pageIndex: this.pageIndex,
       pageSize: this.pageSize,
@@ -99,6 +130,12 @@ class App extends React.Component {
     };
     this.reqTableList(this.data);
     this.getAllBrand();
+
+    typeApproveAgent().then((res) => {
+      this.setState({
+        agentList: [...res.data]
+      })
+    })
   }
 
   componentWillUnmount() {
@@ -106,16 +143,18 @@ class App extends React.Component {
   }
 
   submitData = () => {
-    let { agentName, cityDropdownValue, statusDropdownValue, } = this.state;
+    let { agentName, cityDropdownValue, statusDropdownValue, brandIdValue, typeValue } = this.state;
     this.data = {
-      pageIndex: 1,
+      pageIndex: 0,
       pageSize: this.pageSize,
       level: 12,
       brandName: "",
       agentOutletsName: this.state.agentName,
       city: cityDropdownValue[0],
       region: cityDropdownValue[1],
-      status: statusDropdownValue[0]
+      status: statusDropdownValue[0],
+      brandId: brandIdValue,
+
     };
     this.reqTableList(this.data)
   };
@@ -124,7 +163,7 @@ class App extends React.Component {
     this.setState({
       spinningStatus: true
     });
-    requestAgentList(data).then(res => {
+    relAgentOutletsBrandList(data).then(res => {
       if (res && res.data && res.data.content) {
         let list = res.data.content;
         list.forEach((v, k) => {
@@ -138,8 +177,7 @@ class App extends React.Component {
           v.employeesNumber = v.employeesNumber === null ? 0 : v.employeesNumber;
           v.personNum = <Link to={"/personal/" + v.agentOutletsId} key={k} onClick={this.personNumClick.bind('', v, k, this)}>{v.employeesNumber}</Link>;
           v.vityRegion = v.city + v.region;
-
-          v.statusTxt = v.status === '0' ? <Tag color="orange">正常</Tag> : <Tag color="red">停用</Tag>;
+          v.statusTxt = v.status === '0' ? <Tag color="orange">启用</Tag> : <Tag color="red">停用</Tag>;
           v.brand = <a href="javascript:;" onClick={this.showBrandList.bind('', v, k, this)}>点击查看</a>
         });
         this.setState({
@@ -156,6 +194,7 @@ class App extends React.Component {
       }
     });
   };
+
   showBrandList = (a, b) => {
     this.setState({
       cBrandList: a.brandModelVos,
@@ -163,6 +202,7 @@ class App extends React.Component {
       brandModalVisible: true,
     });
   };
+
   editData = (a, b) => {
     console.log(a);
     let brandData = this.allBrandData;
@@ -195,10 +235,14 @@ class App extends React.Component {
     });
     this.currentEditData = a;
   };
+
   doUse = (a, b) => {
-    console.log(a, b);
     let title = a.status === '0' ? "停用" : "启用";
-    let content = a.status === '0' ? "停用会导致该商户相关所有业务人员账号停用，不能再处理代牌销售业务，确认要停用吗？" : "启用后该商户将恢复代牌销售业务相关办理权限，确认要启用吗？";
+    let content = a.status === '0' ? "停用会导致该商户相关所有业务人员账号停用，不能再处理代牌销售业务，确认要停用吗？" :
+      <>
+        启用后该商户将恢复代牌销售业务相关办理权限，确认要启用吗?
+        <p className='mt-8'> {<Checkbox Checkbox onChange={this.onUseOrStopCheck} id={a.id} > 同时启用该商户所有人员账号</Checkbox>}</p>
+      </>
     let isUse;
     // =  a.status === '1'&&<p>
     //   <Checkbox onChange={this.onUseOrStopCheck} id={a.id}>同时启用该商户所有人员账号</Checkbox>
@@ -224,8 +268,36 @@ class App extends React.Component {
   onFinish = values => {
     console.log('Success:', values);
   };
+
+  handleChangeType = (value) => {
+    this.setState({
+      brandIdValue:value
+    })
+  }
+
   render() {
-    let { cityDropdownData, statusDropdownData, tableDataSource, tableColumns, visible, editDataName, editDataCity, editDataAddress, editDataBrand, total, pageSize, pageIndex, onChange, useOrStopVisible, useOrStopTitle, useOrStopContent, useOrStopIsUse, selectChildren, spinningStatus } = this.state;
+    let {
+      cityDropdownData,
+      statusDropdownData,
+      tableDataSource,
+      tableColumns,
+      visible,
+      editDataName,
+      editDataCity,
+      editDataAddress,
+      editDataBrand,
+      total,
+      pageSize,
+      pageIndex,
+      onChange,
+      useOrStopVisible,
+      useOrStopTitle,
+      useOrStopContent,
+      useOrStopIsUse,
+      selectChildren,
+      spinningStatus,
+      agentList,
+    } = this.state;
 
     return (
       <div className={style.agentLevelOneMain}>
@@ -236,25 +308,53 @@ class App extends React.Component {
           </div>
           <div className={style.searchBoxItem}>
             <span>市区：</span>
-            <Cascader
-              options={cityDropdownData}
+            <Cascade
+              options={filterCity(cityDropdownData)}
               expandTrigger="hover"
               displayRender={this.displayRender}
               onChange={this.cityDropDownChange}
               className={style.inp}
               placeholder='全部'
+              defaultValue={['']}
             />
           </div>
           <div className={style.searchBoxItem}>
             <span>状态：</span>
-            <Cascader
+            <Cascade
               options={statusDropdownData}
               expandTrigger="hover"
               onChange={this.statusDropDownChange}
               className={style.inp}
               placeholder='全部'
+              defaultValue={['']}
             />
           </div>
+
+          <div style={{ width: '200px', display: "inline-block" }} >
+            <Form.Item label='品牌'>
+              <Select
+                placeholder='品牌'
+                defaultValue=''
+                onChange={this.handleChangeType}
+              // dropdownClassName='w-150'
+              >
+
+                <Select.Option value=''>全部</Select.Option>
+                {
+                  agentList &&
+                  agentList.length &&
+                  agentList.map(item => <Select.Option
+                    key={item.id}
+                    value={item.id}
+                  >
+                    {item.brandName}
+                  </Select.Option>)
+                }
+              </Select>
+            </Form.Item>
+
+          </div>
+
 
           <Button className={style.sub} onClick={this.submitData} type="primary" htmlType="submit">
             查询
@@ -266,21 +366,27 @@ class App extends React.Component {
         </div>
         <Spin spinning={spinningStatus}>
           <div className={style.tableList}>
-            <Table width='100%' rowKey={'agentOutletsId'} dataSource={tableDataSource} pagination={{
-              total: total,
-              pageSize: pageSize,
-              current: pageIndex,
-              onChange: onChange,
-              showTotal: total => `共${total}条`,
-              showSizeChanger: true,
-              showQuickJumper: true,
-              onShowSizeChange: (current, size) => {
-                this.setState({
-                  pageIndex: current,
-                  pageSize: size
-                })
-              }
-            }} columns={tableColumns} />
+            <Table
+              width='100%'
+              rowKey={'agentOutletsId'}
+              dataSource={tableDataSource}
+              pagination={{
+                total: total,
+                pageSize: pageSize,
+                current: pageIndex + 1,
+                onChange: onChange,
+                showTotal: total => `共${total}条`,
+                showSizeChanger: true,
+                showQuickJumper: true,
+                onShowSizeChange: (current, size) => {
+                  this.setState({
+                    pageIndex: current,
+                    pageSize: size
+                  })
+                }
+              }}
+              columns={tableColumns}
+            />
           </div>
         </Spin>
         {/*添加弹框*/}
@@ -300,7 +406,7 @@ class App extends React.Component {
             <Input className={style.editInp} value={editDataName} onChange={this.editAgentNameInp} placeholder="商户名称" />
           </div>
           <div className={style.editInp}>
-            <Cascader
+            <Cascade
               options={cityDropdownData}
               expandTrigger="hover"
               onChange={this.editDropDownChange}
@@ -613,5 +719,5 @@ class App extends React.Component {
     })
   }
 }
-
-export default App;
+const mapStateToProps = ({ snApprove }) => ({ snApprove })
+export default connect(mapStateToProps)(App);

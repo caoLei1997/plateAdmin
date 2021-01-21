@@ -25,6 +25,8 @@ function AddAuthority({
     const [form] = Form.useForm()
     let [authority, setAuthority] = useState(rows && rows.type)
     const [agentOutlesName, setAgentOutlesName] = useState(rows ? rows.agentOutlesName : undefined)
+    console.log('rows', rows);
+
     // 选择角色
     const rolesList = [
         { label: "超级管理员", value: '0' },
@@ -141,7 +143,7 @@ function AddAuthority({
                         ...rows,
                         type: rows && rows.type,
                         address: rows && (rows.city && rows.region) ? [rows.city, rows.region] : undefined,
-                        agentOutletsId: rows && (rows.type == '3' ? rows.agentOutletsName:rows.agentOutletsId)
+                        agentOutletsId: rows && rows.agentOutletsId
                     }}
                 >
                     <Form.Item
@@ -151,6 +153,14 @@ function AddAuthority({
                     >
                         <Input placeholder='姓名' />
                     </Form.Item>
+
+                    {/* <Form.Item
+                        rules={[{ required: true, message: '账户名不能为空' }]}
+                        label='账户名'
+                        name='phoneNumber'
+                    >
+                        <Input placeholder='账户名' />
+                    </Form.Item> */}
                     <Form.Item
                         rules={[{ required: true, len: 11, message: '手机号不能为空' }]}
                         label='手机号'

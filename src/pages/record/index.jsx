@@ -19,8 +19,7 @@ class Record extends Component {
         pageIndex = this.props.recordList.pageIndex,
         pageSize = this.props.recordList.pageSize,
         filter = this.props.recordList.filter,
-    }
-    ) => {
+    }) => {
         let { dispatch } = this.props;
         dispatch({
             type: 'recordList/getList',
@@ -50,10 +49,7 @@ class Record extends Component {
                 },
                 sorter: (a, b) => a.applyTime - b.applyTime,
             },
-            {
-                title: '归属地',
-                dataIndex: 'city',
-            },
+           
             {
                 title: '登记人',
                 dataIndex: 'userName',
@@ -172,7 +168,6 @@ class Record extends Component {
                     />
                 </div>
             </PageHeaderWrapper>
-
         )
     }
 }

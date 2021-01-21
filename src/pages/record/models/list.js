@@ -19,11 +19,10 @@ export default {
     namespace: 'recordList',
     state: { ...initialState },
     effects: {
-
         *getList({ payload }, { call, put }) {
             const { pageIndex, filter, pageSize } = payload;
             console.log(pageIndex);
-            
+
             yield put({
                 type: 'changeFilter',
                 payload: { filter, pageIndex, pageSize }
@@ -40,6 +39,13 @@ export default {
 
         *requestGetCity({ payload }, { call, put }) {
             const response = yield call(requestGetCity, { ...payload });
+            const { data } = response;
+             data.map(item => {
+                if(item.children&& item.children.length){
+                    item.children.unshift({label:'全部',value:undefined})
+                }
+            })
+            console.log(response);
             yield put({
                 type: 'changeCity',
                 payload: response
@@ -74,7 +80,7 @@ export default {
         },
         changeFilter(state, { payload }) {
             console.log(payload);
-            
+
             return {
                 ...state,
                 ...payload

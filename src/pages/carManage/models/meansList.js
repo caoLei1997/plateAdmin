@@ -14,17 +14,29 @@ export default {
         pageSize: PAGESIZE,
         current: 1,
         list: [],
-        isLoaded: false
+        isLoaded: false,
+        filter: {},
     },
     effects: {
-        *getList({ payload, onSuccess }, { call, put }) {
+        *getList({ payload, onSuccess }, { call, put, select }) {
+            // const filter = yield select(state => state.meansList.filter)
+            console.log(payload);
+
+            console.log('pageIndex: ', payload.pageIndex)
             yield put({
                 type: 'changeCurrent',
                 payload: { current: payload.pageIndex }
             });
 
-            const response = yield call(requestCarMeansList, { ...payload, pageIndex: payload.pageIndex - 1 });
-
+            yield put({
+                type: 'changeFilter',
+                payload: payload.filter ? { ...payload.filter } : { ...payload }
+            })
+            const response = yield call(requestCarMeansList, {
+                ...payload,
+                current: payload.pageIndex - 1,
+                pageIndex: payload.pageIndex - 1,
+            });
             yield put({
                 type: 'changeList',
                 payload: response
@@ -45,6 +57,9 @@ export default {
         },
         changeCurrent(state, { payload }) {
             return { ...state, current: payload.current }
+        },
+        changeFilter(state, { payload }) {
+            return { ...state, filter: { ...payload } }
         }
     }
 }

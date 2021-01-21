@@ -57,3 +57,28 @@ export const getRouteAuthority = (path, routeData) => {
   });
   return authorities;
 };
+
+
+
+export const filterCity = (city) => {
+  const someType = (item) => {
+    return item.label === '全部'
+  }
+  const newCity = city.map(item => {
+    if (item.children.length && (item.children.some(someType) === false)) {
+      item.children.unshift({
+        value: '',
+        label: '全部'
+      })
+    }
+    return item
+  })
+
+  if (newCity.some(someType) === false) {
+    newCity.unshift({
+      value: '',
+      label: '全部'
+    })
+  }
+  return [...newCity]
+}

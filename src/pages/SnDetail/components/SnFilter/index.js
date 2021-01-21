@@ -23,7 +23,8 @@ const FilterSearch = ({ getList }) => {
                 onFinish={onFinish}
                 initialValues={{
                     electrombileNumber: null,
-                    modelName: null
+                    modelName: null,
+                    approvalStatus: ''
                 }}
             >
                 <Row gutter={24}>

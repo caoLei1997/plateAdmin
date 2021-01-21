@@ -1,6 +1,7 @@
 import { requestCarDistributeList, requestCarDistributeCensus } from '@/services/car';
 import { toggleStatusKeyVal } from '@/commonFun';
 import { PAGESIZE } from '@/globalConstant';
+import { requestGetCity } from '@/services/record';
 
 const resetList = arr => {
     if (!arr) return [];
@@ -15,14 +16,33 @@ export default {
         pageSize: PAGESIZE,
         current: 1,
         list: [],
-        census: {}
+        census: {},
+        city: [],
+        filter: {},
     },
     effects: {
+        *requestGetCity({ payload }, { call, put }) {
+            const response = yield call(requestGetCity, { ...payload });
+            const { data } = response;
+            data.map(item => {
+                if (item.children && item.children.length) {
+                    item.children.unshift({ label: '全部', value: undefined })
+                }
+            })
+            yield put({
+                type: 'changeCity',
+                payload: response
+            })
+        },
         *getList({ payload }, { call, put }) {
             yield put({
                 type: 'changeCurrent',
                 payload: { current: payload.pageIndex }
             });
+            yield put({
+                type: 'changeFilter',
+                payload: { ...payload }
+            })
 
             const response = yield call(requestCarDistributeList, { ...payload, pageIndex: payload.pageIndex - 1 });
             yield put({
@@ -42,7 +62,7 @@ export default {
         changeList(state, { payload }) {
             const { data } = payload;
             if (!data) return { ...state, list: [], total: 0 };
-            return { ...state, list: resetList(data.content), total: data.total };
+            return { ...state, list: resetList(data.content), total: data.totalElements };
         },
         changeCurrent(state, { payload }) {
             return { ...state, current: payload.current }
@@ -50,6 +70,19 @@ export default {
         changeCensus(state, { payload }) {
             const { data } = payload;
             return { ...state, census: data || {} };
+        },
+        changeCity(state, { payload }) {
+            const { data } = payload;
+            return { ...state, city: [...data] };
+        },
+
+        changeFilter(state, { payload }) {
+            console.log(payload);
+            
+            return {
+                ...state,
+                filter: { ...payload }
+            }
         }
     }
 }

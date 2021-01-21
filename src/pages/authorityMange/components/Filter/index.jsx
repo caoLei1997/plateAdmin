@@ -22,6 +22,9 @@ const Filter = ({ getList }) => {
                 form={form}
                 name="horizontal_login"
                 onFinish={onFinish}
+                initialValues={{
+                    type: ''
+                }}
             >
                 <Row gutter={20}>
                     <Col span={6}>

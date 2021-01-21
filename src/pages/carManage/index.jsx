@@ -9,6 +9,7 @@ import MeansFormSearch from './components/MeansFormSearch';
 import DistributeFormSearch from './components/DistributeFormSearch';
 import CardCensusBasic from './components/cardCensusBasic';
 import styles from './index.less';
+import { PAGESIZE, LOCAL_MEANS_IDS_KEY, RETCODESUCCESS, LOCAL_MEANS_FILTER } from '@/globalConstant';
 
 const tabCensus = [
   {
@@ -44,15 +45,11 @@ const tabMenu = ({ getMeansList, getDistributeList }) => [
     ),
   },
 ];
-
 const CarManage = (props) => {
   const { dispatch, means, meansListState, userInfo, distributeListState } = props;
   const [tabKey, setTabKey] = useState('1');
+  const getMeansList = (current, firstId, config = {...meansListState.filter}) => {
 
-  console.log(userInfo);
-
-
-  const getMeansList = (current, firstId, config = {}) => {
     dispatch({
       type: 'meansList/getList',
       payload: {
@@ -60,6 +57,7 @@ const CarManage = (props) => {
         "account": userInfo.phone,
         "pageIndex": current,
         "pageSize": meansListState.pageSize,
+        secondaryAgentOutletsId: [],
         ...config
       }
     })
@@ -70,6 +68,8 @@ const CarManage = (props) => {
       }
     })
   }
+
+
 
   const getDistributeList = (current, firstId, config = {}) => {
     dispatch({
@@ -85,7 +85,8 @@ const CarManage = (props) => {
         "plateNumberCode": "",
         "startDistributionDate": '',
         "endDistributionDate": '',
-        ...config
+        ...distributeListState.filter,
+        ...config,
       }
     })
 
@@ -106,7 +107,8 @@ const CarManage = (props) => {
   }
 
   useEffect(() => {
-    getMeansList(1);
+    getMeansList(1,false,{});
+
   }, []);
 
   const tabKeyChange = (key, agentOutletsId) => {
@@ -138,7 +140,8 @@ const CarManage = (props) => {
         tabData={tabMenu({
           means,
           getMeansList,
-          getDistributeList
+          getDistributeList,
+
         })}
         tabsChange={tabsChange}
       />

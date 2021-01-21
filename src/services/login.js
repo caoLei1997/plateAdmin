@@ -6,7 +6,8 @@ export async function fakeAccountLogin(params) {
     'serialNumber': params.serialNumber,
     'phoneNumber': params.mobile,
     'verifyCode': params.captcha,
-    'types': params.type
+    'types': params.type,
+    'applyType': params.applyType
   }
 
   if (process.env.NODE_ENV === 'development' || process.env.REACT_APP_ENV === 'buildtest') {
@@ -14,7 +15,9 @@ export async function fakeAccountLogin(params) {
     data = {
       userName: params.mobile,
       password: params.captcha,
-      types: params.type
+      types: params.type,
+      'applyType': params.applyType
+
     }
   }
 

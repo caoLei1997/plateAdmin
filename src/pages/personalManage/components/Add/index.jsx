@@ -45,9 +45,6 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
     const add = (values) => {
         if (!checkSelect(values)) return false;
         toggleShowForm(true);
-
-
-
         setList([...list, {
             ...values,
             agentOutletsId: values.outlets.split('-')[0],
@@ -62,10 +59,8 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
             message.error('请先添加人员');
             return;
         };
-
         const fromData = form.getFieldsValue();
         // const { isEnableAccount } = form.getF÷ieldsValue();
-
         const data = [];
         list.forEach((item) => {
             data.push({
@@ -76,6 +71,7 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
                 "level": Number(item.level)
             })
         })
+        console.log('fromData', fromData.isEnableAccount);
         dispatch({
             type: 'personalList/add',
             payload: { list: data, isEnableAccount: fromData.isEnableAccount },
@@ -89,14 +85,16 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
                     setList([]);
                 } else {
                     const newList = list.map((item, index) => {
-                        data.forEach((filterItem, filterIndex) => {
-                            if (item.phone === filterItem) {
-                                item['repeatStatus'] = 1
-                            } else {
-                                item['repeatStatus'] = 0
-                            }
-                        })
-                        return item
+                        if (data) {
+                            data.forEach((filterItem, filterIndex) => {
+                                if (item.phone === filterItem) {
+                                    item['repeatStatus'] = 1
+                                } else {
+                                    item['repeatStatus'] = 0
+                                }
+                            })
+                            return item
+                        }
                     })
                     console.log(newList);
                 }
@@ -154,46 +152,69 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
             <div className='add-btn-wrap'>
                 <Button type="primary" className='btn-green mb-24' icon={<PlusOutlined />} onClick={() => toggleModalVisible(true)}>新增人员</Button>
             </div>
-            <Modal className='add-personal-modal' forceRender destroyOnClose visible={modalVisible} title='新增人员' onCancel={() => toggleModalVisible(false)} onOk={() => modalOk()}>
+            <Modal
+                className='add-personal-modal'
+                forceRender destroyOnClose
+                visible={modalVisible}
+                title='新增人员'
+                onCancel={() => toggleModalVisible(false)}
+                onOk={() => modalOk()}
+                footer={[
+                    <Button key="back" onClick={() => toggleModalVisible(false)}>
+                        取消
+                    </Button>,
+                    <Button key="submit" type="primary" loading={addLoading} onClick={() => modalOk()}>
+                        确定
+                    </Button>,
+                ]}
+            >
                 <Table {...tableProps} rowClassName={filterRepeat} />
-                {formVisible ?
-                    <Form
-                        className='mt-16'
-                        name='add-personal-form'
-                        onFinish={add}
-                        form={form}
-                        initialValues={
-                            { outletsVal: '', isEnableAccount: false }
-                        }
-                    >
-                        <Row gutter={12}>
-                            <Col span={12}>
-                                <Form.Item name='name' className='mb-16' rules={[{ required: true, message: '请输入姓名!' }]}>
-                                    <Input placeholder="姓名" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item name='phone' className='mb-16' rules={[{ required: true, len: 11, message: '请输入正确的手机号!' }]}>
-                                    <Input placeholder="手机号" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <div>
-                            <DealerLinkage isAddPersonal onCallBack={selectChange} />
-                        </div>
-                        <div className='text-right'>
-                            <Button loading={addLoading} type="primary" htmlType="submit" className='search-button mr-8'>添加</Button>
-                            <Button className='search-button' onClick={() => toggleShowForm(false)}>取消</Button>
-                        </div>
-                        <Form.Item name="isEnableAccount" valuePropName="checked">
-                            <Checkbox>全部启用</Checkbox>
-                        </Form.Item>
-                    </Form>
-                    :
-                    <p className={styles.add_text} onClick={() => toggleShowForm(true)}>
-                        <PlusOutlined />&nbsp;&nbsp;添加
-                    </p>
-                }
+                <Form
+                    className='mt-16'
+                    name='add-personal-form'
+                    onFinish={add}
+                    form={form}
+                    initialValues={
+                        { outletsVal: '', isEnableAccount: false }
+                    }
+                >
+                    {formVisible ?
+                        (
+                            <>
+                                <Row gutter={12}>
+                                    <Col span={12}>
+                                        <Form.Item name='name' className='mb-16' rules={[{ required: true, message: '请输入姓名!' }]}>
+                                            <Input placeholder="姓名" />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={12}>
+                                        <Form.Item name='phone' className='mb-16' rules={[{ required: true, len: 11, message: '请输入正确的手机号!' }]}>
+                                            <Input placeholder="手机号" />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                <div>
+                                    <DealerLinkage isAddPersonal onCallBack={selectChange} />
+                                </div>
+                                <div className='text-right'>
+                                    <Button type="primary" htmlType="submit" className='search-button mr-8'>添加</Button>
+                                    <Button className='search-button' onClick={() => toggleShowForm(false)}>取消</Button>
+                                </div>
+                            </>
+                        )
+                        :
+                        (
+                            <p className={styles.add_text} onClick={() => toggleShowForm(true)}>
+                                <PlusOutlined />&nbsp;&nbsp;添加
+                            </p>
+                        )
+                    }
+                    <Form.Item name="isEnableAccount" valuePropName="checked">
+                        <Checkbox>启用该批次人员</Checkbox>
+                    </Form.Item>
+                </Form>
+
+
             </Modal>
         </div>
     </div>)

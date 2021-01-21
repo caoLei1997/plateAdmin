@@ -9,13 +9,18 @@ const scroll = { x: 1000 };
 const columns = [
   {
     title: '申请日期',
-    dataIndex: 'updatedAt',
-    key: 'updatedAt'
+    dataIndex: 'lastImageInputtedDate',
+    key: 'lastImageInputtedDate'
   },
   {
     title: '经销商',
     dataIndex: 'agentOutletsName',
     key: 'agentOutletsName',
+  },
+  {
+    title: '市区',
+    dataIndex: 'agentOutletsCity',
+    key: 'agentOutletsCity',
   },
   {
     title: '车辆品牌',
@@ -71,8 +76,8 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange, getList })
   const [nowPageSize, setNowPageSize] = useState([pageSize]);
   console.log(pageSize);
 
-  const handlePaginationChange = (page) => {
-    paginationChange(page);
+  const handlePaginationChange = (page, size) => {
+    paginationChange(page, false, { ...meansListState.filter, pageSize: size[0], pageIndex: page });
   }
 
   const tableProps = {
@@ -80,22 +85,16 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange, getList })
     columns,
     scroll,
     pagination: {
-      total, current,
+      total, 
+      current,
       pageSize: nowPageSize,
       onChange: handlePaginationChange,
       showTotal: total => `共${total}条`,
       showSizeChanger: true,
       showQuickJumper: true,
-      onShowSizeChange: (current, size) => {
-        setNowPageSize(size);
-        paginationChange(current, false, { pageSize: size });
-      }
     },
     dataSource: list
   }
-
-  console.log(tableProps.dataSource);
-  
   return (
     <div className={styles.container}>
       <div id="components-table-demo-basic">

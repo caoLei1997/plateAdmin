@@ -79,10 +79,12 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
 
   const handleFinish = (values) => {
     if (!checkSelect()) return false;
+    console.log(values);
+    const [agentOutletsId, agentOutletsName] = values.outlets.split('-');
     const data = {
       "id": item.id,
-      "agentOutletsId": values.outlets.split('-')[0],
-      "agentOutletsName": values.outlets.split('-')[1],
+      "agentOutletsId": agentOutletsId,
+      "agentOutletsName": agentOutletsName,
       "name": values.name,
       "phoneNumber": values.phoneNumber,
       "level": Number(values.level)
@@ -107,17 +109,42 @@ const OperaBrandEdit = ({ dispatch, item, getList }) => {
   return (
     <div>
       <a onClick={() => toggleModalVisible(true)}>编辑</a>
-      <Modal   title='编辑业务人员' destroyOnClose visible={modalVisible} footer={null} onCancel={() => toggleModalVisible(false)}>
-        <Form initialValues={{ name: item.name, phoneNumber: item.phoneNumber, city: item.region, level: String(item.level) }} fields={[{ name: ['outlets'], value: selectVal.outlets }]} className="personal-edit-form" name='catalog-manage-table-search' onFinish={handleFinish} >
+      <Modal title='编辑业务人员'
+        destroyOnClose
+        visible={modalVisible}
+        footer={null}
+        onCancel={() => toggleModalVisible(false)}
+      >
+        <Form
+          initialValues={{
+            name: item.name,
+            phoneNumber: item.phoneNumber,
+            level: String(item.level),
+            city: [item.city, item.region],
+          }}
+          fields={[{
+            name: ['outlets'],
+            value: selectVal.outlets
+          }]}
+          className="personal-edit-form"
+          name='catalog-manage-table-search'
+          onFinish={handleFinish}
+        >
           <Form.Item label='姓名' name='name' rules={[{ required: true, message: '请输入姓名!' }]}>
             <Input placeholder="姓名" />
           </Form.Item>
           <Form.Item label='手机号' name='phoneNumber' rules={[{ required: true, len: 11, message: '请输入正确的手机号!' }]}>
             <Input placeholder="手机号" />
           </Form.Item>
-          {/* <Form.Item label='所属商户' name='name'>
-            <DealerLinkage isAddPersonal formProps={formProps} span={8} onCallBack={selectChange} defaultLevel={item.level} />
-          </Form.Item> */}
+          <Form.Item label='所属商户' name='name'>
+            <DealerLinkage
+              isAddPersonal
+              formProps={formProps}
+              span={8}
+              onCallBack={selectChange}
+              defaultLevel={item.level}
+            />
+          </Form.Item>
           <div className='text-right'>
             <Button type="primary" htmlType="submit" className='search-button mr-8'>保存</Button>
             <Button className='search-button' onClick={() => toggleModalVisible(false)}>取消</Button>
@@ -134,7 +161,7 @@ const TableList = (props) => {
 
   const handlePaginationChange = (page) => {
     console.log(page);
-    
+
     getList(page);
   }
 

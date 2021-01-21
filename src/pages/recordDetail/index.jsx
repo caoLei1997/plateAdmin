@@ -5,10 +5,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Descriptions, Divider, Table, Row, Col, Typography, Collapse, Image } from 'antd';
 import AuditPass from './components/AuditPass'
 import AuditBy from './components/AuditBy'
-import defaultImg from '../../assets/default.png'
-
 import { connect, Link } from 'umi'
-
 const { Panel } = Collapse;
 
 const Text = Typography
@@ -72,15 +69,14 @@ class index extends Component {
 
         const columns = [
             {
-                title: '审核人',
-                dataIndex: 'auditName',
-                key: 'auditName',
+                title: '审核人手机号',
+                dataIndex: 'auditPhone',
+                key: 'auditPhone',
             },
             {
                 title: '审核日期',
                 dataIndex: 'auditedAt',
                 key: 'auditedAt',
-
             },
             {
                 title: '审核结果',
@@ -414,7 +410,7 @@ class index extends Component {
                             }
                         </Col>
                     </Row>
-                </div >
+                </div>
 
             );
         } else {

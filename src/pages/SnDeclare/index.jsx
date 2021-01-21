@@ -155,7 +155,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
         <PageHeaderWrapper className={styles.main}>
             <div>
                 <SnFilter getList={getList}></SnFilter>
-                <AddExcel getList={getList}></AddExcel>
+                {/* <AddExcel getList={getList}></AddExcel> */}
                 <Table
                     rowKey='id'
                     dataSource={content}

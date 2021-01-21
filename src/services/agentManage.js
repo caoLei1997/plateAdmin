@@ -2,6 +2,13 @@ import request from '@/utils/request';
 import { queryJsonToString } from '@/commonFun';
 
 export async function requestAgentList(data) {
+  return request('/manager/v1.1/RelAgentOutletsBrand/pageList/brand', {
+    method: 'POST',
+    data
+  });
+}
+
+export async function relAgentOutletsBrandList(data) {
   return request('/manager/v1.1/RelAgentOutletsBrand/pageList', {
     method: 'POST',
     data
@@ -10,6 +17,11 @@ export async function requestAgentList(data) {
 
 export async function requestCityRegion(data) {
   return request('/manager/v1.1/DealerPersonnel/getCityTree', {
+    method: 'GET',
+  });
+}
+export async function requestDicModelsByBrandId(data) {
+  return request(`/manager/v1.1/DirectoryManageController/dicModelsByBrandId?brandId=${data}`, {
     method: 'GET',
   });
 }
@@ -59,5 +71,11 @@ export async function addSecondAgent(data) {
   return request(`/manager/v1.1/RelAgentOutletsBrand/addSecondAgent`, {
     method: 'POST',
     data
+  });
+}
+
+export async function typeApproveAgent() {
+  return request(`/manager/v1.1/RelAgentOutletsBrand/getAllBrands`, {
+    method: 'GET',
   });
 }

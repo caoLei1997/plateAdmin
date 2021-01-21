@@ -93,7 +93,7 @@ const OperaBrandAddModel = (props) => {
     </div>
   )
 }
-  
+
 const OperaModelEdit = ({ dispatch, id, successFun, val, brandId }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -199,8 +199,9 @@ const NestedTable = (props) => {
         }
 
         return (<div className='inline'>
-          <OperaModelEdit dispatch={dispatch} id={item.id} brandId={item.pid} val={item.name} successFun={() => { handlePaginationChange(current) }} />
-          <OperaModelDel loading={delModelLoading} dispatch={dispatch} id={item.id} brandId={item.pid} val={item.name} successFun={() => { handlePaginationChange(current) }} />
+          --
+          {/* <OperaModelEdit dispatch={dispatch} id={item.id} brandId={item.pid} val={item.name} successFun={() => { handlePaginationChange(current) }} /> */}
+          {/* <OperaModelDel loading={delModelLoading} dispatch={dispatch} id={item.id} brandId={item.pid} val={item.name} successFun={() => { handlePaginationChange(current) }} /> */}
         </div>)
       }
     }
