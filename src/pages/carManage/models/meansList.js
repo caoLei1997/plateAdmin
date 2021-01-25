@@ -14,7 +14,6 @@ export default {
         pageSize: PAGESIZE,
         current: 1,
         list: [],
-<<<<<<< HEAD
         isLoaded: false,
         filter: {},
     },
@@ -24,18 +23,11 @@ export default {
             console.log(payload);
 
             console.log('pageIndex: ', payload.pageIndex)
-=======
-        isLoaded: false
-    },
-    effects: {
-        *getList({ payload, onSuccess }, { call, put }) {
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             yield put({
                 type: 'changeCurrent',
                 payload: { current: payload.pageIndex }
             });
 
-<<<<<<< HEAD
             yield put({
                 type: 'changeFilter',
                 payload: payload.filter ? { ...payload.filter } : { ...payload }
@@ -45,10 +37,6 @@ export default {
                 current: payload.pageIndex - 1,
                 pageIndex: payload.pageIndex - 1,
             });
-=======
-            const response = yield call(requestCarMeansList, { ...payload, pageIndex: payload.pageIndex - 1 });
-
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             yield put({
                 type: 'changeList',
                 payload: response
@@ -69,12 +57,9 @@ export default {
         },
         changeCurrent(state, { payload }) {
             return { ...state, current: payload.current }
-<<<<<<< HEAD
         },
         changeFilter(state, { payload }) {
             return { ...state, filter: { ...payload } }
-=======
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
         }
     }
 }

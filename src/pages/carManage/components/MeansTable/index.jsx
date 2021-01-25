@@ -9,13 +9,8 @@ const scroll = { x: 1000 };
 const columns = [
   {
     title: '申请日期',
-<<<<<<< HEAD
     dataIndex: 'lastImageInputtedDate',
     key: 'lastImageInputtedDate'
-=======
-    dataIndex: 'updatedAt',
-    key: 'updatedAt'
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
   },
   {
     title: '经销商',
@@ -23,14 +18,11 @@ const columns = [
     key: 'agentOutletsName',
   },
   {
-<<<<<<< HEAD
     title: '市区',
     dataIndex: 'agentOutletsCity',
     key: 'agentOutletsCity',
   },
   {
-=======
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
     title: '车辆品牌',
     dataIndex: 'brandName',
     key: 'brandName',
@@ -84,13 +76,8 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange, getList })
   const [nowPageSize, setNowPageSize] = useState([pageSize]);
   console.log(pageSize);
 
-<<<<<<< HEAD
   const handlePaginationChange = (page, size) => {
     paginationChange(page, false, { ...meansListState.filter, pageSize: size[0], pageIndex: page });
-=======
-  const handlePaginationChange = (page) => {
-    paginationChange(page);
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
   }
 
   const tableProps = {
@@ -98,33 +85,16 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange, getList })
     columns,
     scroll,
     pagination: {
-<<<<<<< HEAD
       total, 
       current,
-=======
-      total, current,
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
       pageSize: nowPageSize,
       onChange: handlePaginationChange,
       showTotal: total => `共${total}条`,
       showSizeChanger: true,
       showQuickJumper: true,
-<<<<<<< HEAD
     },
     dataSource: list
   }
-=======
-      onShowSizeChange: (current, size) => {
-        setNowPageSize(size);
-        paginationChange(current, false, { pageSize: size });
-      }
-    },
-    dataSource: list
-  }
-
-  console.log(tableProps.dataSource);
-  
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
   return (
     <div className={styles.container}>
       <div id="components-table-demo-basic">

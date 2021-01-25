@@ -1,6 +1,5 @@
 import React from 'react';
 import style from './add.less';
-<<<<<<< HEAD
 import {
   Modal,
   Button,
@@ -11,9 +10,6 @@ import {
   notification,
   Checkbox
 } from 'antd';
-=======
-import { Modal, Button, Table, Input, Select, Cascader, notification } from 'antd';
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
 const { Option } = Select;
 const children = [];
 import { CloseOutlined } from '@ant-design/icons';
@@ -113,10 +109,7 @@ class App extends React.Component {
       agentAddress: '',
       agentBrand: [],
       brandIds: [],
-<<<<<<< HEAD
       checked: false
-=======
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
     });
   };
 
@@ -133,7 +126,6 @@ class App extends React.Component {
           maskClosable={false}
           width="60%"
         >
-<<<<<<< HEAD
           <Table
             scroll={{ x: 600 }}
             dataSource={dataSource}
@@ -148,14 +140,6 @@ class App extends React.Component {
                 onChange={this.agentNameInp}
                 placeholder="商户名称"
               />
-=======
-        
-
-          <Table scroll={{ x: 600 }} dataSource={dataSource} columns={columns} pagination={false} />
-          <div>
-            <div className={style.addInpInLine}>
-              <Input className={style.addInp} value={agentName} onChange={this.agentNameInp} placeholder="商户名称" />
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
               <Cascader
                 options={dropdownData}
                 expandTrigger="hover"
@@ -165,16 +149,12 @@ class App extends React.Component {
                 value={dropdownValue}
               />
             </div>
-<<<<<<< HEAD
             <Input
               className={style.addInpAddress}
               value={agentAddress}
               onChange={this.agentAddressInp}
               placeholder="商户地址"
             />
-=======
-            <Input className={style.addInpAddress} value={agentAddress} onChange={this.agentAddressInp} placeholder="商户地址" />
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             <Select
               style={{ width: '100%' }}
               placeholder="选择代理品牌"
@@ -184,10 +164,6 @@ class App extends React.Component {
             >
               {brandChildren}
             </Select>
-<<<<<<< HEAD
-
-=======
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
           </div>
           <Button className={style.addSubBtn} onClick={this.checkAddData} type="primary" block color='#ccc'>+ 添加</Button>
         </Modal>

@@ -2,7 +2,6 @@ import request from '@/utils/request';
 import { queryJsonToString } from '@/commonFun';
 
 export async function requestAgentList(data) {
-<<<<<<< HEAD
   return request('/manager/v1.1/RelAgentOutletsBrand/pageList/brand', {
     method: 'POST',
     data
@@ -10,8 +9,6 @@ export async function requestAgentList(data) {
 }
 
 export async function relAgentOutletsBrandList(data) {
-=======
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
   return request('/manager/v1.1/RelAgentOutletsBrand/pageList', {
     method: 'POST',
     data
@@ -23,14 +20,11 @@ export async function requestCityRegion(data) {
     method: 'GET',
   });
 }
-<<<<<<< HEAD
 export async function requestDicModelsByBrandId(data) {
   return request(`/manager/v1.1/DirectoryManageController/dicModelsByBrandId?brandId=${data}`, {
     method: 'GET',
   });
 }
-=======
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
 
 export async function requestBrand(data) {
   return request('/manager/v1.1/RelAgentOutletsBrand/getAllBrands', {
@@ -61,11 +55,7 @@ export async function useOrStop(data) {
 }
 
 export async function getSecondAgentBrand(data) {
-<<<<<<< HEAD
   return request(`/manager/v1.1/RelAgentOutletsBrand/getSecondAgentSellBrandAndModel?${data && queryJsonToString(data)}`, {
-=======
-  return request(`/manager/v1.1/RelAgentOutletsBrand/getSecondAgentSellBrandAndModel?${data&&queryJsonToString(data)}`, {
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
     method: 'GET',
   });
 }
@@ -83,7 +73,6 @@ export async function addSecondAgent(data) {
     data
   });
 }
-<<<<<<< HEAD
 
 export async function typeApproveAgent() {
   return request(`/manager/v1.1/RelAgentOutletsBrand/getAllBrands`, {
@@ -98,5 +87,3 @@ export async function getBrandAndModel(data) {
     });
   };
 }
-=======
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
