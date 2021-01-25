@@ -16,5 +16,8 @@ const NoFoundPage = () => (
 );
 
 export default NoFoundPage;
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7

@@ -19,7 +19,12 @@ class Record extends Component {
         pageIndex = this.props.recordList.pageIndex,
         pageSize = this.props.recordList.pageSize,
         filter = this.props.recordList.filter,
+<<<<<<< HEAD
     }) => {
+=======
+    }
+    ) => {
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
         let { dispatch } = this.props;
         dispatch({
             type: 'recordList/getList',
@@ -49,7 +54,14 @@ class Record extends Component {
                 },
                 sorter: (a, b) => a.applyTime - b.applyTime,
             },
+<<<<<<< HEAD
            
+=======
+            {
+                title: '归属地',
+                dataIndex: 'city',
+            },
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             {
                 title: '登记人',
                 dataIndex: 'userName',
@@ -168,6 +180,10 @@ class Record extends Component {
                     />
                 </div>
             </PageHeaderWrapper>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
         )
     }
 }

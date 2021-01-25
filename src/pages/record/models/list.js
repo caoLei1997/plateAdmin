@@ -19,10 +19,18 @@ export default {
     namespace: 'recordList',
     state: { ...initialState },
     effects: {
+<<<<<<< HEAD
         *getList({ payload }, { call, put }) {
             const { pageIndex, filter, pageSize } = payload;
             console.log(pageIndex);
 
+=======
+
+        *getList({ payload }, { call, put }) {
+            const { pageIndex, filter, pageSize } = payload;
+            console.log(pageIndex);
+            
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             yield put({
                 type: 'changeFilter',
                 payload: { filter, pageIndex, pageSize }
@@ -39,6 +47,7 @@ export default {
 
         *requestGetCity({ payload }, { call, put }) {
             const response = yield call(requestGetCity, { ...payload });
+<<<<<<< HEAD
             const { data } = response;
              data.map(item => {
                 if(item.children&& item.children.length){
@@ -46,6 +55,8 @@ export default {
                 }
             })
             console.log(response);
+=======
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             yield put({
                 type: 'changeCity',
                 payload: response
@@ -80,7 +91,11 @@ export default {
         },
         changeFilter(state, { payload }) {
             console.log(payload);
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             return {
                 ...state,
                 ...payload

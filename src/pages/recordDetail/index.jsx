@@ -5,7 +5,14 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Descriptions, Divider, Table, Row, Col, Typography, Collapse, Image } from 'antd';
 import AuditPass from './components/AuditPass'
 import AuditBy from './components/AuditBy'
+<<<<<<< HEAD
 import { connect, Link } from 'umi'
+=======
+import defaultImg from '../../assets/default.png'
+
+import { connect, Link } from 'umi'
+
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
 const { Panel } = Collapse;
 
 const Text = Typography
@@ -69,14 +76,24 @@ class index extends Component {
 
         const columns = [
             {
+<<<<<<< HEAD
                 title: '审核人手机号',
                 dataIndex: 'auditPhone',
                 key: 'auditPhone',
+=======
+                title: '审核人',
+                dataIndex: 'auditName',
+                key: 'auditName',
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             },
             {
                 title: '审核日期',
                 dataIndex: 'auditedAt',
                 key: 'auditedAt',
+<<<<<<< HEAD
+=======
+
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             },
             {
                 title: '审核结果',
@@ -410,7 +427,11 @@ class index extends Component {
                             }
                         </Col>
                     </Row>
+<<<<<<< HEAD
                 </div>
+=======
+                </div >
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
 
             );
         } else {

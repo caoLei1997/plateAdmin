@@ -4,12 +4,18 @@ import { connect } from 'umi';
 import styles from './index.less';
 const { RangePicker } = DatePicker;
 import { formatData } from '@/commonFun'
+<<<<<<< HEAD
 import { filterCity } from '@/utils/utils'
 
 const FilterSearch = ({ dispatch, recordList, login, getList }) => {
     const [form] = Form.useForm();
     console.log(recordList);
 
+=======
+
+const FilterSearch = ({ dispatch, recordList, login, getList }) => {
+    const [form] = Form.useForm();
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
     const onFinish = data => {
         let { applyTimeStart, auditTimeStart, city } = data;
         let filter = {
@@ -21,9 +27,12 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
             auditTimeStart: auditTimeStart && formatData(auditTimeStart[0]),
             auditTimeEnd: auditTimeStart && formatData(auditTimeStart[1]),
         }
+<<<<<<< HEAD
         if (login.channel == 14) {
             filter.agentOutlesId = login.id
         }
+=======
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
         getList({ filter, pageIndex: 1 })
     };
     useEffect(() => {
@@ -34,6 +43,14 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
             }
         })
     }, []);
+<<<<<<< HEAD
+=======
+
+
+    console.log(login);
+
+
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
     function displayRender(label) {
         return label.join('-');
     }
@@ -43,6 +60,7 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
             type: 'recordList/getCityAndRegion',
             payload: {
                 "city": city,
+<<<<<<< HEAD
                 "region": region ? region : ''
             },
         })
@@ -57,6 +75,13 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
         recordStatus: ''
     }
     
+=======
+                "region": region
+            },
+        })
+    }
+    const dateFormat = 'YYYY/MM/DD';
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
     return (
         <div className={styles.filter} >
             <Form
@@ -64,7 +89,14 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
                 name="advanced_search"
                 className="ant-advanced-search-form"
                 onFinish={onFinish}
+<<<<<<< HEAD
                 initialValues={initialValue}
+=======
+                initialValues={{
+                    city: login.channel == 14 ? [login.city, login.region] : undefined,
+                    agentOutlesId: login.channel == 14 ? login.name : undefined
+                }}
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             >
                 <Row gutter={24}>
                     <Col span={6}>
@@ -73,12 +105,20 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
                             label='所属大队'
                         >
                             <Cascader
+<<<<<<< HEAD
                                 options={filterCity(recordList.city)}
+=======
+                                options={recordList.city}
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
                                 expandTrigger="hover"
                                 displayRender={displayRender}
                                 onChange={onChange}
                                 placeholder='选择市区'
+<<<<<<< HEAD
                                 disabled={login.channel == 14 ? true : false}
+=======
+                                disabled={login.channel == 14 ? true : false }
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
                             />
                         </Form.Item>
                     </Col>
@@ -90,6 +130,7 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
                         >
                             <Select
                                 placeholder='选择所属大队'
+<<<<<<< HEAD
                                 disabled={login.channel == 14 ? true : false}
                             >
                                 <Option value=''>全部</Option>
@@ -107,6 +148,20 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
                                             </Option>
                                         </>
 
+=======
+                                disabled={login.channel == 14 ? true : false }
+                            >
+                                {
+                                    recordList.brigadeList.length &&
+                                    recordList.brigadeList.map((item, index) => {
+                                        return <Option
+                                            key={index}
+                                            agentOutletsName={item.agentOutlesName}
+                                            value={item.agentOutlesId}
+                                        >
+                                            {item.agentOutlesName}
+                                        </Option>
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
                                     })
                                 }
                             </Select>
@@ -140,7 +195,10 @@ const FilterSearch = ({ dispatch, recordList, login, getList }) => {
                     <Col span={6}>
                         <Form.Item label='审核状态' name='recordStatus'>
                             <Select placeholder='审核状态'>
+<<<<<<< HEAD
                                 <Select.Option value="">全部</Select.Option>
+=======
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
                                 <Select.Option value="2">待审核</Select.Option>
                                 <Select.Option value="3">不通过</Select.Option>
                                 <Select.Option value="4">已通过</Select.Option>

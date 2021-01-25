@@ -57,6 +57,7 @@ const columns = [
 
 const MeansTable = ({ distributeListState, tableLoading, paginationChange }) => {
   const { total, current, pageSize, list } = distributeListState;
+<<<<<<< HEAD
   console.log('distributeListState: ', distributeListState)
 
   const [nowPageSize, setNowPageSize] = useState([pageSize]);
@@ -65,6 +66,12 @@ const MeansTable = ({ distributeListState, tableLoading, paginationChange }) => 
     console.log(111);
     console.log('filter', distributeListState.filter);
     paginationChange(page, false, { ...distributeListState.filter, pageIndex: page, pageSize: size[0], });
+=======
+  const [nowPageSize, setNowPageSize] = useState([pageSize]);
+
+  const handlePaginationChange = (page) => {
+    paginationChange(page);
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
   }
 
   const exportExcel = () => {
@@ -79,16 +86,26 @@ const MeansTable = ({ distributeListState, tableLoading, paginationChange }) => 
     rowKey: 'id',
     columns,
     pagination: {
+<<<<<<< HEAD
       total,
       current,
       pageSize: nowPageSize,
       onChange: handlePaginationChange,
+=======
+      total, current,
+      pageSize: nowPageSize, onChange: handlePaginationChange,
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
       showTotal: total => `共${total}条`,
       showSizeChanger: true,
       showQuickJumper: true,
       onShowSizeChange: (current, size) => {
+<<<<<<< HEAD
 
         setNowPageSize(size);
+=======
+        setNowPageSize(size);
+        paginationChange(current, false, { pageSize: size });
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
       }
     },
 

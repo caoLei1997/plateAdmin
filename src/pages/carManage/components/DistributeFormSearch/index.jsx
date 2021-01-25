@@ -29,7 +29,10 @@ const DistributeFormSearch = (props) => {
     <Col span={8}>
       <Form.Item label='经销商' name='secondDealer'>
         <Select placeholder="经销商" >
+<<<<<<< HEAD
           {subDealerList.length && <Option value=''>全部</Option>}
+=======
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
           {subDealerList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
         </Select>
       </Form.Item>
@@ -77,6 +80,7 @@ const DistributeFormSearch = (props) => {
   }
 
   return (
+<<<<<<< HEAD
     <Form
       className="ant-advanced-search-form"
       name='car-manage-form-search'
@@ -87,6 +91,11 @@ const DistributeFormSearch = (props) => {
     >
       {getFields()}
       <Row Row >
+=======
+    <Form className="ant-advanced-search-form" name='car-manage-form-search' onFinish={handleFinish}>
+      {getFields()}
+      <Row>
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
         <Col span={24} style={{ textAlign: 'right', }}>
           <Button type="primary" htmlType="submit">查询</Button>
         </Col>

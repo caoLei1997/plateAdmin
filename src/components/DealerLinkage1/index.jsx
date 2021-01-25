@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'umi';
+<<<<<<< HEAD
 import { Form, Select, Row, Col, Cascader } from 'antd';
 import styles from './index.less';
 import { filterCity } from '@/utils/utils';
@@ -25,6 +26,21 @@ const DealerSelect = (props) => {
 
   const { city = {}, level = {}, dealer = {} } = formProps;
 
+=======
+import { Form, Select, Row, Col,Cascader } from 'antd';
+import styles from './index.less';
+
+const { Option, OptGroup } = Select;
+
+const DealerSelect = (props) => {
+  const { showAll, isAddPersonal, personalDealerState, dispatch, onCallBack, formProps = {}, span = 8 } = props;
+  const [cityVal, setCityVal] = useState('');
+  const [levelVal, setLevelVal] = useState('');
+  const [outletsVal, setOutletsVal] = useState('6666666');
+  const { city = {}, level = {}, dealer = {} } = formProps;
+
+
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
   const getCityList = () => {
     dispatch({
       type: 'personalDealer/getCityList'
@@ -53,9 +69,14 @@ const DealerSelect = (props) => {
   const handleSelect = (value, key) => {
     onCallBack(value, key);
     if (key === 'city') {
+<<<<<<< HEAD
       const city = value.join('-');
       setCityVal(city);
       getOutletsList(city);
+=======
+      setCityVal(value);
+      getOutletsList(value);
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
     }
 
     if (key === 'level') {
@@ -74,6 +95,7 @@ const DealerSelect = (props) => {
     getOutletsList();
   }, [])
 
+<<<<<<< HEAD
 
 
   function onChange(value) {
@@ -92,15 +114,34 @@ const DealerSelect = (props) => {
     console.log('search:', val);
   }
 
+=======
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
   return (
     <div className={styles.container}>
       <Row gutter={12}>
         <Col span={12}>
           <Form.Item name='city' label={city.label || ''} className='mb-16'>
+<<<<<<< HEAD
             <Cascader
               options={filterCity(personalDealerState.city)}
               onChange={(value) => { handleSelect(value, 'city') }}
             />
+=======
+            <Select placeholder={level.placeholder || "选择市区"} onSelect={value => handleSelect(value, 'city')}>
+              {showAll && <Option value="">全部市区</Option>}
+              {personalDealerState.city && personalDealerState.city.map(item => (
+                <OptGroup label={item.value}>
+                  {item.children.length > 0 && item.children.map(sItem => <Option value={`${item.value}-${sItem.value}`}>{sItem.value}</Option>)}
+                </OptGroup>
+              ))}
+            </Select>
+
+            {/* <Cascader
+              defaultValue={['zhejiang', 'hangzhou', 'xihu']}
+              options={options}
+              onChange={onChange}
+            /> */}
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -115,6 +156,7 @@ const DealerSelect = (props) => {
       </Row>
       <Form.Item name='outlets' value={outletsVal} label={dealer.label || ''} className='mb-16'>
         {isAddPersonal ?
+<<<<<<< HEAD
           <Select
             placeholder={dealer.placeholder || "选择所属商户"}
             onSelect={value => handleSelect(value, 'outlets')}
@@ -140,6 +182,15 @@ const DealerSelect = (props) => {
             }
           >
             <Option value="">全部网点</Option>
+=======
+          <Select placeholder={dealer.placeholder || "选择所属商户"} onSelect={value => handleSelect(value, 'outlets')}>
+            {showAll && <Option value="">全部网点</Option>}
+            {personalDealerState.outlets && personalDealerState.outlets.map(item => <Option value={`${item.id}-${item.name}`}>{item.name}</Option>)}
+          </Select>
+          :
+          <Select placeholder={dealer.placeholder || "选择所属商户"} onSelect={value => handleSelect(value, 'outlets')}>
+            {showAll && <Option value="">全部网点</Option>}
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             {personalDealerState.outlets && personalDealerState.outlets.map(item => <Option value={item.id}>{item.name}</Option>)}
           </Select>
         }
@@ -148,7 +199,12 @@ const DealerSelect = (props) => {
   );
 }
 
+<<<<<<< HEAD
 export default connect(({ personalDealer, loading }) => ({
   personalDealerState: personalDealer,
   selectLoading: loading.effects['personalDealer/getOutletsList']
+=======
+export default connect(({ personalDealer }) => ({
+  personalDealerState: personalDealer
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
 }))(DealerSelect);

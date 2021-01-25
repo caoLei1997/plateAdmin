@@ -9,7 +9,10 @@ import MeansFormSearch from './components/MeansFormSearch';
 import DistributeFormSearch from './components/DistributeFormSearch';
 import CardCensusBasic from './components/cardCensusBasic';
 import styles from './index.less';
+<<<<<<< HEAD
 import { PAGESIZE, LOCAL_MEANS_IDS_KEY, RETCODESUCCESS, LOCAL_MEANS_FILTER } from '@/globalConstant';
+=======
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
 
 const tabCensus = [
   {
@@ -45,11 +48,23 @@ const tabMenu = ({ getMeansList, getDistributeList }) => [
     ),
   },
 ];
+<<<<<<< HEAD
 const CarManage = (props) => {
   const { dispatch, means, meansListState, userInfo, distributeListState } = props;
   const [tabKey, setTabKey] = useState('1');
   const getMeansList = (current, firstId, config = {...meansListState.filter}) => {
 
+=======
+
+const CarManage = (props) => {
+  const { dispatch, means, meansListState, userInfo, distributeListState } = props;
+  const [tabKey, setTabKey] = useState('1');
+
+  console.log(userInfo);
+
+
+  const getMeansList = (current, firstId, config = {}) => {
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
     dispatch({
       type: 'meansList/getList',
       payload: {
@@ -57,7 +72,10 @@ const CarManage = (props) => {
         "account": userInfo.phone,
         "pageIndex": current,
         "pageSize": meansListState.pageSize,
+<<<<<<< HEAD
         secondaryAgentOutletsId: [],
+=======
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
         ...config
       }
     })
@@ -69,8 +87,11 @@ const CarManage = (props) => {
     })
   }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
   const getDistributeList = (current, firstId, config = {}) => {
     dispatch({
       type: 'distributeList/getList',
@@ -85,8 +106,12 @@ const CarManage = (props) => {
         "plateNumberCode": "",
         "startDistributionDate": '',
         "endDistributionDate": '',
+<<<<<<< HEAD
         ...distributeListState.filter,
         ...config,
+=======
+        ...config
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
       }
     })
 
@@ -107,8 +132,12 @@ const CarManage = (props) => {
   }
 
   useEffect(() => {
+<<<<<<< HEAD
     getMeansList(1,false,{});
 
+=======
+    getMeansList(1);
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
   }, []);
 
   const tabKeyChange = (key, agentOutletsId) => {
@@ -140,8 +169,12 @@ const CarManage = (props) => {
         tabData={tabMenu({
           means,
           getMeansList,
+<<<<<<< HEAD
           getDistributeList,
 
+=======
+          getDistributeList
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
         })}
         tabsChange={tabsChange}
       />

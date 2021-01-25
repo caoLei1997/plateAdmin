@@ -57,6 +57,7 @@ export const getRouteAuthority = (path, routeData) => {
   });
   return authorities;
 };
+<<<<<<< HEAD
 
 
 
@@ -82,3 +83,5 @@ export const filterCity = (city) => {
   }
   return [...newCity]
 }
+=======
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7

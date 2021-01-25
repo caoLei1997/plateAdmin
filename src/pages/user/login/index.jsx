@@ -36,7 +36,11 @@ const Login = props => {
   const handleSubmit = values => {
     dispatch({
       type: 'login/login',
+<<<<<<< HEAD
       payload: { ...values, type: 7,applyType:1 },
+=======
+      payload: { ...values, type: 7 },
+>>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
       onFail: () => {
         getPicCode();
       }
