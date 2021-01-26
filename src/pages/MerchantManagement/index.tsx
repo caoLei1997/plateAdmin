@@ -1,18 +1,17 @@
-import React from 'react';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Tabs } from 'antd';
-const { TabPane } = Tabs;
-const MerchantManagement = (props) => {
-  const { children } = props;
+import React, { FC } from 'react';
+import BranFilter from './components/BranFilter/BranFilter';
+import BrandAdd from './components/BrandAdd/BrandAdd';
+import BrandList from './components/BrandList/BrandList';
+import { connect } from 'umi';
+
+const index: FC<{}> = (props) => {
   return (
-    <PageHeaderWrapper>
-      <Tabs>
-        <TabPane tab='品牌厂家' />
-        <TabPane tab='经销商' />
-      </Tabs>
-      {children}
-    </PageHeaderWrapper>
+    <div>
+      <BranFilter />
+      <BrandAdd />
+      <BrandList />
+    </div>
   );
 }
 
-export default MerchantManagement;
+export default connect()(index);

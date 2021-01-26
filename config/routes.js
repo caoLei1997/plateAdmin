@@ -37,6 +37,31 @@ export const routes = [
             authority: ['admin'],
           },
           {
+            name: '商户管理重构',
+            icon: 'https://electric.sxwinstar.net/plateSale/shgl.png',
+            path: '/merchant',
+            component: './MerchantManagement/_layout',
+            authority: ['admin'],
+            routes: [
+              {
+                path: '/merchant',
+                redirect: '/merchant/brand',
+              },
+              {
+                path: 'brand',
+                name: '商户管理-品牌厂家',
+                component: './MerchantManagement',
+                hideInMenu: true
+              },
+              {
+                path: 'distributor',
+                name: '商户管理-经销商',
+                component: './MerchantManagement/Distributor',
+                hideInMenu: true
+              }
+            ]
+          },
+          {
             name: '目录管理',
             path: '/catalog',
             icon: 'https://electric.sxwinstar.net/plateSale/mlgl.png',
