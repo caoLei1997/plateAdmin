@@ -155,11 +155,7 @@ const SnDeclare = ({ snDeclare, tableLoading, dispatch, listLoading }) => {
         <PageHeaderWrapper className={styles.main}>
             <div>
                 <SnFilter getList={getList}></SnFilter>
-<<<<<<< HEAD
                 {/* <AddExcel getList={getList}></AddExcel> */}
-=======
-                <AddExcel getList={getList}></AddExcel>
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
                 <Table
                     rowKey='id'
                     dataSource={content}

@@ -10,13 +10,7 @@ const PersonalIndex = (props) => {
   const { dispatch, listStore: { current, pageSize, filter }, userInfo, match: { params = {} } } = props;
 
   const getList = (pageIndex = current, listParams = filter) => {
-<<<<<<< HEAD
     console.log(111111, pageIndex, listParams);
-=======
-
-    console.log(111111, pageIndex, listParams);
-
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
     dispatch({
       type: 'personalList/getList',
       payload: {

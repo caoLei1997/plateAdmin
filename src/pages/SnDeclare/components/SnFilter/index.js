@@ -26,12 +26,9 @@ const FilterSearch = ({ snDeclare, getList }) => {
                 name="advanced_search"
                 className="ant-advanced-search-form"
                 onFinish={onFinish}
-<<<<<<< HEAD
                 initialValues={{
                     approvalStatus:''
                 }}
-=======
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             >
                 <Row gutter={24}>
                     <Col span={6}>

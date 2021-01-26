@@ -71,7 +71,7 @@ class App extends React.Component {
 
     typeApproveAgent().then(res => {
       this.setState({
-        allList: [...res.data]
+        allList: res.data && [...res.data]
       })
     })
   }
@@ -85,14 +85,14 @@ class App extends React.Component {
     let brandId = [];
     let brandsList = this.brandsList;
     let editDataBrandId = a.brandList[0].id;
-    
+
     this.selectChildrenRender(brandsList, a);
     this.setState({
       editVisible: true,
       editDataName: a.name,
       editDataCity: [a.city, a.region],
       editDataAddress: a.address,
-      editDataBrandId:[editDataBrandId] ,
+      editDataBrandId: [editDataBrandId],
       editDataId: a.id,
       selectChildren: this.selectChildren.filter(item => item.agented === 1)
     })

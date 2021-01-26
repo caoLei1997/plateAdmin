@@ -45,12 +45,6 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
     const add = (values) => {
         if (!checkSelect(values)) return false;
         toggleShowForm(true);
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
         setList([...list, {
             ...values,
             agentOutletsId: values.outlets.split('-')[0],
@@ -65,15 +59,8 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
             message.error('请先添加人员');
             return;
         };
-<<<<<<< HEAD
         const fromData = form.getFieldsValue();
         // const { isEnableAccount } = form.getF÷ieldsValue();
-=======
-
-        const fromData = form.getFieldsValue();
-        // const { isEnableAccount } = form.getF÷ieldsValue();
-
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
         const data = [];
         list.forEach((item) => {
             data.push({
@@ -84,10 +71,7 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
                 "level": Number(item.level)
             })
         })
-<<<<<<< HEAD
         console.log('fromData', fromData.isEnableAccount);
-=======
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
         dispatch({
             type: 'personalList/add',
             payload: { list: data, isEnableAccount: fromData.isEnableAccount },
@@ -101,7 +85,6 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
                     setList([]);
                 } else {
                     const newList = list.map((item, index) => {
-<<<<<<< HEAD
                         if (data) {
                             data.forEach((filterItem, filterIndex) => {
                                 if (item.phone === filterItem) {
@@ -112,16 +95,6 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
                             })
                             return item
                         }
-=======
-                        data.forEach((filterItem, filterIndex) => {
-                            if (item.phone === filterItem) {
-                                item['repeatStatus'] = 1
-                            } else {
-                                item['repeatStatus'] = 0
-                            }
-                        })
-                        return item
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
                     })
                     console.log(newList);
                 }
@@ -179,7 +152,6 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
             <div className='add-btn-wrap'>
                 <Button type="primary" className='btn-green mb-24' icon={<PlusOutlined />} onClick={() => toggleModalVisible(true)}>新增人员</Button>
             </div>
-<<<<<<< HEAD
             <Modal
                 className='add-personal-modal'
                 forceRender destroyOnClose
@@ -243,48 +215,6 @@ const AddPersonal = ({ dispatch, onGetList, addLoading }) => {
                 </Form>
 
 
-=======
-            <Modal className='add-personal-modal' forceRender destroyOnClose visible={modalVisible} title='新增人员' onCancel={() => toggleModalVisible(false)} onOk={() => modalOk()}>
-                <Table {...tableProps} rowClassName={filterRepeat} />
-                {formVisible ?
-                    <Form
-                        className='mt-16'
-                        name='add-personal-form'
-                        onFinish={add}
-                        form={form}
-                        initialValues={
-                            { outletsVal: '', isEnableAccount: false }
-                        }
-                    >
-                        <Row gutter={12}>
-                            <Col span={12}>
-                                <Form.Item name='name' className='mb-16' rules={[{ required: true, message: '请输入姓名!' }]}>
-                                    <Input placeholder="姓名" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item name='phone' className='mb-16' rules={[{ required: true, len: 11, message: '请输入正确的手机号!' }]}>
-                                    <Input placeholder="手机号" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <div>
-                            <DealerLinkage isAddPersonal onCallBack={selectChange} />
-                        </div>
-                        <div className='text-right'>
-                            <Button loading={addLoading} type="primary" htmlType="submit" className='search-button mr-8'>添加</Button>
-                            <Button className='search-button' onClick={() => toggleShowForm(false)}>取消</Button>
-                        </div>
-                        <Form.Item name="isEnableAccount" valuePropName="checked">
-                            <Checkbox>全部启用</Checkbox>
-                        </Form.Item>
-                    </Form>
-                    :
-                    <p className={styles.add_text} onClick={() => toggleShowForm(true)}>
-                        <PlusOutlined />&nbsp;&nbsp;添加
-                    </p>
-                }
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
             </Modal>
         </div>
     </div>)

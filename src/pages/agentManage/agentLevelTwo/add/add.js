@@ -389,10 +389,8 @@ class App extends React.Component {
     this.setState({
       dataSource: [...listData],
       agentName: '',
-      dropdownValue: [],
       agentAddress: '',
       agentBrand: [],
-      agentBrandObjArr: [],
     })
     console.log('this.address: ', this.address)
     console.log('this.state.carsAddress', this.state.carsAddress);

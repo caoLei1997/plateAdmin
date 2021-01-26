@@ -58,10 +58,7 @@ const MeansDetail = ({ dispatch, match, detailState, loading, meansListState,his
   }, [match.params.id])
 
   const prevDetail = (type = 'prev') => {
-<<<<<<< HEAD
     
-=======
->>>>>>> 41356f35b7e943121f346e96c7f658b71a23b8f7
     const activeIdIndex = listIds.findIndex(item => item === Number(match.params.id));
     if (type === 'next') {
       return listIds[activeIdIndex + 1];
