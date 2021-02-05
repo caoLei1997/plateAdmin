@@ -45,7 +45,8 @@ export const routes = [
             routes: [
               {
                 path: '/merchant',
-                redirect: '/merchant/brand',
+                // redirect: '/merchant/brand',
+                redirect: '/merchant/distributor',
               },
               {
                 path: 'brand',

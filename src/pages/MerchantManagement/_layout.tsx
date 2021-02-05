@@ -7,8 +7,8 @@ import { MerchantManagementProp } from 'umi';
 
 const MerchantManagement: FC<MerchantManagementProp> = (props) => {
   const { children, history } = props;
+  const { location } = history;
   useLayoutEffect(() => {
-    history.push('brand')
   }, [])
 
   const tabsChangeRoutes = (key: string): void => {
@@ -26,7 +26,7 @@ const MerchantManagement: FC<MerchantManagementProp> = (props) => {
     >
       <Tabs
         onChange={tabsChangeRoutes}
-        defaultActiveKey='1'
+        activeKey={location.pathname == '/merchant/distributor' ? '2' : '1'}
       >
         <TabPane tab='品牌厂家' key='1' />
         <TabPane tab='经销商' key='2' />

@@ -1,36 +1,28 @@
 import React, {
   useState
 } from 'react';
+import { statusBrandModalType } from '@/models/exports'
 import {
   Tag,
   Form,
   Input,
   Table,
   Modal,
-  Select,
   Button,
   Checkbox,
+  TreeSelect,
   Cascader as Cascade
 } from 'antd'
-import { Link } from 'umi'
 
 const { Item, useForm } = Form;
-const { Option } = Select;
-const BrandList = (props) => {
+const { SHOW_CHILD, SHOW_ALL, SHOW_PARENT } = TreeSelect; // 选中后效果 全部子节点显示 全部显示 父节点显示
+const DistributorList = (props: any) => {
   const {
-    cityList,
-    editBrandItem,
     requestGetList,
-    brandModelsState,
-    stopAndStartBrand
+    distributorState,
+    getEditData,
+    cityList,
   } = props;
-  const {
-    pageIndex,
-    pageSize,
-    list,
-    total
-  } = brandModelsState;
-
   const columns = [
     {
       title: '商户ID',
@@ -41,7 +33,6 @@ const BrandList = (props) => {
       title: '商户名称',
       dataIndex: 'name',
       key: 'name',
-      width: 140
     },
     {
       title: '级别',
@@ -57,26 +48,19 @@ const BrandList = (props) => {
       title: '地址',
       dataIndex: 'address',
       key: 'address',
-      width: 120
     },
     {
       title: '代理品牌',
       dataIndex: 'brandList',
       key: 'brandList',
-      render: (brandList: any) => {
-        if (brandList.length) {
-          return brandList[0].brandName
-        }
-      }
+      render: (brandList: any) => (
+        brandList ? brandList[0].brandName : '--'
+      )
     },
     {
       title: '人员数',
-      render: (record: any) => {
-        const { id, employeesNumber } = record;
-        return (
-          <Link to={`/personal/${id}`}>{employeesNumber}</Link>
-        )
-      }
+      dataIndex: 'employeesNumber',
+      key: 'employeesNumber',
     },
     {
       title: '状态',
@@ -119,76 +103,63 @@ const BrandList = (props) => {
     },
   ];
 
-  const paginationChange = (pageIndex: number, pageSize: number) => {
-    requestGetList({
-      pageIndex: pageIndex - 1,
-      pageSize,
-    })
-  }
-  const pagination = {
+  const {
     total,
+    pageIndex,
     pageSize,
+    list,
+  } = distributorState
+  const paginationChange = (pageIndex: number, pageSize: number) => {
+    requestGetList({ pageIndex: pageIndex - 1, pageSize })
+  }
+
+  const pagination = {
+    total: total,
+    current: pageIndex + 1,
+    pageSize: pageSize,
+    onChange: paginationChange,
+    showTotal: total => `共${total}条`,
     showSizeChanger: true,
     showQuickJumper: true,
-    current: pageIndex + 1,
-    onChange: paginationChange,
-    showTotal: (total: number) => `共${total}条`,
   }
-  const [editBrandId, setEditBrandId] = useState<number>(0)
+
+  const [editRecord, setEditRecord] = useState({
+
+  });
+  // const [statusBrandModal, setStatusBrandModal] = useState<statusBrandModalType>({})
   const [editBrandModal, setEditBrandModal] = useState<boolean>(false)
-  const [editNewBrandList, setEditNewBrandList] = useState([]) // 品牌列表
   const editBrand = (id: number, record: any) => {
-    const { brandList } = record;
-    const newBrandList = [
-      ...brandList,
-      ...cityList.brandList.filter(item => item.agented === 1)
-    ]
-    setEditBrandId(id)
-    setEditBrandModal(true);
-    setEditNewBrandList(newBrandList)
-    const brandIds = record.brandList ? record.brandList.map((item: any) => item.id) : [];
-    const setFieldsParams = {
-      brandIds,
+    form.setFieldsValue({
       name: record.name,
       city: [record.city, record.region],
-      address: record.address
-    }
-    form.setFieldsValue({ ...setFieldsParams })
+      address: record.address,
+      // brandIds: []
+    })
+    setEditRecord({
+      address: record.address,
+      city: record.city,
+      name: record.name,
+      region: record.region,
+      id: record.id,
+    })
+    setEditBrandModal(true)
+    // 获取经销商绑定的品牌信息
+    getEditData(id)
   }
   const [form] = useForm();
+  const formLayout = {
+    labelCol: {
+      span: 5
+    }
+  }
   const initialValues = {
     name: null,
     city: null,
     address: null,
-    brandIds: null
+    brandIds: []
   }
-  const fromLayout = {
-    labelCol: {
-      span: 4,
-    }
-  }
+  const submitEditBrand = () => {
 
-  const submitEditBrand = async () => {
-    const fields = await form.validateFields();
-    const [city, region] = fields.city
-    try {
-      const payload = {
-        city,
-        region,
-        id: editBrandId,
-        name: fields.name,
-        address: fields.address,
-        brandIds: fields.brandIds,
-      }
-      const callback = () => {
-        setEditBrandId(0)
-        setEditBrandModal(false)
-        setEditNewBrandList([])
-      }
-      editBrandItem(payload, callback)
-    } catch (error) {
-      console.log('error,', error);
-    }
   }
 
   const closeEditBrand = () => {
@@ -196,12 +167,11 @@ const BrandList = (props) => {
     form.setFieldsValue({ ...initialValues })
   }
 
-  const [statusBrandModal, setStatusBrandModal] = useState({
+  const [statusBrandModal, setStatusBrandModal] = useState<statusBrandModalType>({
     isVisible: false,
     title: null,
     context: '',
     allCheck: false,
-    id: null,
   });
   const startBrand = (id: number) => {
     setStatusBrandModal({
@@ -209,7 +179,6 @@ const BrandList = (props) => {
       title: '启用',
       context: '启用后该商户将恢复代牌销售业务相关办理权限，确认要启用吗?',
       allCheck: true,
-      id,
     })
   }
 
@@ -219,24 +188,11 @@ const BrandList = (props) => {
       title: '停用',
       context: '停用会导致该商户相关所有业务人员账号停用，不能再处理代牌销售业务，确认要停用吗？',
       allCheck: false,
-      id,
     })
   }
 
-
   const submitStopBrand = () => {
-    // 0启用 1停用
-    console.log('statusBrandModal', statusBrandModal);
-    const { title, id,allCheck } = statusBrandModal;
-    let status: string = (title === '停用' ? '1':'0');
-    const params = {
-      status,
-      level:'11', //品牌厂家等级
-      agentOutletsId:id,
-      isEnableAccount:allCheck,
-    }
-   
-    stopAndStartBrand(params,closeStopModal)
+
   }
 
   const closeStopModal = () => {
@@ -246,10 +202,42 @@ const BrandList = (props) => {
         title: null,
         context: '',
         allCheck: false,
-        id: null
       }
     )
   }
+
+  // 测试 select +tree
+
+  const treeDataChildren: Array<any> = distributorState.brandList.map(item => {
+    return {
+      value: item.id,
+      title: item.name,
+      key: item.id,
+    }
+  })
+  const treeData = [
+    {
+      title: '全部品牌',
+      key: '',
+      value: '',
+      children: treeDataChildren,
+    },
+  ];
+  const treeSelectChange = () => {
+
+  }
+
+  const tProps = {
+    treeData,
+    treeCheckable: true,
+    treeDefaultExpandAll: true,
+    placeholder: '请选择品牌型号',
+    onChange: treeSelectChange,
+    showCheckedStrategy: SHOW_PARENT,
+    style: {
+      width: '100%',
+    },
+  };
 
   return (
     <div className='mt-32'>
@@ -260,69 +248,31 @@ const BrandList = (props) => {
         pagination={pagination}
       />
       <Modal
-        title='编辑品牌厂家'
+        title='编辑商户信息'
         visible={editBrandModal}
         onOk={submitEditBrand}
         onCancel={closeEditBrand}
-        okText='保存'
       >
-        <h3>基本信息：</h3>
+        <h3>基本信息</h3>
         <Form
           form={form}
           initialValues={initialValues}
-          {...fromLayout}
+          {...formLayout}
         >
-          <Item
-            label='商户名称'
-            name='name'
-            rules={[{
-              required: true,
-              message: '请输入商户名称',
-            }]}
-          >
-            <Input placeholder='品牌厂家名称' />
+          <Item label='商户名称' name='name'>
+            <Input placeholder='商户名称' />
           </Item>
-          <Item
-            label='代理品牌'
-            name='brandIds'
-            rules={[{
-              required: true,
-              message: '请选择代理品牌',
-            }]}
-          >
-            <Select placeholder='代理品牌'>
-              {
-                editNewBrandList && editNewBrandList.map(item => (
-                  <Option key={item.id} value={item.id}>
-                    {item.brandName}
-                  </Option>
-                ))
-              }
-            </Select>
-          </Item>
-          <Item
-            label='市区'
-            name='city'
-            rules={[{
-              required: true,
-              message: '请选择市区',
-            }]}
-          >
+          <Item label='市区' name='city'>
             <Cascade options={cityList.cityList} placeholder='选择市区' />
           </Item>
-          <Item
-            label='地址'
-            name='address'
-            rules={[{
-              required: true,
-              message: '请输入地址',
-            }]}
-          >
-            <Input placeholder='品牌厂家地址' />
+          <Item label='地址' name='address'>
+            <Input.TextArea placeholder='品牌厂家地址' />
+          </Item>
+          <Item label='代理品牌型号' name='brandIds'>
+            <TreeSelect {...tProps} />
           </Item>
         </Form>
       </Modal>
-
       <Modal
         title={statusBrandModal.title}
         visible={statusBrandModal.isVisible}
@@ -339,4 +289,4 @@ const BrandList = (props) => {
   );
 }
 
-export default BrandList;
+export default DistributorList;

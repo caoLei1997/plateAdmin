@@ -54,7 +54,7 @@ const Model = {
           history.replace('/carmanage');
           return;
         } else if (response.data.channel == BrigadeChannel)
-          history.replace( '/record');
+          history.replace('/record');
 
       } else {
         onFail();
@@ -74,7 +74,8 @@ const Model = {
         ...payload.data,
         phone: payload.data.account,
         firstId: payload.data.id === SUPER_UNIQUE ? '' : payload.data.id,
-        'antd-pro-authority': authorityFn(payload.data)
+        'antd-pro-authority': authorityFn(payload.data),
+        // antdProAuthority: authorityFn(payload.data),
       };
       setAuthority(userInfo);
 
@@ -99,7 +100,7 @@ function authorityFn(data) {
     return 'police'
   } else if (data.channel === agentChannel) {
     return 'agent'
-  }else if (data.channel === BrigadeChannel) {
+  } else if (data.channel === BrigadeChannel) {
     return 'brigade'
   }
 

@@ -19,3 +19,7 @@ export const queryJsonToString = (obj) => {
 export function formatData(date) {
     return date.format('YYYY-MM-DD')
 }
+
+export  function fromReset(form,initialValues){
+    form.setFieldsValue({...initialValues})
+}
