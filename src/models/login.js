@@ -94,6 +94,7 @@ const Model = {
 export default Model;
 
 function authorityFn(data) {
+  console.log('data: ', data)
   if (data.id === SUPER_UNIQUE) {
     return 'admin'
   } else if (data.channel === PoliceChannel) {

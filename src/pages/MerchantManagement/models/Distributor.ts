@@ -46,7 +46,7 @@ export default {
       }
     },
     *getEditData(action, { put, call }) {
-      const { payload } = action;
+      const { payload, callback } = action;
       const response = yield call(requestEditData, payload)
       if (response.retCode === RETCODESUCCESS) {
         if (payload) {
@@ -54,6 +54,7 @@ export default {
             type: 'modifyEditData',
             payload: response
           })
+          yield callback(response.data.list)
         } else {
           yield put({
             type: 'modifyBrandList',
@@ -62,6 +63,14 @@ export default {
         }
       }
     },
+
+    *getBrandList(action,{put,call}){
+      const response = yield call(requestEditData)
+      yield put({
+        type:'modifyBrandList',
+        payload:response
+      })
+    }
   },
   reducers: {
     pageElement(state, { payload }) {
@@ -87,8 +96,6 @@ export default {
     },
     modifyBrandList(state, { payload }) {
       const { data } = payload;
-      
-
       return {
         ...state,
         brandList: [...data]

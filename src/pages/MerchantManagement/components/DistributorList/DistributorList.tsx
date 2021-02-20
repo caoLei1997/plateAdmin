@@ -128,13 +128,20 @@ const DistributorList = (props: any) => {
   });
   // const [statusBrandModal, setStatusBrandModal] = useState<statusBrandModalType>({})
   const [editBrandModal, setEditBrandModal] = useState<boolean>(false)
-  const editBrand = (id: number, record: any) => {
-    form.setFieldsValue({
-      name: record.name,
-      city: [record.city, record.region],
-      address: record.address,
-      // brandIds: []
-    })
+  const editBrand = async (id: number, record: any) => {
+    // 获取经销商绑定的品牌信息
+    const callback = (list:any) => {
+      form.setFieldsValue({
+        name: record.name,
+        city: [record.city, record.region],
+        address: record.address,
+        brandIds: [...list.map(item => item.id)]
+      })
+    }
+    getEditData(id, callback)
+    setEditBrandModal(true)
+    console.log('distributorState: ', distributorState)
+
     setEditRecord({
       address: record.address,
       city: record.city,
@@ -142,9 +149,8 @@ const DistributorList = (props: any) => {
       region: record.region,
       id: record.id,
     })
-    setEditBrandModal(true)
-    // 获取经销商绑定的品牌信息
-    getEditData(id)
+
+
   }
   const [form] = useForm();
   const formLayout = {

@@ -8,7 +8,8 @@ const Distributor: FC<any> = (props) => {
     cityList,
     distributorState,
     getList,
-    getEditData
+    getEditData,
+    getBrandList
   } = props;
 
   const {
@@ -26,15 +27,16 @@ const Distributor: FC<any> = (props) => {
       ...filter,
       ...params,
       ...params?.filter,
-      filter:null
+      filter: null
     }
     getList(payload)
   }
 
-  useEffect(()=>{
-    requestGetList({pageIndex:0,pageSize:10})
+  useEffect(() => {
+    requestGetList({ pageIndex: 0, pageSize: 10 })
     getEditData()
-  },[])
+    // getBrandList()
+  }, [])
   return (
     <div>
       <BranFilter
@@ -43,7 +45,10 @@ const Distributor: FC<any> = (props) => {
         requestGetList={requestGetList}
         brandList={cityList.brandList}
       />
-      <DistributorAdd />
+      <DistributorAdd
+        cityList={cityList}
+        distributorState={distributorState}
+      />
       <DistributorList
         cityList={cityList}
         requestGetList={requestGetList}
@@ -66,9 +71,13 @@ const dispatchToProps = {
     type: 'Distributor/getList',
     payload: payload
   }),
-  getEditData:(id)=>({
-    type:'Distributor/getEditData',
-    payload:id
+  getEditData: (id,callback) => ({
+    type: 'Distributor/getEditData',
+    payload: id,
+    callback,
+  }),
+  getBrandList:()=>({
+    type: 'Distributor/getBrandList',
   })
 }
 export default connect(

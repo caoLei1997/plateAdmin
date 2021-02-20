@@ -14,27 +14,25 @@ import {
 } from 'antd'
 import { fromReset } from '@/commonFun'
 import { CreateBrandList } from '@/models/exports';
+import { zip } from '@/utils/utils'
+import brand from '@/pages/catalogManage/models/brand';
 const { Item, useForm } = Form;
-const { SHOW_CHILD } = TreeSelect;
-const DistributorAdd = () => {
-
+const { SHOW_CHILD, } = TreeSelect;
+const DistributorAdd = (props: any) => {
+  const { cityList, distributorState } = props;
   const [createModal, setCreateModal] = useState<boolean>(false)
   const [formVisible, setFormVisible] = useState<boolean>(false)
-  const [createDistributorList, setCreateDistributorList] = useState<CreateBrandList[]>([])
-
+  const [createDistributorList, setCreateDistributorList] = useState([])
+  const [selectBrand, setSelectBrand] = useState([])
   const createModalVisible = () => {
     setCreateModal(true)
   }
-
   const createDistributorOk = () => {
-
   }
-
   const createDistributorCancel = () => {
     setCreateModal(false)
     setFormVisible(false)
   }
-
   const columns = [
     {
       title: '商户名称',
@@ -54,7 +52,18 @@ const DistributorAdd = () => {
     {
       title: '代理品牌型号',
       dataIndex: 'agentBrand',
-      key: 'agentBrand',
+      render: (agentBrand) => {
+        let brandString: string = '';
+        agentBrand.forEach(item => {
+          brandList.forEach(brand => {
+            if (brand.id === item) {
+              brandString += brand.name + ' '
+            }
+          })
+        })
+        console.log('brandString: ', brandString)
+        return brandString
+      }
     },
     {
       title: '操作',
@@ -70,22 +79,20 @@ const DistributorAdd = () => {
       ),
     },
   ]
-
   const [form] = useForm();
   const formLayout = {
-    labelCol:{
-      span:3
+    labelCol: {
+      span: 3
     }
   }
   const initialValues = {
     name: null,
     city: null,
     address: null,
-    agentBrand: undefined
+    agentBrand: []
   }
-
   const submitDistributorList = (file: CreateBrandList) => {
-    const { name, city, address, agentBrand } = file
+    const { name, city, address, agentBrand } = file;
     const params = {
       name,
       city,
@@ -93,10 +100,14 @@ const DistributorAdd = () => {
       agentBrand,
       id: createDistributorList.length + 1
     }
-    setCreateDistributorList([...createDistributorList, params])
+    setCreateDistributorList([
+      ...createDistributorList,
+      { ...params },
+    ]);
     form.setFieldsValue({
       ...initialValues
     })
+    setSelectBrand([])
   }
 
   const createDistributorListDelete = (id: number) => {
@@ -109,28 +120,58 @@ const DistributorAdd = () => {
   const cancelCreateDistributorList = () => {
     setFormVisible(false)
     fromReset(form, initialValues)
+    setSelectBrand([])
   }
-
-
+  const { brandList } = distributorState;
   const treeData = [
     {
       title: '全部品牌',
       key: '0-0',
-      children: [
-        {
-          title: '爱马',
-          key: '0-0-0',
-        },
-        {
-          title: '小刀',
-          key: '0-0-1',
-        },
-      ],
+      value: '0-0',
+      children: brandList.map(item => ({
+        key: item.id,
+        value: item.id,
+        title: item.name
+      }))
     },
   ];
-
-  const treeSelectChange = () => {
-
+  const treeSelectChange = (values, titles) => {
+    let newValue: any = [];
+    if (titles[0] !== '全部品牌') {
+      newValue = zip(values, titles).map(
+        ([value, title], index) => {
+          const currentList = brandList.filter(item => item.id === value);
+          return {
+            value,
+            title,
+            children: currentList[0].children && currentList[0].children.map((item, key) => ({
+              title: item.name,
+              key: index + '-' + key,
+              value: index + '-' + key
+            }))
+          }
+        }
+      )
+    } else {
+      // 如果全部 titles 和values 则只有一个 需要手动便利
+      let allTitles = brandList.map(item => item.name)
+      let allValues = brandList.map(item => item.id)
+      newValue = zip(allValues, allTitles).map(
+        ([value, title], index) => {
+          const currentList = brandList.filter(item => item.id === value);
+          return {
+            value,
+            title,
+            children: currentList[0].children && currentList[0].children.map((item, key) => ({
+              title: item.name,
+              key: index + '-' + key,
+              value: index + '-' + key
+            }))
+          }
+        }
+      )
+    }
+    setSelectBrand([...newValue])
   }
 
   const tProps = {
@@ -143,6 +184,7 @@ const DistributorAdd = () => {
     style: {
       width: '100%',
     },
+    getPopupContainer: triggerNode => triggerNode.parentNode
   };
   return (
     <div className='mt-32 context-end'>
@@ -195,7 +237,10 @@ const DistributorAdd = () => {
                 </Col>
                 <Col span={12}>
                   <Item name='city'>
-                    <Cascade placeholder='选择地区' />
+                    <Cascade
+                      options={cityList.cityList}
+                      placeholder='选择地区'
+                    />
                   </Item>
                 </Col>
               </Row>
@@ -203,8 +248,34 @@ const DistributorAdd = () => {
                 <Input placeholder='商户地址' />
               </Item>
               <Item name='agentBrand'>
-                <TreeSelect {...tProps} />;
+                <TreeSelect {...tProps} />
               </Item>
+              {
+                selectBrand && selectBrand.map(item => (
+                  <div key={item.value} style={{
+                    marginBottom: 15,
+                  }}>
+                    <div style={{
+                      color: '#1890ff'
+                    }}>
+                      {item.title}
+                    </div>
+                    <TreeSelect
+                      style={{
+                        width: '100%',
+                      }}
+                      treeData={item.children}
+                      defaultValue={
+                        item.children ? item.children.map(item => item.value) : []
+                      }
+                      treeCheckable={true}
+                      treeDefaultExpandAll={true}
+                      showCheckedStrategy={SHOW_CHILD}
+                      getPopupContainer={triggerNode => triggerNode.parentNode}
+                    />
+                  </div>
+                ))
+              }
               <Item>
                 <Row gutter={20}>
                   <Col span={12}>

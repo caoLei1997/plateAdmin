@@ -119,7 +119,6 @@ export const routes = [
               { path: '/catalog/catalogmange', name: '目录明细', component: './catalogManage' },
             ],
           },
-
           {
             name: 'SN管理',
             path: '/snmanagement',
