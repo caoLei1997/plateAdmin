@@ -104,5 +104,7 @@ function authorityFn(data) {
   } else if (data.channel === BrigadeChannel) {
     return 'brigade'
   }
+    
 
+  
 }
