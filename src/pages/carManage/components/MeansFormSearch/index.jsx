@@ -16,7 +16,7 @@ const MeansFormSearch = ({
   distributeList,
   subDealerListLoading
 }) => {
-
+  console.log('userInfo: ', userInfo)
   const [form] = Form.useForm();
   useEffect(() => {
     dispatch({
@@ -66,11 +66,14 @@ const MeansFormSearch = ({
           <Input placeholder="整车编码SN" />
         </Form.Item>
       </Col>
-      <Col span={8}>
-        <Form.Item label='车辆品牌' name='carBrand'>
-          <Input placeholder="车辆品牌" />
-        </Form.Item>
-      </Col>
+      {
+        userInfo['antd-pro-authority'] != 'vip' &&
+        <Col span={8}>
+          <Form.Item label='车辆品牌' name='carBrand'>
+            <Input placeholder="车辆品牌" />
+          </Form.Item>
+        </Col>
+      }
       <Col span={8}>
         <Form.Item label='车辆型号' name='carModel'>
           <Input placeholder="车辆型号" />
@@ -145,8 +148,8 @@ const MeansFormSearch = ({
 
   const initialValues = {
     secondDealer: '',
-    address:[''],
-    status:''
+    address: [''],
+    status: ''
   }
 
   return (

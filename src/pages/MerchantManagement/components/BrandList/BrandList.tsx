@@ -148,10 +148,10 @@ const BrandList = (props) => {
     setEditNewBrandList(newBrandList)
     const brandIds = record.brandList ? record.brandList.map((item: any) => item.id) : [];
     const setFieldsParams = {
-      brandIds,
       name: record.name,
+      brandIds: brandIds,
+      address: record.address,
       city: [record.city, record.region],
-      address: record.address
     }
     form.setFieldsValue({ ...setFieldsParams })
   }
@@ -160,7 +160,7 @@ const BrandList = (props) => {
     name: null,
     city: null,
     address: null,
-    brandIds: null
+    brandIds: []
   }
   const fromLayout = {
     labelCol: {
@@ -178,7 +178,7 @@ const BrandList = (props) => {
         id: editBrandId,
         name: fields.name,
         address: fields.address,
-        brandIds: fields.brandIds,
+        brandIds: Array.isArray(fields.brandIds) ? fields.brandIds : [fields.brandIds],
       }
       const callback = () => {
         setEditBrandId(0)
@@ -226,17 +226,16 @@ const BrandList = (props) => {
 
   const submitStopBrand = () => {
     // 0启用 1停用
-    console.log('statusBrandModal', statusBrandModal);
-    const { title, id,allCheck } = statusBrandModal;
-    let status: string = (title === '停用' ? '1':'0');
+    const { title, id, allCheck } = statusBrandModal;
+    let status: string = (title === '停用' ? '1' : '0');
     const params = {
       status,
-      level:'11', //品牌厂家等级
-      agentOutletsId:id,
-      isEnableAccount:allCheck,
+      level: '11', //品牌厂家等级
+      agentOutletsId: id,
+      isEnableAccount: allCheck,
     }
-   
-    stopAndStartBrand(params,closeStopModal)
+
+    stopAndStartBrand(params, closeStopModal)
   }
 
   const closeStopModal = () => {

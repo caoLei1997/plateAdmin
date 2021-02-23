@@ -8,7 +8,7 @@
 export default {
   dev: {
     '/cjj-api/': {
-      target: 'http://electric.sxwinstar.net/api',
+      target: 'https://electric.sxwinstar.net/api',
       changeOrigin: true,
       pathRewrite: {
         '/cjj-api/': '',
@@ -26,7 +26,7 @@ export default {
   },
   test: {
     '/api/': {
-      target: 'https://preview.pro.ant.design',
+      target: 'https://electric.sxwinstar.net/api',
       changeOrigin: true,
       pathRewrite: {
         '^': '',

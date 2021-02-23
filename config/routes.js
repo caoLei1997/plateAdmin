@@ -36,32 +36,32 @@ export const routes = [
             component: './agentManage',
             authority: ['admin'],
           },
-          {
-            name: '商户管理重构',
-            icon: 'https://electric.sxwinstar.net/plateSale/shgl.png',
-            path: '/merchant',
-            component: './MerchantManagement/_layout',
-            authority: ['admin'],
-            routes: [
-              {
-                path: '/merchant',
-                // redirect: '/merchant/brand',
-                redirect: '/merchant/distributor',
-              },
-              {
-                path: 'brand',
-                name: '商户管理-品牌厂家',
-                component: './MerchantManagement',
-                hideInMenu: true
-              },
-              {
-                path: 'distributor',
-                name: '商户管理-经销商',
-                component: './MerchantManagement/Distributor',
-                hideInMenu: true
-              }
-            ]
-          },
+          // {
+          //   name: '商户管理重构',
+          //   icon: 'https://electric.sxwinstar.net/plateSale/shgl.png',
+          //   path: '/merchant',
+          //   component: './MerchantManagement/_layout',
+          //   authority: ['admin'],
+          //   routes: [
+          //     {
+          //       path: '/merchant',
+          //       // redirect: '/merchant/brand',
+          //       redirect: '/merchant/distributor',
+          //     },
+          //     {
+          //       path: 'brand',
+          //       name: '商户管理-品牌厂家',
+          //       component: './MerchantManagement',
+          //       hideInMenu: true
+          //     },
+          //     {
+          //       path: 'distributor',
+          //       name: '商户管理-经销商',
+          //       component: './MerchantManagement/Distributor',
+          //       hideInMenu: true
+          //     }
+          //   ]
+          // },
           {
             name: '目录管理',
             path: '/catalog',
@@ -122,7 +122,7 @@ export const routes = [
           {
             name: 'SN管理',
             path: '/snmanagement',
-            authority: ['agent'],
+            authority: ['vip','agent'],
             icon: 'https://electric.sxwinstar.net/plateSale/mlgl.png',
             routes: [
               { path: '/snmanagement', redirect: '/snmanagement/upload' },
@@ -148,7 +148,7 @@ export const routes = [
             icon: 'https://electric.sxwinstar.net/plateSale/clgl.png',
             path: '/carmanage',
             component: './carManage',
-            authority: ['agent', 'admin'],
+            authority: ['vip', 'admin'],
           },
           {
             name: '车辆管理详情页',

@@ -43,7 +43,7 @@ export default {
       const { payload, callback } = action;
       const response = yield call(editBrand, payload)
       if (response.retCode === RETCODESUCCESS) {
-        yield message.success(response.retMsg)
+        message.success(response.retMsg)
         yield put({
           type: 'modifyList',
           payload: {

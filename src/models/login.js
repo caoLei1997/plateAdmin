@@ -51,7 +51,7 @@ const Model = {
           history.replace('/record');
           return;
         } else if (response.data.channel == agentChannel) {
-          history.replace('/carmanage');
+          history.replace('/snmanagement');
           return;
         } else if (response.data.channel == BrigadeChannel)
           history.replace('/record');
@@ -99,12 +99,17 @@ function authorityFn(data) {
     return 'admin'
   } else if (data.channel === PoliceChannel) {
     return 'police'
-  } else if (data.channel === agentChannel) {
+  } else if (data.channel === agentChannel && data.versionType === 'free') {
     return 'agent'
   } else if (data.channel === BrigadeChannel) {
     return 'brigade'
+  } else if (
+    data.channel === agentChannel
+    && (data.versionType === 'vip'
+      || data.versionType === 'general'
+      || data.versionType === null
+      || data.versionType === undefined
+    )) {
+    return 'vip'
   }
-    
-
-  
 }

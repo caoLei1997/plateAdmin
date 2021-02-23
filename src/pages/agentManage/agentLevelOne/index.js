@@ -81,18 +81,18 @@ class App extends React.Component {
   }
 
   editData = (a, b) => {
-
     let brandId = [];
     let brandsList = this.brandsList;
-    let editDataBrandId = a.brandList[0].id;
-
+    let editDataBrandId = a.brandList.length ? a.brandList[0].id : [];
+    console.log('editDataBrandId: ', editDataBrandId)
+    console.log('a: ', a)
     this.selectChildrenRender(brandsList, a);
     this.setState({
       editVisible: true,
       editDataName: a.name,
       editDataCity: [a.city, a.region],
       editDataAddress: a.address,
-      editDataBrandId: [editDataBrandId],
+      editDataBrandId: editDataBrandId,
       editDataId: a.id,
       selectChildren: this.selectChildren.filter(item => item.agented === 1)
     })
@@ -321,7 +321,7 @@ class App extends React.Component {
     const newData = [...data];
     let arr = [
       ...newData.filter(item => item.agented === 1),
-      ...newData.filter(item => item.brandName === listItem.brandList[0].brandName),
+      ...newData.filter(item => item.brandName === (listItem.brandList.length ? listItem.brandList[0].brandName : '' ) ),
     ]
     this.setState({
       editSelectList: arr

@@ -71,7 +71,6 @@ request.interceptors.request.use((url, options = {}) => {
     // queryUrl = `/cjj-api${url}`;
     // queryUrl = `/cjj-api${url}`; // 开发环境
     queryUrl = `/vehicle-pre${url}`;
-    // queryUrl = `/vehicle/${url}`;
     // queryUrl = `/api${url}`;
   }
   if (process.env.NODE_ENV === 'production') {

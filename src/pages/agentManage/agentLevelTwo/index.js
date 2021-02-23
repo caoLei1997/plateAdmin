@@ -80,7 +80,7 @@ class App extends React.Component {
       pageIndex: 0,
       onChange: (a, b) => {
         console.log(a, b);
-        let { pageSize, cityDropdownValue, statusDropdownValue } = this.state;
+        let { pageSize, cityDropdownValue, statusDropdownValue, brandIdValue } = this.state;
         this.data = {
           pageIndex: a - 1,
           pageSize: pageSize,
@@ -89,7 +89,8 @@ class App extends React.Component {
           agentOutletsName: this.state.agentName,
           city: cityDropdownValue && cityDropdownValue[0],
           region: cityDropdownValue && cityDropdownValue[1],
-          status: statusDropdownValue[0]
+          status: statusDropdownValue[0],
+          brandId: brandIdValue,
         };
         this.reqTableList(this.data)
       },
@@ -155,7 +156,6 @@ class App extends React.Component {
       region: cityDropdownValue[1],
       status: statusDropdownValue[0],
       brandId: brandIdValue,
-
     };
     this.reqTableList(this.data)
   };
