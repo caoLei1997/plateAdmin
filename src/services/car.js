@@ -28,7 +28,7 @@ export async function requestCarMeansDetail(data) {
 }
 
 export async function requestCarMeansDetailPass(data) {
-  return request(`/manager/v1.1/VehicleManageController/vehicleAuditPass`, {
+  return request(`/manager/v1.1/VehicleManageController/vehicleAuditPass/vip`, {
     method: 'POST',
     data
   });

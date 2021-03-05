@@ -25,6 +25,7 @@ const MeansFormSearch = ({
         "agentOutletsId": userInfo.firstId,
         city: '',
         region: '',
+
       }
     })
   }, [])
@@ -138,7 +139,7 @@ const MeansFormSearch = ({
         endAuditedAt: values.date ? values.date[1].format('YYYY-MM-DD') : '',
         city: values.address ? values.address[0] : '',
         region: values.address ? (values.address[1] ? values.address[1] : '') : '',
-        versionType: "general"
+        versionType:'vip',
       }
     })
   }

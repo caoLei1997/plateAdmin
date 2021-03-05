@@ -166,22 +166,22 @@ const MeansDetail = ({ dispatch, match, detailState, loading, meansListState,his
               {judgeIdIsDisabled() ?
                 <Text className='font-size-20' disabled><LeftOutlined />上一个</Text>
                 :
-                <Link className='font-size-20' to={`/carmanage/basic/details/${prevDetail('prev')}`}>
+                <Link className='font-size-20' to={`/carmanage/vip/details/${prevDetail('prev')}`}>
                   <LeftOutlined />上一个
           </Link>
               }
             </Col>
-            {/* <Col span={12}>
+            <Col span={12}>
               {detailState.auditStatus === '待审核' && <div className='inline text-center'>
                 <AuditPass params={passParams} callBack={() => getDetails(match.params.id)} />
                 <AuditNotPass id={match.params.id} callBack={() => getDetails(match.params.id)} />
               </div>}
-            </Col> */}
+            </Col>
             <Col span={3} style={{ textAlign: 'right' }}>
               {judgeIdIsDisabled('last') ?
                 <Text className='font-size-20' disabled>下一个<RightOutlined /></Text>
                 :
-                <Link className='font-size-20' to={`/carmanage/basic/details/${prevDetail('next')}`}>
+                <Link className='font-size-20' to={`/carmanage/vip/details/${prevDetail('next')}`}>
                   <span>下一个</span><RightOutlined />
                 </Link>
               }

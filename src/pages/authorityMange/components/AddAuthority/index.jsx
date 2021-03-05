@@ -8,8 +8,6 @@ import {
     Message,
     Cascader
 } from 'antd'
-
-
 import { connect } from 'umi';
 import { addAccount, getBrigadeByCityAndRegion } from '@/services/authority';
 function AddAuthority({
@@ -18,14 +16,14 @@ function AddAuthority({
     visibleFn = null,
     type,
     record = null,
-    getList
+    getList,
+    userInfo
 }) {
     const [rows, setRows] = useState(record ? { ...record } : null)
     const { Option } = Select
     const [form] = Form.useForm()
     let [authority, setAuthority] = useState(rows && rows.type)
     const [agentOutlesName, setAgentOutlesName] = useState(rows ? rows.agentOutlesName : undefined)
-    console.log('rows', rows);
 
     // 选择角色
     const rolesList = [
@@ -92,11 +90,14 @@ function AddAuthority({
     const functionDisplay = (authority) => {
         if (authority == '0') return '拥有所有权限'
         if (authority == '1') {
+            const isVip = userInfo['antd-pro-authority'];
+            let defaultValue = ['SN管理'];
+            if (isVip === 'vip' || isVip === 'admin') defaultValue.push('车辆管理')
             return <Checkbox.Group
                 key='1'
                 disabled
                 options={authorityArr}
-                defaultValue={['车辆管理', 'SN管理']}
+                defaultValue={defaultValue}
             />
         }
         if ((authority == '2' || authority == '3') && authority != null && authority != '超级管理员') {
@@ -112,7 +113,6 @@ function AddAuthority({
     // 选择品牌厂家
     const handleAgent = (value, { agentOutletsName }) => {
         setAgentOutlesName(agentOutletsName)
-        console.log(rows);
     }
     // 选择地区
     const [brigadeList, setBrigadeList] = useState([]);
@@ -303,6 +303,11 @@ function AddAuthority({
     )
 }
 
-export default connect(
-    ({ authorityList }) => ({ authorityList: authorityList })
-)(AddAuthority) 
+const stateToProps = ({
+    authorityList,
+    login
+}) => ({
+    authorityList: authorityList,
+    userInfo: login,
+})
+export default connect(stateToProps)(AddAuthority) 

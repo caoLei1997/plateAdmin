@@ -1,0 +1,15 @@
+.container :global #components-form-demo-advanced-search .ant-form {
+  max-width: none;
+}
+.container :global #components-form-demo-advanced-search .search-result-list {
+  margin-top: 16px;
+  min-height: 200px;
+  text-align: center;
+  padding-top: 16px;
+}
+.container :global #components-form-demo-advanced-search .ant-form-item {
+  margin-bottom: 8px;
+}
+.container :global #components-form-demo-advanced-search .ant-calendar-picker {
+  width: 100%;
+}

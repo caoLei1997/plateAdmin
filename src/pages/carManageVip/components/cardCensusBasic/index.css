@@ -1,0 +1,21 @@
+.container :global .ant-card:not(:last-child) {
+  border-bottom: none;
+}
+.container :global .ant-card-body {
+  padding: 16px 0;
+}
+.container :global .total {
+  border-right: 1px solid #e8e8e8;
+}
+.container :global .item-wrap {
+  text-align: center;
+}
+.container :global .ant-statistic {
+  display: inline-block;
+  min-width: 100px;
+  text-align: left;
+}
+.container :global .ant-statistic-title {
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 16px;
+}

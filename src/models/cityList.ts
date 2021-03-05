@@ -2,16 +2,19 @@
 
 import {
   requestCityRegion,
-  requestAllBrands
+  requestAllBrands,
+  requestBrands
 } from '@/services/cityList'
 import { filterCity } from '@/utils/utils'
 interface cityListStateType {
   cityList: Array<any>,
-  brandList:Array<any>,
+  brandList: Array<any>,
+  brands:any
 }
 const cityListState: cityListStateType = {
   cityList: [],
-  brandList:[]
+  brandList: [],
+  brands:[],
 }
 export default {
   namespace: 'cityList',
@@ -24,11 +27,20 @@ export default {
         payload: { ...response }
       })
     },
-    *getAllBrands(action:any,{put,call}){
+    *getAllBrands(action: any, { put, call }) {
       const response = yield call(requestAllBrands)
       yield put({
-        type:'modifyBrandList',
-        payload:{...response}
+        type: 'modifyBrandList',
+        payload: { ...response }
+      })
+    },
+    *getBrands(action,{put,call}){
+      const response = yield call(requestBrands);
+      console.log(response);
+      
+      yield put({
+        type: 'modifyBrands',
+        payload: { ...response }
       })
     }
   },
@@ -40,11 +52,18 @@ export default {
         cityList: filterCity([...data])
       };
     },
-    modifyBrandList(state:any,{payload}){
+    modifyBrandList(state: any, { payload }) {
       const { data } = payload;
       return {
         ...state,
-        brandList:[...data]
+        brandList: [...data]
+      }
+    },
+    modifyBrands(state: any, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        brands: [...data]
       }
     }
   },
@@ -57,7 +76,12 @@ export default {
               type: 'getCity',
             })
             dispatch({
-              type:'getAllBrands'
+              type: 'getAllBrands'
+            })
+            break;
+          case '/vipManage':
+            dispatch({
+              type: 'getBrands'
             })
             break;
           case '/merchant/distributor':

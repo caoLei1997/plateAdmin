@@ -67,7 +67,7 @@ const columns = [
     dataIndex: 'id',
     key: 'id',
     fixed: 'right',
-    render: id => <Link to={`/carmanage/basic/details/${id}`}>查看详情</Link>,
+    render: id => <Link to={`/carmanage/vip/details/${id}`}>查看详情</Link>,
   },
 ];
 

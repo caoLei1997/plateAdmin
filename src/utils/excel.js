@@ -1,7 +1,6 @@
 //excelUtil.js
 import XLSX from 'xlsx';
 function importExcel(file){
-
     // 获取上传的文件对象
     const { files } = file.target;
     // 通过FileReader对象读取文件

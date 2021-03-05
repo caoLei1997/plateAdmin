@@ -9,3 +9,9 @@ export async function requestAllBrands() {
     method: 'GET',
   });
 }
+export async function requestBrands() {
+  return request(`/manager/v1.1/DistributePlateNumberRecordController/getAllFirstAgentOutlets`, {
+    method: 'GET',
+  });
+}
+

@@ -58,6 +58,7 @@ const CarManage = (props) => {
         "pageIndex": current,
         "pageSize": meansListState.pageSize,
         secondaryAgentOutletsId: [],
+        versionType:'general',
         ...config
       }
     })

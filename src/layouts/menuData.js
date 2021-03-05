@@ -38,7 +38,7 @@ export default [
             {
               name: '基础详情页',
               icon: 'smile',
-              path: '/carmanage/details/:id',
+              path: '/carmanage/basic/details/:id',
               component: './carManage/details',
               hideInMenu: true,
             },
