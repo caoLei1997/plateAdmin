@@ -38,10 +38,8 @@ class index extends Component {
                 id
             }
         })
-        // history.push(`/recordDetail/${id}`);
-        // history.replace(`recordDetail`);
+        history.push(`/approveManage/record/recordDetail/${id}`);
         window.scrollTo(0, 0);
-
     }
     getPagePrev = (type = 'first') => {
         let { match } = this.props;
@@ -60,12 +58,12 @@ class index extends Component {
         const recordList = JSON.parse(localStorage.getItem('recordList')).data.ids;
         const activeIdIndex = recordList.findIndex(item => item === Number(match.params.id));
         let { id } = match.params
-        // dispatch({
-        //     type: 'recordDetail/getDetail',
-        //     payload: {
-        //         id
-        //     }
-        // })
+        dispatch({
+            type: 'recordDetail/getDetail',
+            payload: {
+                id
+            }
+        })
         if (type === 'next') {
             return recordList[activeIdIndex + 1];
         }

@@ -1,5 +1,5 @@
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect,useLayoutEffect, useState } from 'react';
 import { connect } from 'umi';
 import DealerSelect from '@/components/DealerSelect';
 
@@ -48,7 +48,9 @@ const CarManage = (props) => {
     })
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    console.log(111);
+    
     getMeansList(1, false, {});
   }, []);
 

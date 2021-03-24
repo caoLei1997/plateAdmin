@@ -24,7 +24,7 @@ function AddAuthority({
     const [form] = Form.useForm()
     let [authority, setAuthority] = useState(rows && rows.type)
     const [agentOutlesName, setAgentOutlesName] = useState(rows ? rows.agentOutlesName : undefined)
-
+    const [isVIP, setIsVIP] = useState('');
     // 选择角色
     const rolesList = [
         { label: "超级管理员", value: '0' },
@@ -86,18 +86,23 @@ function AddAuthority({
         { label: '权限管理', value: '权限管理' },
         { label: 'SN管理', value: 'SN管理' },
     ]
+
+
+    const [defaultValue, setDefaultValue] = useState(['SN管理']);
+    useEffect(() => {
+        if (rows !== null && rows.versionType === 'vip') {
+            setDefaultValue([...defaultValue, '车辆管理'])
+        }
+    },[])
     // 权限介绍
     const functionDisplay = (authority) => {
         if (authority == '0') return '拥有所有权限'
         if (authority == '1') {
-            const isVip = userInfo['antd-pro-authority'];
-            let defaultValue = ['SN管理'];
-            if (isVip === 'vip' || isVip === 'admin') defaultValue.push('车辆管理')
             return <Checkbox.Group
                 key='1'
                 disabled
                 options={authorityArr}
-                defaultValue={defaultValue}
+                value={defaultValue}
             />
         }
         if ((authority == '2' || authority == '3') && authority != null && authority != '超级管理员') {
@@ -111,7 +116,12 @@ function AddAuthority({
         return '根据角色选择自动匹配'
     }
     // 选择品牌厂家
-    const handleAgent = (value, { agentOutletsName }) => {
+    const handleAgent = (value, { agentOutletsName, versionType }) => {
+        if (versionType === 'vip' || versionType === 'general') {
+            setDefaultValue([...defaultValue, '车辆管理'])
+        } else {
+            setDefaultValue(['SN管理'])
+        }
         setAgentOutlesName(agentOutletsName)
     }
     // 选择地区
@@ -213,6 +223,7 @@ function AddAuthority({
                                                     key={index}
                                                     agentOutletsName={item.agentOutlesName}
                                                     value={item.agentOutlesId}
+                                                    versionType={item.versionType}
                                                 >
                                                     {item.agentOutlesName}
                                                 </Option>
@@ -295,7 +306,6 @@ function AddAuthority({
                         {
                             functionDisplay(authority)
                         }
-                        <div></div>
                     </Form.Item>
                 </Form>
             </Modal>

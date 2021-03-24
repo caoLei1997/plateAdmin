@@ -54,7 +54,7 @@ const Model = {
           history.replace('/snmanagement');
           return;
         } else if (response.data.channel == BrigadeChannel)
-          history.replace('/record');
+          history.replace('/approveManage/record');
 
       } else {
         onFail();

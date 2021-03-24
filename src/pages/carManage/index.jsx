@@ -1,5 +1,5 @@
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect,useLayoutEffect, useState } from 'react';
 import { connect } from 'umi';
 import DealerSelect from '@/components/DealerSelect';
 import TabsBasic from './components/TabsBasic';
@@ -107,9 +107,8 @@ const CarManage = (props) => {
     })
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getMeansList(1,false,{});
-
   }, []);
 
   const tabKeyChange = (key, agentOutletsId) => {

@@ -35,6 +35,7 @@ const errorHandler = error => {
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
+    
     notification.error({
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
@@ -67,7 +68,6 @@ request.interceptors.request.use((url, options = {}) => {
   // if (isToken) headers.token = '07dc5aa9-8c43-4c8b-bae6-85081a3c1599';
   let queryUrl = url;
   if (process.env.NODE_ENV === 'development') {
-    // queryUrl = `/cjj-api${url}`;
     // queryUrl = `/cjj-api${url}`; // 开发环境
     queryUrl = `/vehicle-pre${url}`;
     // queryUrl = `/api${url}`;

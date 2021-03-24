@@ -49,7 +49,7 @@ const columns = [
     width: 80,
     render: auditStatus => {
       const active = examineArr.filter(item => item.key === auditStatus) || [];
-      return <span className={`font-${active[0].color}`}>{active[0].val}</span>
+      return active.length && <span className={`font-${active[0].color}`}>{active[0].val}</span>
     }
   },
   {
@@ -85,7 +85,7 @@ const MeansTable = ({ meansListState, tableLoading, paginationChange, getList })
     columns,
     scroll,
     pagination: {
-      total, 
+      total,
       current,
       pageSize: nowPageSize,
       onChange: handlePaginationChange,

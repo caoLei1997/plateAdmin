@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Row, Col, Button, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import AddAuthority from '../AddAuthority'
@@ -48,8 +48,10 @@ const AuthorityTable = ({
         },
         {
             title: '功能权限',
-            dataIndex: 'power',
-            key: 'power',
+            render: (record) => {
+                if (record.versionType === 'free') return record.power.split(',')[1]
+                else return record.power
+            }
         },
         {
             title: '状态',
@@ -144,7 +146,7 @@ const AuthorityTable = ({
     }
     const [size, setSize] = useState(authorityList.pageSize);
 
-  
+
     // 分页
     const pagination = {
         total: authorityList.total,
@@ -193,7 +195,7 @@ const AuthorityTable = ({
             <div className='mt-16'>
                 <Table
                     loading={tableLoading}
-                    rowKey={(record)=>record.id}
+                    rowKey={(record) => record.id}
                     dataSource={authorityList.content}
                     columns={columns}
                     pagination={pagination}>

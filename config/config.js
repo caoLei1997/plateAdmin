@@ -28,7 +28,6 @@ export default defineConfig({
   dva: {
     hmr: true,
     immer: true,
-
   },
   locale: {
     default: 'zh-CN',

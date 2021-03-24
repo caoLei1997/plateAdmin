@@ -53,7 +53,7 @@ const MeansDetail = ({ dispatch, match, detailState, loading, meansListState,his
   }
 
   useEffect(() => {
-    getMeansList();
+    // getMeansList();
     getDetails(match.params.id);
   }, [match.params.id])
 

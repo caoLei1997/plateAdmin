@@ -59,7 +59,7 @@ const VipManage = (props: VipMangeProps) => {
         return (
           <PopupConfirm
             placement="top"
-            title={'移除后该品牌厂家将不在有VIP通道权限'}
+            title={'移除后该品牌厂家将不在有VIP通道权限,确认要移除么？'}
             onConfirm={() => vipDeletes(id)}
             okText="确定"
             cancelText="取消"
