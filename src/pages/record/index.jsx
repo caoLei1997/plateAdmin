@@ -133,7 +133,7 @@ class Record extends Component {
                 dataIndex: 'plateNumberApplyId',
                 render: (plateNumberApplyId) => (
                     <div size="middle">
-                        <Link to={`/record/recordDetail/${plateNumberApplyId}`}>查看详情</Link>
+                        <Link to={`recordDetail/${plateNumberApplyId}`}>查看详情</Link>
                     </div>
                 ),
             },

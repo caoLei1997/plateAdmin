@@ -16,8 +16,6 @@ export default {
     },
     '/vehicle-pre/': {
       target: 'http://vehicle.natapp1.cc/',
-      // target: 'http://wechat.sxeccellentdriving.com',
-      // target: '113.142.56.124:8080',
       changeOrigin: true,
       pathRewrite: {
         '/vehicle-pre/': '',

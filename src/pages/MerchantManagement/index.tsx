@@ -6,6 +6,7 @@ import BranFilter from './components/BranFilter/BranFilter';
 import BrandAdd from './components/BrandAdd/BrandAdd';
 import BrandList from './components/BrandList/BrandList';
 import { connect } from 'umi';
+
 const index: FC<any> = (props) => {
   const {
     getList,

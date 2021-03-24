@@ -36,32 +36,32 @@ export const routes = [
             component: './agentManage',
             authority: ['admin'],
           },
-          {
-            name: '商户管理重构',
-            icon: 'https://electric.sxwinstar.net/plateSale/shgl.png',
-            path: '/merchant',
-            component: './MerchantManagement/_layout',
-            authority: ['admin'],
-            routes: [
-              {
-                path: '/merchant',
-                // redirect: '/merchant/brand',
-                redirect: '/merchant/distributor',
-              },
-              {
-                path: 'brand',
-                name: '商户管理-品牌厂家',
-                component: './MerchantManagement',
-                hideInMenu: true
-              },
-              {
-                path: 'distributor',
-                name: '商户管理-经销商',
-                component: './MerchantManagement/Distributor',
-                hideInMenu: true
-              }
-            ]
-          },
+          // {
+          //   name: '商户管理重构',
+          //   icon: 'https://electric.sxwinstar.net/plateSale/shgl.png',
+          //   path: '/merchant',
+          //   component: './MerchantManagement/_layout',
+          //   authority: ['admin'],
+          //   routes: [
+          //     {
+          //       path: '/merchant',
+          //       // redirect: '/merchant/brand',
+          //       redirect: '/merchant/distributor',
+          //     },
+          //     {
+          //       path: 'brand',
+          //       name: '商户管理-品牌厂家',
+          //       component: './MerchantManagement',
+          //       hideInMenu: true
+          //     },
+          //     {
+          //       path: 'distributor',
+          //       name: '商户管理-经销商',
+          //       component: './MerchantManagement/Distributor',
+          //       hideInMenu: true
+          //     }
+          //   ]
+          // },
           {
             name: '目录管理',
             path: '/catalog',
@@ -202,20 +202,87 @@ export const routes = [
               },
             ],
           },
+
           {
-            name: '备案管理',
+            name: '审批管理',
             icon: 'https://electric.sxwinstar.net/plateSale/bagl.png',
-            path: '/record',
-            component: './record',
+            path: '/approveManage',
             authority: ['admin', 'police', 'brigade'],
-          },
-          {
-            name: '备案详情',
-            icon: 'smile',
-            path: '/record/recordDetail/:id',
-            component: './recordDetail',
-            authority: ['admin', 'police', 'brigade'],
-            hideInMenu: true,
+            routes: [
+              {
+                path: '/approveManage',
+                redirect: 'record',
+              },
+              {
+                path: 'record',
+                name: '备案管理',
+                routes: [
+                  {
+                    path: '/approveManage/record',
+                    redirect: 'recordList',
+                  },
+                  {
+                    path: 'recordList',
+                    component: './record',
+                    hideInMenu: true,
+                    name: '备案管理',
+                    hideInBreadcrumb: true,
+                  },
+                  {
+                    path: 'recordDetail/:id',
+                    component: './recordDetail',
+                    hideInMenu: true,
+                    name: '备案详情',
+                  },
+                ]
+              },
+              {
+                path: 'carCancel',
+                name: '车辆注销',
+                routes: [
+                  {
+                    path: '/approveManage/carCancel',
+                    redirect: 'carCancelList'
+                  },
+                  {
+                    path: 'carCancelList',
+                    name: '车辆注销',
+                    component: './CarCancel/List',
+                    hideInMenu: true,
+                    hideInBreadcrumb: true,
+                  },
+                  {
+                    path: 'carCancelDetail/:id',
+                    name: '车辆注销详情',
+                    component: './CarCancel/Detail',
+                    hideInMenu: true,
+                  }
+                ]
+              },
+              {
+                path: 'infoChange',
+                name: '信息变更',
+                routes: [
+                  {
+                    path: '/approveManage/infoChange',
+                    redirect: 'infoChangeList'
+                  },
+                  {
+                    path: 'infoChangeList',
+                    name: '信息变更',
+                    component: './InfoChange/List',
+                    hideInMenu: true,
+                    hideInBreadcrumb: true,
+                  },
+                  {
+                    path: 'infoChangeDetail/:id',
+                    name: '信息变更详情',
+                    component: './InfoChange/Detail',
+                    hideInMenu: true,
+                  }
+                ]
+              }
+            ]
           },
           {
             name: 'VIP管理',

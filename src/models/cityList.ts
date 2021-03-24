@@ -9,12 +9,12 @@ import { filterCity } from '@/utils/utils'
 interface cityListStateType {
   cityList: Array<any>,
   brandList: Array<any>,
-  brands:any
+  brands: any
 }
 const cityListState: cityListStateType = {
   cityList: [],
   brandList: [],
-  brands:[],
+  brands: [],
 }
 export default {
   namespace: 'cityList',
@@ -34,10 +34,9 @@ export default {
         payload: { ...response }
       })
     },
-    *getBrands(action,{put,call}){
-      const response = yield call(requestBrands);
+    *getBrands(action, { put, call }) {
+      const response = yield call(requestBrands, { ...action.payload });
       console.log(response);
-      
       yield put({
         type: 'modifyBrands',
         payload: { ...response }
@@ -81,7 +80,10 @@ export default {
             break;
           case '/vipManage':
             dispatch({
-              type: 'getBrands'
+              type: 'getBrands',
+              payload: {
+                versionType: 'vip'
+              }
             })
             break;
           case '/merchant/distributor':

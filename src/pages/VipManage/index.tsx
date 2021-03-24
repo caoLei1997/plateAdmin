@@ -14,6 +14,7 @@ import {
   Table,
   Select,
   Button,
+  message,
   DatePicker,
   Popconfirm as PopupConfirm,
 } from 'antd'
@@ -69,7 +70,6 @@ const VipManage = (props: VipMangeProps) => {
       }
     },
   ]
-
   const paginationChange = (pageIndex: number, pageSize: number) => {
     getList(pageIndex - 1, pageSize)
   }
@@ -118,15 +118,25 @@ const VipManage = (props: VipMangeProps) => {
     setVipBrandId(null);
   }
   const submitCreateVip = () => {
-    const callback = () => {
-      clearCreateData()
-      getList()
+    if (
+      vipBrandId === null ||
+      vipBrandId === undefined ||
+      vipBrandId === false
+    ) {
+      message.error('请选择商户')
+      return
+    } else {
+      const callback = () => {
+        clearCreateData()
+        getList()
+      }
+      const params = {
+        "agentOutletsId": vipBrandId,
+        "versionType": "vip"
+      }
+      add(params, callback)
     }
-    const params = {
-      "agentOutletsId": vipBrandId,
-      "versionType": "vip"
-    }
-    add(params, callback)
+
   }
 
   return (
@@ -147,7 +157,7 @@ const VipManage = (props: VipMangeProps) => {
           <RangePicker placeholder={['开始日期', '结束日期']} />
         </Item>
         <Item>
-          <Button htmlType='submit'>查询</Button>
+          <Button   type='primary' htmlType='submit'>查询</Button>
         </Item>
       </Form>
       <div className='mt-16'></div>
@@ -167,6 +177,7 @@ const VipManage = (props: VipMangeProps) => {
             textAlign: 'left',
             marginBottom: 32
           }}
+        
           onClick={() => setCreateVipVisible(true)}
         >
           添加
@@ -202,7 +213,7 @@ const VipManage = (props: VipMangeProps) => {
             <Button onClick={clearCreateData} className='mr-8'>取消</Button>
             <PopupConfirm
               placement="top"
-              title={'保存后该品牌厂家将拥有使用VIP通道的权限'}
+              title={'保存后该品牌厂家将拥有使用VIP通道的权限,确定要添加么?'}
               onConfirm={submitCreateVip}
               okText="确定"
               cancelText="取消"

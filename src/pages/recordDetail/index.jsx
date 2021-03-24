@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
 import styles from './index.less'
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import {
+    LeftOutlined,
+    RightOutlined
+} from '@ant-design/icons';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Descriptions, Divider, Table, Row, Col, Typography, Collapse, Image } from 'antd';
+import {
+    Descriptions,
+    Divider,
+    Table,
+    Row,
+    Col,
+    Typography,
+    Collapse,
+    Image
+} from 'antd';
 import AuditPass from './components/AuditPass'
 import AuditBy from './components/AuditBy'
-import { connect, Link } from 'umi'
+import {
+    connect,
+    Link
+} from 'umi'
 const { Panel } = Collapse;
 
 const Text = Typography
@@ -23,7 +38,8 @@ class index extends Component {
                 id
             }
         })
-        history.replace(`/record/recordDetail/${id}`);
+        // history.push(`/recordDetail/${id}`);
+        // history.replace(`recordDetail`);
         window.scrollTo(0, 0);
 
     }
@@ -98,9 +114,17 @@ class index extends Component {
                         <div className={styles.container}>
                             <div className={styles.status}>
                                 <span>审核状态： </span>
-                                <div className="inline" style={{ display: 'inline-block' }}>
+                                <div
+                                    className="inline"
+                                    style={{ display: 'inline-block' }}>
                                     {
-                                        content.recordStatus == 2 ? <div className='font-pending'>待审核</div> : (content.recordStatus == 4 ? <div className='font-success'>通过</div> : <div className='font-red'>未通过</div>)
+                                        content.recordStatus == 2 ?
+                                            <div className='font-pending'>待审核</div> :
+                                            (
+                                                content.recordStatus == 4 ?
+                                                    <div className='font-success'>通过</div> :
+                                                    <div className='font-red'>未通过</div>
+                                            )
                                     }
                                 </div>
                             </div>
@@ -366,6 +390,7 @@ class index extends Component {
                                 }
 
                             </Descriptions>
+
                             <h3>车主信息</h3>
                             <Divider></Divider>
                             <Descriptions title="" column={2}>
@@ -382,13 +407,24 @@ class index extends Component {
                     </PageHeaderWrapper>
 
                     <Row justify="space-between" align="middle" className='mt-32'>
-                        {/* <Text to={`/record/recordDetail/${this.toDetail('prev')}`}> <LeftOutlined />上一条</Text> : */}
-
                         <Col span={3}>
                             {
                                 this.getPagePrev('first') ?
-                                    <Text className='link-a' onClick={() => (this.getDetail(this.toDetail('prev')))}> <LeftOutlined />上一条 </Text> :
-                                    <Text className='font-size-16' disabled={true}><LeftOutlined />上一条</Text>
+                                    <Text
+                                        className='link-a'
+                                        onClick={
+                                            () => (this.getDetail(this.toDetail('prev')))
+                                        }>
+                                        <LeftOutlined />
+                                        上一条
+                                    </Text> :
+                                    <Text
+                                        className='font-size-16'
+                                        disabled={true}
+                                    >
+                                        <LeftOutlined />
+                                        上一条
+                                    </Text>
                             }
                         </Col>
                         <Col span={12}>
@@ -405,8 +441,22 @@ class index extends Component {
                         <Col span={3} style={{ textAlign: 'right' }}>
                             {
                                 this.getPagePrev('last') ?
-                                    <Text className='link-a' onClick={() => (this.getDetail(this.toDetail('next')))}> 下一条 <RightOutlined /> </Text> :
-                                    <Text className='font-size-16' disabled={true}>下一条 <RightOutlined /></Text>
+                                    <Text
+                                        className='link-a'
+                                        onClick={
+                                            () => (this.getDetail(this.toDetail('next')))
+                                        }
+                                    >
+                                        下一条
+                                         <RightOutlined />
+                                    </Text> :
+                                    <Text
+                                        className='font-size-16'
+                                        disabled={true}
+                                    >
+                                        下一条
+                                        <RightOutlined />
+                                    </Text>
                             }
                         </Col>
                     </Row>

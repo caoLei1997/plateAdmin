@@ -54,3 +54,12 @@ export const PAGESIZE = 10;
 export const MODAL_PAGESIZE = '10';
 
 export const INIT_ADMIN = '18629331200'
+
+export const GUTTER = 20;// 删格间距
+
+
+export const LABEL_COL = {// form label宽度
+    span: 6,
+    offset: 1
+}
+
