@@ -48,7 +48,7 @@ const Model = {
           history.replace('/personal');
           return;
         } else if (response.data.channel === PoliceChannel) {
-          history.replace('/record');
+          history.replace('/approveManage/record');
           return;
         } else if (response.data.channel == agentChannel) {
           history.replace('/snmanagement');

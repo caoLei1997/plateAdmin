@@ -22,7 +22,6 @@ export default {
         *getList({ payload }, { call, put }) {
             const { pageIndex, filter, pageSize } = payload;
             console.log(pageIndex);
-
             yield put({
                 type: 'changeFilter',
                 payload: { filter, pageIndex, pageSize }

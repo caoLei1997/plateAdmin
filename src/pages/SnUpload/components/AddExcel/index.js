@@ -23,7 +23,7 @@ function AddExcel({
         })
     }
     const uploadExcelAttr = {
-        accept: '.xls',
+        accept: '.xls,.xlsx',
         showUploadList: true,
         onRemove: (file) => {
             setFileList([]);

@@ -82,7 +82,7 @@ function AddAuthority({
         { label: '经销商管理', value: '经销商管理' },
         { label: '目录管理', value: '目录管理' },
         { label: '车辆管理', value: '车辆管理' },
-        { label: '备案管理', value: '备案管理' },
+        { label: '审批管理', value: '审批管理' },
         { label: '权限管理', value: '权限管理' },
         { label: 'SN管理', value: 'SN管理' },
     ]
@@ -110,7 +110,7 @@ function AddAuthority({
                 key='2'
                 disabled
                 options={authorityArr}
-                defaultValue={['备案管理']}
+                defaultValue={['审批管理']}
             />
         }
         return '根据角色选择自动匹配'

@@ -20,7 +20,9 @@ export interface TableDataType {
 
 export interface PaginationType {
   current: number,
-  pageSize: number
+  pageSize: number,
+  total:number,
+  onChange:Function,
 }
 
 

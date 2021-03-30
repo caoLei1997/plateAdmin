@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Row,
   Col,
@@ -9,73 +9,88 @@ import {
   Select,
   DatePicker,
 } from 'antd'
-import {
-  connect,
-  Link,
-} from 'umi'
+import { Link } from 'umi'
+import moment from 'moment'
+import { connect } from 'dva'
+import { formatData } from '@/commonFun'
 import {
   GUTTER,
-  LABELCOL,
+  LABEL_COL,
 } from '@/globalConstant';
+import { PAGESIZE, PAGE_INDEX } from '@/globalConstant'
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { TableDataType, PaginationType } from './data';
+import TrafficPolice from '@/components/TrafficPolice/TrafficPolice';
 const { Option } = Select;
 const { Item } = Form;
 const { RangePicker } = DatePicker;
+
 const columns = [
   {
     title: "申请日期",
-    dataIndex: 'dateOfApplication'
+    dataIndex: 'createdAt',
+    render: (createdAt) => {
+      return createdAt ? moment(createdAt).format('YYYY-MM-DD') : ''
+    },
+    sorter: (a, b) => a.createdAt - b.createdAt,
+    filterMultiple: false,
   },
   {
     title: '登记人',
-    dataIndex: 'registerPerson'
+    dataIndex: 'applyUserName'
   },
   {
     title: '手机号码',
-    dataIndex: 'phoneNumber'
+    dataIndex: 'applyPhone'
   },
   {
     title: '注销原因',
-    dataIndex: 'logout'
+    dataIndex: 'applyReasonName'
   },
   {
     title: '车牌号',
-    dataIndex: 'licensePlate'
+    dataIndex: 'plateNumber'
   },
   {
     title: '车辆品牌',
-    dataIndex: 'vehicleBrands'
+    dataIndex: 'brandName'
   },
   {
     title: '车辆型号',
-    dataIndex: 'vehicleModel'
+    dataIndex: 'modelName'
   },
   {
     title: '整车编码',
-    dataIndex: 'vehicleCode'
+    dataIndex: 'electrombileNumber',
+    width: 100,
+    ellipsis: true,
   },
   {
     title: '审核状态',
-    dataIndex: 'status',
-    render: (status: number = 0) => {
-      switch (status) {
-        case 0:
-          return <span className='font-red'>不通过</span>
-        case 1:
+    dataIndex: 'auditStatus',
+    render: (auditStatus: string) => {
+      switch (auditStatus) {
+        case '0':
           return <span className='font-blue'>待审核</span>
-        case 2:
+        case '1':
           return <span className='font-success'>已通过</span>
+        case '2':
+          return <span className='font-red'>不通过</span>
       }
     }
   },
   {
     title: '审核日期',
-    dataIndex: 'reviewDate'
+    dataIndex: 'orgAuditAt',
+    render: (orgAuditAt) => {
+      return orgAuditAt ? moment(orgAuditAt).format('YYYY-MM-DD') : ''
+    },
+    sorter: (a, b) => a.orgAuditAt - b.orgAuditAt,
+    filterMultiple: false,
   },
   {
     title: '不通过原因',
-    dataIndex: 'fail'
+    dataIndex: 'notPassReason',
+    ellipsis: true,
   },
   {
     title: '操作',
@@ -86,29 +101,67 @@ const columns = [
   },
 ]
 
-const dataSource: Array<TableDataType> = [
-  {
-    dateOfApplication: '2019-12-13',
-    registerPerson: '曹某某',
-    phoneNumber: 15619270901,
-    logout: '车辆报废',
-    licensePlate: 15611122,
-    vehicleBrands: '小刀电动车',
-    vehicleModel: '小刀-CT5',
-    vehicleCode: '15619270901',
-    status: 0,
-    reviewDate: '2019-12-14',
-    fail: '错误错误',
-    id: 0,
-  }
-]
-
-
-const List = () => {
+const List = (props: any) => {
+  const { getList, carCancel, trafficList, getBrigade, login } = props;
   const [form] = Form.useForm();
-  const pagination: PaginationType = {
-    current: 1,
-    pageSize: 10,
+  const tableChange = (pageIndex: number, pageSize: number) => {
+    const params = {
+      pageIndex: pageIndex - 1,
+      pageSize: pageSize,
+      filter: { ...carCancel.filter }
+    }
+    getList(params)
+  }
+  const pagination: any = {
+    current: carCancel.pageIndex + 1,
+    pageSize: carCancel.pageSize,
+    total: carCancel.total,
+    onChange: tableChange,
+    showQuickJumper: true,
+    showSizeChanger: true,
+  }
+
+  useEffect(() => {
+    const params = {
+      pageIndex: PAGE_INDEX,
+      pageSize: PAGESIZE,
+      filter: {}
+    }
+    getList(params)
+  }, [])
+
+  const search = (fields) => {
+    const { city, createdAt, orgAuditAt } = fields;
+    const [orgCity = '', orgRegion = ''] = city;
+    const [createdAtStart = '', createdAtEnd = ''] = createdAt;
+    const [orgAuditAtStart = '', orgAuditAtEnd = ''] = orgAuditAt;
+    const filter = {
+      ...fields,
+      orgCity,
+      orgRegion,
+      createdAtStart: createdAtStart ? formatData(createdAtStart) : '',
+      createdAtEnd: createdAtEnd ? formatData(createdAtEnd) : '',
+      orgAuditAtStart: orgAuditAtStart ? formatData(orgAuditAtStart) : '',
+      orgAuditAtEnd: orgAuditAtEnd ? formatData(orgAuditAtEnd) : '',
+      city: undefined,
+      createdAt: undefined,
+      orgAuditAt: undefined
+    }
+    const params = {
+      pageIndex: PAGE_INDEX,
+      pageSize: PAGESIZE,
+      filter
+    }
+    getList(params)
+  }
+
+  const initialValues = {
+    city: login.channel == 14 ? [login.city, login.region] : [''],
+    createdAt: [],
+    orgAuditAt: [],
+    auditStatus: '',
+    applyReason: '',
+    agentOutlesId: login.channel == 14 ? login.name : '',
   }
   return (
     <PageHeaderWrapper
@@ -116,68 +169,69 @@ const List = () => {
     >
       <Form
         form={form}
-        labelCol={LABELCOL}
+        labelCol={LABEL_COL}
+        onFinish={search}
+        initialValues={initialValues}
       >
-        <Row gutter={GUTTER}>
+        <TrafficPolice
+          setFieldsValue={form.setFieldsValue}
+          trafficList={trafficList}
+          getBrigade={getBrigade}
+          login={login}
+        />
+        <Row>
           <Col span={6}>
-            <Item label='交警大队' name='city'>
-              <Select placeholder='市区'>
-                <Option value='1'>全部市区</Option>
-              </Select>
-            </Item>
-          </Col>
-          <Col span={6}>
-            <Item name=''>
-              <Select placeholder='大队'>
-                <Option value='1'>全部大队</Option>
-              </Select>
-            </Item>
-          </Col>
-        </Row>
-        <Row gutter={GUTTER}>
-          <Col span={6}>
-            <Item label='登记人' name=''>
+            <Item label='登记人' name='applyUserName'>
               <Input placeholder='登记人' />
             </Item>
           </Col>
           <Col span={6}>
-            <Item label='手机号码' name=''>
+            <Item label='手机号码' name='applyPhone'>
               <Input placeholder='手机号码' />
             </Item>
           </Col>
           <Col span={6}>
-            <Item label='注销原因' name=''>
+            <Item label='注销原因' name='applyReason'>
               <Select placeholder='注销原因'>
-                <Option value='1'>全部</Option>
+                <Option value=''>全部</Option>
+                <Option value='scrap'>灭失或报废</Option>
+                <Option value='stolen'>车辆失窃</Option>
+                <Option value='newVehicleBack'>新车退车</Option>
+                <Option value='otherPlace'>迁往外地</Option>
+                <Option value='oldForNew'>以旧换新或不再使用</Option>
+                <Option value='repeal'>依法撤销登记</Option>
               </Select>
             </Item>
           </Col>
           <Col span={6}>
-            <Item label='车牌号' name=''>
+            <Item label='车牌号' name='plateNumber'>
               <Input placeholder='车牌号' />
             </Item>
           </Col>
         </Row>
-        <Row gutter={GUTTER}>
+        <Row >
           <Col span={6}>
-            <Item label='整车编码' name=''>
+            <Item label='整车编码' name='electrombileNumber'>
               <Input placeholder='整车编码' />
             </Item>
           </Col>
           <Col span={6}>
-            <Item label='审核状态' name=''>
+            <Item label='审核状态' name='auditStatus'>
               <Select placeholder='审核状态'>
-                <Option value='1'>全部</Option>
+                <Option value=''>全部</Option>
+                <Option value='0'>待审核</Option>
+                <Option value='1'>已通过</Option>
+                <Option value='2'>不通过</Option>
               </Select>
             </Item>
           </Col>
           <Col span={6}>
-            <Item label='申请日期' name=''>
+            <Item label='申请日期' name='createdAt'>
               <RangePicker placeholder={['日期起', '日期止']} />
             </Item>
           </Col>
           <Col span={6}>
-            <Item label='审核日期' name=''>
+            <Item label='审核日期' name='orgAuditAt'>
               <RangePicker placeholder={['日期起', '日期止']} />
             </Item>
           </Col>
@@ -192,7 +246,7 @@ const List = () => {
       <Table
         columns={columns}
         rowKey='id'
-        dataSource={dataSource}
+        dataSource={carCancel.content}
         pagination={pagination}
       />
     </PageHeaderWrapper >
@@ -200,10 +254,19 @@ const List = () => {
 }
 
 const stateToProps = (state: any) => ({
-
+  carCancel: state.CarCancel,
+  trafficList: state.traffic,
+  login: state.login
 })
 const dispatchToProps = {
-
+  getList: (payload) => ({
+    type: 'CarCancel/getList',
+    payload: payload
+  }),
+  getBrigade: (payload) => ({
+    type: 'traffic/getBrigade',
+    payload: payload
+  })
 }
 export default connect(
   stateToProps,

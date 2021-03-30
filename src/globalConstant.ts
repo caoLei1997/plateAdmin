@@ -49,7 +49,7 @@ export const RETCODE_TOKEN_ERR = 'token_error';
 // export const PAGESIZE = '10';
 
 export const PAGESIZE = 10;
-
+export const PAGE_INDEX = 0;
 
 export const MODAL_PAGESIZE = '10';
 
@@ -62,4 +62,23 @@ export const LABEL_COL = {// form label宽度
     span: 6,
     offset: 1
 }
+
+export enum VehicleReason {
+    Scrap = '灭失或报废',
+    Stolen = '车辆失窃',
+    NewVehicleBack = '新车退车',
+    OtherPlace = '迁往外地',
+    OldForNew = '以旧换新或不再使用',
+    Repeal = '依法撤销登记',
+}
+
+export enum VehicleReasonStatus {
+    Scrap = 'scrap', // 灭失或报废
+    Stolen = 'stolen',// 车辆失窃
+    NewVehicleBack = 'newVehicleBack',// 车辆失窃
+    OtherPlace = 'otherPlace',// 还往外地
+    OldForNew = 'oldForNew',// 以旧换新或不再使用
+    Repeal = 'repeal',//'依法撤销登记',
+}
+
 

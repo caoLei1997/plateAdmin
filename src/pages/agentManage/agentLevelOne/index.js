@@ -141,7 +141,7 @@ class App extends React.Component {
       city: editDataCity[0],
       region: editDataCity[1],
       address: editDataAddress,
-      brandIds: editDataBrandId,
+      brandIds: [editDataBrandId],
     }).then(res => {
       this.tableListReq(this.agentTableListParams)
     });

@@ -116,12 +116,12 @@ class Record extends Component {
             {
                 title: '审核日期',
                 dataIndex: 'auditTime',
-                sorter: (a, b) => a.auditTime - b.auditTime,
                 render: auditTime => {
                     if (auditTime == '') return '-'
                     let time = new Date(auditTime);
                     return time.getFullYear() + '年' +  Number(time.getMonth() + 1) + '月' + time.getDate() + '日'
                 },
+                sorter: (a, b) => a.auditTime - b.auditTime,
                 filterMultiple: false,
             },
             {
