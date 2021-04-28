@@ -90,11 +90,11 @@ const columns = [
   {
     title: '不通过原因',
     dataIndex: 'notPassReason',
-    ellipsis: true,
   },
   {
     title: '操作',
     dataIndex: 'id',
+    fixed: 'right',
     render: (id: number) => {
       return <Link to={`carCancelDetail/${id}`}>查看详情</Link>
     }

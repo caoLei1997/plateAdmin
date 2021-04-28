@@ -36,33 +36,25 @@ export const PLATE_TYPE = {
 export const LOCALUSERKEY = 'bike_user';
 export const LOCAL_MEANS_IDS_KEY = 'means_ids';
 export const LOCAL_MEANS_FILTER = 'means_filter';
+export const SUPER_UNIQUE = 999999999; // 管理员
+export const PoliceChannel = 13; // 交警
+export const agentChannel = 11; // 经销商
+export const BrigadeChannel = 14; // 交警大队
 
-export const SUPER_UNIQUE = 999999999;
-export const PoliceChannel = 13;
-export const agentChannel = 11;
-
-export const BrigadeChannel = 14;
-
-export const RETCODESUCCESS = '0000';
-export const RETCODE_TOKEN_ERR = 'token_error';
-
-// export const PAGESIZE = '10';
-
-export const PAGESIZE = 10;
-export const PAGE_INDEX = 0;
-
+export const RETCODESUCCESS = '0000'; // 请求成功
+export const RETCODE_TOKEN_ERR = 'token_error'; // token错误码
+export const PAGESIZE = 10; // 分页条数
+export const PAGE_INDEX = 0; // 页数
 export const MODAL_PAGESIZE = '10';
-
 export const INIT_ADMIN = '18629331200'
-
 export const GUTTER = 20;// 删格间距
-
-
 export const LABEL_COL = {// form label宽度
     span: 6,
     offset: 1
 }
 
+
+// 枚举
 export enum VehicleReason {
     Scrap = '灭失或报废',
     Stolen = '车辆失窃',
@@ -82,3 +74,20 @@ export enum VehicleReasonStatus {
 }
 
 
+export enum vehicleUse {
+    SelfUse = '自用',
+    ExpressDelivery = '快递',
+    Takeaway = '外卖',
+    Other = '其他',
+}
+
+export enum certificate {
+    IDCare = '身份证',
+    passport = '护照',
+    HongKong = '港澳通行证',
+    officerID = '军官证',
+}
+
+
+export const NEW_API = '/newapi' //车辆变更注销 新服务
+export const API = ''  //基础老服务

@@ -12,7 +12,7 @@ const SnUploadBatch = (props) => {
         <h3 className='mt-16'>
           点击此处
           <a
-            href='./snDeclare.xls'
+            href='./snDeclare.xlsx'
             download='品牌厂家SN申报模板'
             className='font-underline ml-8'>
             下载模板

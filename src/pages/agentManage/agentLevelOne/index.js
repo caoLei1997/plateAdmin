@@ -425,7 +425,7 @@ class App extends React.Component {
             <Input
               onChange={this.inpChange1}
               className={style.inp}
-              placeholder='姓名'
+              placeholder='商户名称'
               size='middle'
             />
           </div>

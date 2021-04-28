@@ -27,6 +27,7 @@ export default {
         payload: { ...response }
       })
     },
+    
     *getAllBrands(action: any, { put, call }) {
       const response = yield call(requestAllBrands)
       yield put({

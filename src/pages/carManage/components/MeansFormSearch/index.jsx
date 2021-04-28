@@ -41,8 +41,6 @@ const MeansFormSearch = ({
 
   function onChange(value) {
     const [city = '', region = ''] = value;
-
-
     dispatch({
       type: 'subDealer/getList',
       payload: {

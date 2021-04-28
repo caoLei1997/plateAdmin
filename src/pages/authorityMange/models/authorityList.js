@@ -12,7 +12,7 @@ import { PAGESIZE, RETCODESUCCESS } from '@/globalConstant';
 const initialState = {
     total: 0,
     pageSize: PAGESIZE,
-    pageIndex: 1,
+    pageIndex: 0,
     filterValue: {},
     brigadeList: [],
     content: []

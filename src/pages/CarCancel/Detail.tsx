@@ -240,6 +240,7 @@ const Detail = (props: any) => {
               <AuditPass
                 getPagePrev={getPagePrev}
                 getId={getId}
+                getInfo={getInfo}
                 id={match.params.id}
                 history={history}
               />

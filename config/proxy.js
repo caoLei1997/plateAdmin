@@ -7,19 +7,13 @@
  */
 export default {
   dev: {
-    '/cjj-api/': {
-      target: 'https://electric.sxwinstar.net/api',
-      changeOrigin: true,
-      pathRewrite: {
-        '/cjj-api/': '',
-      },
-    },
-    '/vehicle-pre/': {
+    '/manager': {
       target: 'http://vehicle.natapp1.cc/',
       changeOrigin: true,
-      pathRewrite: {
-        '/vehicle-pre/': '',
-      },
+    },
+    '/newapi': {
+      target: 'http://vehicle.natapp1.cc/',
+      changeOrigin: true,
     },
   },
   test: {

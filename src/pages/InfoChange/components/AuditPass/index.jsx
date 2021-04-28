@@ -10,7 +10,7 @@ import {
 } from 'antd'
 const { TextArea } = Input;
 
-const AuditPass = ({ dispatch, id, getInfo, getPagePrev,getId,history }) => {
+const AuditPass = ({ dispatch, id, getInfo, getPagePrev,getId,history,changeId }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [passValue, setPassValue] = useState(0);
     const [form] = Form.useForm();
@@ -23,10 +23,10 @@ const AuditPass = ({ dispatch, id, getInfo, getPagePrev,getId,history }) => {
     }
     const onFinish = async values => {
         dispatch({
-            type: 'CarCancel/noPass',
+            type: 'infoChangeList/noPass',
             payload: {
                 ...values,
-                id: id,
+                id: changeId,
                 isUpdate: values.isUpdate ? 'NO' : undefined,
 
             },
@@ -37,7 +37,7 @@ const AuditPass = ({ dispatch, id, getInfo, getPagePrev,getId,history }) => {
         message.success(data.retMsg);
         const isNextPage = getPagePrev('last')
         if (isNextPage) {
-            history.push(`/approveManage/carCancel/carCancelDetail/${getId('last')}`)
+            history.push(`/approveManage/infoChange/infoChangeDetail/${getId('last')}`)
             window.scrollTo(0, 0);
         }else{
             getInfo(id)

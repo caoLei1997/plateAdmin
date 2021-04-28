@@ -1,7 +1,7 @@
 import { requestCarDistributeList, requestCarDistributeCensus } from '@/services/car';
 import { toggleStatusKeyVal } from '@/commonFun';
 import { PAGESIZE } from '@/globalConstant';
-import { requestGetCity } from '@/services/record';
+import { requestGetCarCity } from '@/services/record';
 
 const resetList = arr => {
     if (!arr) return [];
@@ -22,7 +22,7 @@ export default {
     },
     effects: {
         *requestGetCity({ payload }, { call, put }) {
-            const response = yield call(requestGetCity, { ...payload });
+            const response = yield call(requestGetCarCity, { ...payload });
             const { data } = response;
             data.map(item => {
                 if (item.children && item.children.length) {

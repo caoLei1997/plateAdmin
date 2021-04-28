@@ -3,7 +3,7 @@ import React, {
   useState,
   FC,
 } from 'react';
-import { GUTTER, LABEL_COL, } from '@/globalConstant';
+import { GUTTER, LABEL_COL, PAGE_INDEX, PAGESIZE, } from '@/globalConstant';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect, Link, } from 'umi'
 import {
@@ -16,94 +16,182 @@ import {
   Select,
   DatePicker,
 } from 'antd'
-import {
-  TableDataType,
-  PaginationType,
-  ListPropsType,
-} from './data';
+import moment from 'moment'
+import TrafficPolice from '@/components/TrafficPolice/TrafficPolice';
+import { formatData } from '@/commonFun';
 const { Option } = Select;
 const { Item } = Form;
 const { RangePicker } = DatePicker;
 const columns = [
   {
     title: "申请日期",
-    dataIndex: 'dateOfApplication'
-  },
-  {
-    title: '登记人',
-    dataIndex: 'registerPerson'
-  },
-  {
-    title: '证件类型',
-    dataIndex: 'IDType'
+    dataIndex: 'appliedAt',
+    render: (appliedAt) => {
+      return appliedAt ? moment(appliedAt).format('YYYY-MM-DD') : ''
+    },
+    sorter: (a, b) => a.appliedAt - b.appliedAt,
+    filterMultiple: false,
+    fixed: 'left',
   },
   {
     title: '证件号码',
-    dataIndex: 'IDNumber'
+    dataIndex: 'oldCertificateNumber',
+    fixed: 'left',
+    width: 200,
+  },
+  {
+    title: '登记人',
+    dataIndex: 'oldUserName',
+  },
+  {
+    title: '证件类型',
+    dataIndex: 'oldCertificateType',
+    render: (oldCertificateType) => {
+      // 身份证 0 护照 1 港澳 2 军官 3
+      switch (oldCertificateType) {
+        case '0':
+          return '身份证'
+        case '1':
+          return '护照'
+        case '2':
+          return '港澳'
+        case '3':
+          return '军官'
+        default:
+          return ''
+      }
+    }
   },
   {
     title: '手机号码',
-    dataIndex: 'phoneNumber'
+    dataIndex: 'oldPhoneNumber'
   },
   {
     title: '变更字段',
-    dataIndex: 'changeField'
+    dataIndex: 'changeCount',
   },
+  // {
+  //   title: '变更字段',
+  //   dataIndex: 'vehicleInfoDiffResults',
+  //   render: (vehicleInfoDiffResults) => {
+  //     if (vehicleInfoDiffResults && vehicleInfoDiffResults.length) {
+  //       return (
+  //         vehicleInfoDiffResults.map(item =>
+  //           (<div>{item.fieldChinese}</div>)
+  //         )
+  //       )
+  //     } else {
+  //       return ''
+  //     }
+  //   }
+  // },
   {
     title: '审核状态',
-    dataIndex: 'status',
-    render: (status: number = 0) => {
-      switch (status) {
-        case 0:
-          return <span className='font-red'>不通过</span>
-        case 1:
+    dataIndex: 'auditStatus',
+    render: (auditStatus) => {
+      switch (auditStatus) {
+        case '0':
           return <span className='font-blue'>待审核</span>
-        case 2:
+        case '1':
           return <span className='font-success'>已通过</span>
+        case '2':
+          return <span className='font-red'>不通过</span>
       }
     }
   },
   {
     title: '审核日期',
-    dataIndex: 'reviewDate'
+    dataIndex: 'orgAuditAt',
+    render: (orgAuditAt) => {
+      return orgAuditAt ? moment(orgAuditAt).format('YYYY-MM-DD') : ''
+    },
+    sorter: (a, b) => a.orgAuditAt - b.orgAuditAt,
+    filterMultiple: false,
   },
   {
     title: '不通过原因',
-    dataIndex: 'fail'
+    dataIndex: 'notPassReason'
   },
   {
     title: '操作',
     dataIndex: 'id',
     render: (id: number) => {
       return <Link to={`infoChangeDetail/${id}`}>查看详情</Link>
-    }
+    },
+    fixed: 'right',
   },
 ]
-const dataSource: Array<TableDataType> = [
-  {
-    dateOfApplication: '2019-12-13',
-    registerPerson: '曹某某',
-    IDType: 0,
-    IDNumber: 1561112200,
-    phoneNumber: 15619270901,
-    changeField: 3,
-    status: 0,
-    reviewDate: '2019-12-14',
-    fail: '错误错误',
-    id: 0,
-  }
-]
-const List: FC<ListPropsType> = (props) => {
-  const { infoChangeList, getList } = props;
-
+const List: FC<any> = (props) => {
+  const {
+    infoChangeList,
+    getList,
+    trafficList,
+    getBrigade,
+    login
+  } = props; console.log("infoChangeList: ", infoChangeList)
   const [form] = Form.useForm();
-  const pagination: PaginationType = {
-    current: 1,
-    pageSize: 10,
+  const tableChange = (pageIndex: number, pageSize: number) => {
+    const params = {
+      pageIndex: pageIndex - 1,
+      pageSize: pageSize,
+      filter: { ...infoChangeList.filter }
+    }
+    getList(params)
   }
+  const pagination: any = {
+    current: infoChangeList.pageIndex + 1,
+    pageSize: infoChangeList.pageSize,
+    total: infoChangeList.total,
+    onChange: tableChange,
+    showQuickJumper: true,
+    showSizeChanger: true,
+  }
+
   useEffect(() => {
-    getList()
+    const params = {
+      pageIndex: PAGE_INDEX,
+      pageSize: PAGESIZE,
+      filter: {}
+    }
+    getList(params)
   }, [])
+
+
+
+  const search = (fields) => {
+    const { city, createdAt, orgAuditAt } = fields;
+    const [orgCity = '', orgRegion = ''] = city;
+    const [createdAtStart = '', createdAtEnd = ''] = createdAt;
+    const [orgAuditAtStart = '', orgAuditAtEnd = ''] = orgAuditAt;
+    const filter = {
+      ...fields,
+      orgCity,
+      orgRegion,
+      createdAtStart: createdAtStart ? formatData(createdAtStart) : '',
+      createdAtEnd: createdAtEnd ? formatData(createdAtEnd) : '',
+      orgAuditAtStart: orgAuditAtStart ? formatData(orgAuditAtStart) : '',
+      orgAuditAtEnd: orgAuditAtEnd ? formatData(orgAuditAtEnd) : '',
+      city: undefined,
+      createdAt: undefined,
+      orgAuditAt: undefined
+    }
+    const params = {
+      pageIndex: PAGE_INDEX,
+      pageSize: PAGESIZE,
+      filter
+    }
+    getList(params)
+  }
+
+  const initialValues = {
+    city: login.channel == 14 ? [login.city, login.region] : [''],
+    createdAt: [],
+    orgAuditAt: [],
+    auditStatus: '',
+    applyReason: '',
+    agentOutlesId: login.channel == 14 ? login.name : '',
+  }
+
   return (
     <PageHeaderWrapper
       className='mains'
@@ -111,60 +199,55 @@ const List: FC<ListPropsType> = (props) => {
       <Form
         form={form}
         labelCol={LABEL_COL}
+        onFinish={search}
+        initialValues={initialValues}
       >
-        <Row gutter={GUTTER}>
+        <TrafficPolice
+          setFieldsValue={form.setFieldsValue}
+          trafficList={trafficList}
+          getBrigade={getBrigade}
+          login={login}
+        />
+        <Row>
           <Col span={6}>
-            <Item label='交警大队' name='city'>
-              <Select placeholder='市区'>
-                <Option value='1'>全部市区</Option>
-              </Select>
-            </Item>
-          </Col>
-          <Col span={6}>
-            <Item name=''>
-              <Select placeholder='大队'>
-                <Option value='1'>全部大队</Option>
-              </Select>
-            </Item>
-          </Col>
-        </Row>
-        <Row gutter={GUTTER}>
-          <Col span={6}>
-            <Item label='登记人' name=''>
+            <Item label='登记人' name='userName'>
               <Input placeholder='登记人' />
             </Item>
           </Col>
           <Col span={6}>
-            <Item label='证件号码' name=''>
+            <Item label='证件号码' name='certificateNumber'>
               <Input placeholder='证件号码' />
             </Item>
           </Col>
           <Col span={6}>
-            <Item label='手机号码' name=''>
+            <Item label='手机号码' name='phoneNumber'>
               <Input placeholder='手机号码' />
             </Item>
           </Col>
           <Col span={6}>
-            <Item label='审核状态' name=''>
+            <Item label='审核状态' name='auditStatus'>
               <Select placeholder='审核状态'>
-                <Option value='1'>全部</Option>
+                <Option value=''>全部</Option>
+                <Option value='0'>待审核</Option>
+                <Option value='1'>审核通过</Option>
+                <Option value='2'>审核不通过</Option>
               </Select>
             </Item>
           </Col>
         </Row>
-        <Row gutter={GUTTER}>
+        <Row >
           <Col span={6}>
-            <Item label='申请日期' name=''>
+            <Item label='申请日期' name='createdAt'>
               <RangePicker placeholder={['日期起', '日期止']} />
             </Item>
           </Col>
           <Col span={6}>
-            <Item label='审核日期' name=''>
+            <Item label='审核日期' name='orgAuditAt'>
               <RangePicker placeholder={['日期起', '日期止']} />
             </Item>
           </Col>
         </Row>
-        <Row gutter={GUTTER} justify='end'>
+        <Row justify='end'>
           <Col>
             <Button type='primary' htmlType='submit'>查询</Button>
           </Col>
@@ -174,20 +257,27 @@ const List: FC<ListPropsType> = (props) => {
       <Table
         columns={columns}
         rowKey='id'
-        dataSource={dataSource}
+        dataSource={infoChangeList?.content}
         pagination={pagination}
+        scroll={{ x: 1500 }}
       />
     </PageHeaderWrapper >
   );
 }
 
 const stateToProps = (state: any) => ({
-  infoChangeList: state.infoChangeList
+  infoChangeList: state.infoChangeList,
+  trafficList: state.traffic,
+  login: state.login
 })
 const dispatchToProps = {
   getList: (params) => ({
     type: 'infoChangeList/getList',
     payload: params,
+  }), 
+  getBrigade: (payload) => ({
+    type: 'traffic/getBrigade',
+    payload: payload
   })
 }
 export default connect(

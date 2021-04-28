@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './style.less';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-
+import moment from 'moment';
 import {
   LeftOutlined,
   RightOutlined
 } from '@ant-design/icons';
-
+import { connect } from 'dva';
+import { Link } from 'umi';
+import AuditPass from './components/AuditPass'
+import AuditBy from './components/AuditBy'
 import {
   Descriptions,
   Divider,
@@ -16,43 +19,54 @@ import {
   Typography,
   Image,
   Button,
+  Collapse,
 } from 'antd';
 
 import {
   DetailDateType,
   DetailChangeDataType
 } from './data';
+import { vehicleUse } from '@/globalConstant';
+import { typeCertificate } from '@/utils';
+import CarChange from '@/components/CarChange/CarChange';
 
 const { Text } = Typography;
 
 const changeColumns = [
   {
     title: '变更字段',
-    dataIndex: 'changeField'
+    dataIndex: 'fieldChinese'
   },
   {
     title: '变更前',
-    dataIndex: 'changeBefore'
+    render: (item) => {
+      if (item.fieldChinese === '带牌照片') {
+        return <Image src={item.oldValue} width={200} />
+      } else if (item.fieldChinese === '证件类型' || item.fieldChinese === '法人证件类型') {
+        return typeCertificate(item.oldValue)
+      } else {
+        return item.oldValue
+      }
+    }
   },
   {
     title: '变更后',
-    dataIndex: 'changeAfter'
+    render: (item) => {
+      if (item.fieldChinese === '带牌照片') {
+        return <Image src={item.newValue} width={200} />
+      } else if (item.fieldChinese === '证件类型' || item.fieldChinese === '法人证件类型') {
+        return typeCertificate(item.newValue)
+      } else {
+        return item.newValue
+      }
+    }
   },
 ]
-
-let changeDataSource: Array<DetailChangeDataType> = [{
-  id: 0,
-  type: 1,
-  changeField: '整车编码',
-  changeBefore: '11000222',
-  changeAfter: '11000333'
-}]
-
 const columns = [
   {
     title: '审核人',
-    dataIndex: 'audit',
-    key: 'audit',
+    dataIndex: 'auditName',
+    key: 'auditName',
   },
   {
     title: '审核日期',
@@ -71,20 +85,196 @@ const columns = [
     key: 'notPassReason',
   }
 ]
+const { Panel } = Collapse;
+const Detail = (props) => {
+  const { match, infoChangeList, getInfo, history } = props;
 
-let dataSource: Array<DetailDateType> = [
-  {
-    id: 0,
-    audit: '张三',
-    auditedAt: '2020-10-10',
-    auditStatus: 0,
-    notPassReason: '不想通过呗'
+
+  const { info } = infoChangeList;
+
+
+  //审核状态 0-待审核 1-审核通过 2审核不通过
+  const writeStatus = () => {
+    switch (info.auditStatus) {
+      case '0':
+        return <div className='font-pending'>待审核</div>
+      case '1':
+        return <div className='font-success'>已通过</div>
+      case '2':
+        return <div className='font-red'>未通过</div>
+    }
   }
-]
-const Detail = () => {
-  const content = {};
-  return (
+  // 车辆用途
+  const writeUse = (key: string) => {
+    switch (key) {
+      case '0':
+        return vehicleUse.SelfUse
+      case '1':
+        return vehicleUse.ExpressDelivery
+      case '2':
+        return vehicleUse.Takeaway
+      case '3':
+        return vehicleUse.Other
+      default:
+        return ''
+    }
+  }
+  // 上下页是否禁用
+  const getPagePrev = (type = 'first') => {
+    let ids = JSON.parse(window.localStorage.getItem('carIds'))
+    const activeIdIndex = ids?.findIndex(item => item === match.params.id);
+    if (type === 'last') {
+      if (activeIdIndex === (ids.length - 1)) return false;
+      return true;
+    }
+    if (activeIdIndex === 0) return false;
+    return true;
+  }
+  // 获取上下页ID
+  const getId = (type) => {
+    let ids = JSON.parse(window.localStorage.getItem('carIds'))
+    const activeIdIndex = ids?.findIndex(item => item === match.params.id);
+    if (type === 'first') {
+      return activeIdIndex == 0 ? ids[activeIdIndex] : ids[activeIdIndex - 1]
+    } else if (type === 'last') {
+      return activeIdIndex == ids.length - 1 ? ids[activeIdIndex] : ids[activeIdIndex + 1]
+    }
+  }
 
+  // 判断个人0 企业1 营运2
+  const isType = () => {
+    let type;
+    if (info?.isServiceCar == 2) {
+      type = info?.isServiceCar
+    } else {
+      if (info.enterpriseOrPersonalPurview == 1) {
+        type = info.enterpriseOrPersonalPurview
+      } else {
+        type = 0;
+      }
+    }
+    return type
+  }
+
+  const isServer = () => {
+    const type = isType();
+    if (type == 0) {
+      return (
+        <>
+          {
+            info?.idCardFrontImageBase64 &&
+            <div className={styles.item}>
+              <Image
+                src={info?.idCardFrontImageBase64}
+                alt='身份证正面'
+                width={200}
+                height={165}
+              />
+              <p>身份证正面</p>
+            </div>
+          }
+          {
+            info?.idCardEndImageBase64 &&
+            <div className={styles.item}>
+              <Image
+                src={info?.idCardEndImageBase64}
+                alt='身份证反面'
+                width={200}
+                height={165}
+              />
+              <p>身份证反面</p>
+            </div>
+          }
+        </>
+      )
+    } else if (type == 1) {
+      return (
+        <>
+          {
+            info?.registrantIdCardFrontImageBase64 &&
+            <div className={styles.item}>
+              <Image
+                src={info?.registrantIdCardFrontImageBase64}
+                alt='登记人身份证正面'
+                width={200}
+                height={165}
+              />
+              <p>登记人身份证正面</p>
+            </div>
+          }
+          {
+            info?.registrantIdCardEndImageBase64 &&
+            <div className={styles.item}>
+              <Image
+                src={info?.registrantIdCardEndImageBase64}
+                alt='登记人身份证反面'
+                width={200}
+                height={165}
+              />
+              <p>登记人身份证反面</p>
+            </div>
+          }
+        </>
+      )
+    } else {
+      return (
+        <>
+          {
+            info?.idCardFrontImageBase64 &&
+            <div className={styles.item}>
+              <Image
+                src={info?.idCardFrontImageBase64}
+                alt='法人身份证正面'
+                width={200}
+                height={165}
+              />
+              <p>法人身份证正面</p>
+            </div>
+          }
+          {
+            info?.idCardEndImageBase64 &&
+            <div className={styles.item}>
+              <Image
+                src={info?.idCardEndImageBase64}
+                alt='法人身份证反面'
+                width={200}
+                height={165}
+              />
+              <p>法人身份证反面</p>
+            </div>
+          }
+          {
+            info?.registrantIdCardFrontImageBase64 &&
+            <div className={styles.item}>
+              <Image
+                src={info?.registrantIdCardFrontImageBase64}
+                alt='登记人身份证正面'
+                width={200}
+                height={165}
+              />
+              <p>登记人身份证正面</p>
+            </div>
+          }
+          {
+            info?.registrantIdCardEndImageBase64 &&
+            <div className={styles.item}>
+              <Image
+                src={info?.registrantIdCardEndImageBase64}
+                alt='登记人身份证反面'
+                width={200}
+                height={165}
+              />
+              <p>登记人身份证反面</p>
+            </div>
+          }
+        </>
+      )
+    }
+  }
+  useEffect(() => {
+    getInfo(match.params.id)
+  }, [match.params.id])
+  return (
     <div>
       <PageHeaderWrapper
         className={styles.main}
@@ -92,96 +282,86 @@ const Detail = () => {
         <div className={styles.container}>
           <div className={styles.status}>
             <span>审核状态：</span>
-            <div className='font-pending'>待审核</div>
-            <div className='font-success'>通过</div>
-            <div className='font-red'>未通过</div>
+            {writeStatus()}
           </div>
-          <h3>变更明细</h3>
+          <Collapse
+            accordion={true}
+            expandIconPosition='right'
+            ghost
+            defaultActiveKey='0'
+          >
+            <Panel className='collapse' header={
+              <>
+                <h3>变更明细</h3>
+              </>
+            } key="0">
+              <Table
+                rowKey='fieldName'
+                columns={changeColumns}
+                dataSource={info.vehicleInfoDiffResults || []}
+                pagination={false}
+                bordered={true}
+              />
+            </Panel>
+          </Collapse>
           <Divider></Divider>
-          <Table
-            rowKey='id'
-            columns={changeColumns}
-            dataSource={changeDataSource}
-            pagination={false}
-            bordered={true}
-          />
           <div className='mb-16'></div>
           <h3>车辆信息</h3>
           <Divider></Divider>
           <Descriptions title="" column={2}>
             <Descriptions.Item label="登记序号">
-              {1 || '--'}
+              {info?.number || '--'}
             </Descriptions.Item>
             <Descriptions.Item label="车辆品牌">
-              {1 || '--'}
+              {info?.brandName || '--'}
             </Descriptions.Item>
             <Descriptions.Item label="整车编码">
-              {1 || '--'}
+              {info?.electrombileNumber || '--'}
             </Descriptions.Item>
             <Descriptions.Item label="车身颜色">
-              {1 || '--'}
+              {info?.electrombileColor || '--'}
             </Descriptions.Item>
             <Descriptions.Item label="车辆型号">
-              {1 || '--'}
+              {info?.modelName || '--'}
             </Descriptions.Item>
             <Descriptions.Item label="电机编码">
-              {1 || '--'}
+              {info?.electricNumber || '--'}
             </Descriptions.Item>
             <Descriptions.Item label="车辆合格证">
-              {1 || '--'}
+              {info?.electrombileCertificate || '--'}
             </Descriptions.Item>
             <Descriptions.Item label="车牌号">
-              {1 || '--'}
+              {info?.plateNumber || '--'}
             </Descriptions.Item>
             <Descriptions.Item label="登记日期">
-              {1 || '--'}
+              {info?.appliedAt || '--'}
             </Descriptions.Item>
-            <Descriptions.Item label="登记身份">
-              {1 || '--'}
+            <Descriptions.Item label="登记省份">
+              陕西省
             </Descriptions.Item>
             <Descriptions.Item label="发证机关">
-              {1 || '--'}
+              {info?.licenselssueAgencyName || '--'}
             </Descriptions.Item>
             <Descriptions.Item label="车辆用途">
-              {1 || '--'}
+              {writeUse(info?.electrombileUsage)}
             </Descriptions.Item>
           </Descriptions>
-
-          {/* 车辆照片 */}
+          {
+            info?.type == 1 ? <CarChange content={info} /> : ''
+          }
           <Descriptions title="" column={1}>
             <Descriptions.Item label="车辆照片">
-
               <div className={styles.photoContainer}>
                 {
-                  0 &&
-                  <div className={styles.item}>
-                    <Image
-                      src={content.idCardFrontImageBase64}
-                      alt='身份证正面'
-                      width={200}
-                      height={165}
-                    />
-                    <p>身份证正面</p>
-                  </div>
+                  isServer()
                 }
 
+
                 {
-                  0 &&
+                  info?.electrombileImageBase64 &&
                   <div className={styles.item}>
                     <Image
-                      src={content.idCardEndImageBase64}
-                      alt='身份证反面'
-                      width={200}
-                      height={165}
-                    />
-                    <p>身份证反面</p>
-                  </div>
-                }
-                {
-                  0 &&
-                  <div className={styles.item}>
-                    <Image
-                      src={content.electrombileImageBase64}
+                      src={info?.electrombileImageBase64}
                       alt='右后方45度整车照片'
                       width={200}
                       height={165}
@@ -190,10 +370,10 @@ const Detail = () => {
                   </div>
                 }
                 {
-                  0 &&
+                  info?.electrombileNumberImageBase64 &&
                   <div className={styles.item}>
                     <Image
-                      src={content.electrombileNumberImageBase64}
+                      src={info?.electrombileNumberImageBase64}
                       alt='整车编码'
                       width={200}
                       height={165}
@@ -202,10 +382,10 @@ const Detail = () => {
                   </div>
                 }
                 {
-                  0 &&
+                  info?.electricNumberImageBase64 &&
                   <div className={styles.item}>
                     <Image
-                      src={content.electricNumberImageBase64}
+                      src={info?.electricNumberImageBase64}
                       alt='电机编码'
                       width={200}
                       height={165}
@@ -215,10 +395,10 @@ const Detail = () => {
                 }
 
                 {
-                  0 &&
+                  info?.otherImage1Base64 &&
                   <div className={styles.item}>
                     <Image
-                      src={content.otherImage1Base64}
+                      src={info?.otherImage1Base64}
                       alt='其它1'
                       width={200}
                       height={165}
@@ -228,10 +408,10 @@ const Detail = () => {
                 }
 
                 {
-                  0 &&
+                  info?.otherImage2Base64 &&
                   <div className={styles.item}>
                     <Image
-                      src={content.otherImage2Base64}
+                      src={info?.otherImage2Base64}
                       alt='其它2'
                       width={200}
                       height={165}
@@ -240,15 +420,14 @@ const Detail = () => {
                   </div>
                 }
               </div>
-
             </Descriptions.Item>
             {
-              0 &&
+              info?.invoiceImageBase64 &&
               <Descriptions.Item label="购车凭证">
                 <div className={styles.photoContainer}>
                   <div className={styles.item}>
                     <Image
-                      src={content.invoiceImageBase64}
+                      src={info?.invoiceImageBase64}
                       alt='购车凭证'
                       width={200}
                       height={165}
@@ -257,83 +436,127 @@ const Detail = () => {
                 </div>
               </Descriptions.Item>
             }
-
-            {
-              0 &&
-              <Descriptions.Item label="带牌车辆照片">
-                <div className={styles.photoContainer}>
-                  <div className={styles.item}>
-                    <Image
-                      src={content.licensePlatePhotoBase64}
-                      alt='带牌车辆照片'
-                      width={200}
-                      height={165}
-                    />
-                  </div>
+            <Descriptions.Item label="带牌车辆照片">
+              <div className={styles.photoContainer}>
+                <div className={styles.item}>
+                  <Image
+                    src={info?.licensePlatePhotoBase64}
+                    alt='带牌车辆照片'
+                    width={200}
+                    height={165}
+                  />
                 </div>
-              </Descriptions.Item>
-            }
-
+              </div>
+            </Descriptions.Item>
           </Descriptions>
+          {
+            isType() != 0 && (
+              <Descriptions title='企业信息'>
+                <Descriptions.Item label='企业名称'>
+                  {info?.enterpriseName}
+                </Descriptions.Item>
+                <Descriptions.Item label='统一社会信用代码'>
+                  {info?.organizationCode}
+                </Descriptions.Item>
+                <Descriptions.Item label='法人姓名'>
+                  {info?.legalPersonName}
+                </Descriptions.Item>
+                <Descriptions.Item label='证件类型'>
+                  {typeCertificate(info?.legalCertificateType)}
+                </Descriptions.Item>
+                <Descriptions.Item label='证件号码'>
+                  {info?.legalCertificateNumber}
+                </Descriptions.Item>
+                {
+                  isType() != 1 &&
+                  <Descriptions.Item label="企业地址">
+                    {info?.residentialAddress + ',' + info?.detailAddress}
+                  </Descriptions.Item>
+                }
+
+              </Descriptions>
+            )
+          }
           <h3>车主信息</h3>
           <Divider></Divider>
           <Descriptions title="" column={2}>
-            <Descriptions.Item label="姓名">{0 || '--'}</Descriptions.Item>
-            <Descriptions.Item label="证件类型">{0 == 0 ? '身份证' : (1 == 1 ? '护照' : (content.certificateType == 2 ? '港澳通行证' : '军官证')) || '--'}</Descriptions.Item>
-            <Descriptions.Item label="证件号码">{0 || '--'}</Descriptions.Item>
-            <Descriptions.Item label="手机号码">{1 || '--'}</Descriptions.Item>
-            <Descriptions.Item label="家庭住址">{1 || '--'}</Descriptions.Item>
-          </Descriptions>
-          <h3>审核记录</h3>
-          <Divider></Divider>
-          <Table
-            rowKey="id"
-            columns={columns}
-            dataSource={dataSource}
-          />
+            <Descriptions.Item label="姓名">{info?.userName || '--'}</Descriptions.Item>
+            <Descriptions.Item label="证件类型">{info?.certificateType == 0 ? '身份证' : (1 == 1 ? '护照' : (info?.certificateType == 2 ? '港澳通行证' : '军官证')) || '--'}</Descriptions.Item>
+            <Descriptions.Item label="证件号码">{info?.certificateNumber || '--'}</Descriptions.Item>
+            <Descriptions.Item label="手机号码">{info?.phoneNumber || '--'}</Descriptions.Item>
 
+            {
+              isType() == 0 &&
+              <Descriptions.Item label="家庭住址">{info?.residentialAddress + ',' + info?.detailAddress}</Descriptions.Item>
+            }
+          </Descriptions>
+          <Divider></Divider>
+          {
+            info?.auditStatus != '0' &&
+            (
+              <>
+                <h3 className='mt-32'>审核记录</h3>
+                <Divider></Divider>
+                <Table
+                  rowKey="id"
+                  columns={columns}
+                  dataSource={info?.vehicleAuditRecordLists}
+                  pagination={false}
+                >
+                </Table>
+              </>
+            )
+          }
         </div>
 
 
       </PageHeaderWrapper>
 
-      <Row justify="center" align="middle" className='mt-32'>
+      <Row
+        justify="space-between"
+        align="middle"
+        className='mt-32'
+      >
         <Col span={3}>
           {
-            1 ?
-              <Text className='link-a'>
+            getPagePrev('first') ?
+              <Link
+                to={`/approveManage/infoChange/infoChangeDetail/${getId('first')}`
+                }>
                 <LeftOutlined />
-                上一条
-              </Text> :
-              <Text
-                className='font-size-16'
-                disabled={true}
-              >
-                <LeftOutlined />
-                上一条
-            </Text>
+              上一条
+              </Link>
+              :
+              <Text className='font-size-16 cur-not' disabled><LeftOutlined />上一条</Text>
           }
         </Col>
-        <Col span={18} >
-          <div className='ele-center'>
-            <Button type='primary' danger>审核不通过</Button>
-            <Button type='primary'>审核通过</Button>
-          </div>
-        </Col>
+        {
+          info?.auditStatus === '0' &&
+          <Col span={12}>
+            <div className='inline text-center'>
+              <AuditPass
+                getPagePrev={getPagePrev}
+                getId={getId}
+                getInfo={getInfo}
+                id={match.params.id}
+                changeId={info?.changeId}
+                history={history}
+              />
+              <AuditBy
+                id={match.params.id}
+                getInfo={getInfo}
+                getPagePrev={getPagePrev}
+                getId={getId}
+                history={history}
+                changeId={info?.changeId}
+              />
+            </div>
+          </Col>
+        }
         <Col span={3} style={{ textAlign: 'right' }}>
-          {
-            1 ?
-              <Text className='link-a' >
-                下一条
-                <RightOutlined />
-              </Text> :
-              <Text
-                className='font-size-16'
-                disabled={true}
-              >
-                下一条
-                <RightOutlined />
-              </Text>
+          {getPagePrev('last')
+            ? <Link to={`/approveManage/infoChange/infoChangeDetail/${getId('last')}`}> 下一条 <RightOutlined /> </Link>
+            : <Text className='font-size-16 cur-not' disabled>下一条 <RightOutlined /></Text>
           }
         </Col>
       </Row>
@@ -342,4 +565,16 @@ const Detail = () => {
   );
 }
 
-export default Detail;
+const stateToProps = (state) => ({
+  infoChangeList: state.infoChangeList
+})
+const dispatchToProps = {
+  getInfo: (payload) => ({
+    type: 'infoChangeList/getInfo',
+    payload: payload
+  })
+}
+export default connect(
+  stateToProps,
+  dispatchToProps,
+)(Detail);

@@ -12,13 +12,15 @@ const AuditBy = (props) => {
         getPagePrev,
         getId,
         history,
-        getInfo
+        getInfo,
+        changeId
     } = props;
+    console.log("changeId: ",  changeId )
     const confirmOnOK = () => {
         dispatch({
-            type: 'CarCancel/auditPass',
+            type: 'infoChangeList/auditPass',
             payload: {
-                id: id
+                id: changeId
             },
             onSuccess: handleSuccess
         })
@@ -27,7 +29,7 @@ const AuditBy = (props) => {
         message.success(data.retMsg);
         const isNextPage = getPagePrev('last')
         if (isNextPage) {
-            history.push(`/approveManage/carCancel/carCancelDetail/${getId('last')}`)
+            history.push(`/approveManage/infoChange/infoChangeDetail/${getId('last')}`)
             window.scrollTo(0, 0);
         } else {
             getInfo(id)
@@ -38,7 +40,7 @@ const AuditBy = (props) => {
         Modal.confirm({
             title: '审核通过',
             content: <div>
-                <p>审核通过后该车将立即完成注销，确认要审核通过吗？</p>
+                <p>审核通过后该车将立即完成信息变更，确认要审核通过吗？</p>
             </div>
             ,
             okText: '确认',

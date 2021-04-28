@@ -56,6 +56,11 @@ export default {
               type: 'getList'
             })
             break;
+          case '/approveManage/infoChange/infoChangeList':
+            dispatch({
+              type: 'getList'
+            })
+            break;
           default:
             break;
         }

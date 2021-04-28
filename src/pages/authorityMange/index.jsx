@@ -26,7 +26,7 @@ const AuthorityManage = ({ authorityList, dispatch }) => {
         })
     }
     useEffect(() => {
-        getList({pageIndex:1,filterValue:{}})
+        getList({pageIndex:0,filterValue:{}})
         getRoles()
       
     }, [])

@@ -1,40 +1,39 @@
 import request from '@/utils/request';
-
 import { queryJsonToString } from '@/commonFun'
-
+import {API} from '@/globalConstant';
 export async function typeApproveList(data) {
-  return request(`/manager/web/v1/batchModelWeb/modelAuditPageList`, {
+  return request(`${API}/manager/web/v1/batchModelWeb/modelAuditPageList`, {
     method: 'POST',
     data
   });
 }
 
 export async function typeApproveDetail(data) {
-  return request(`/manager/web/v1/batchModelWeb/modelAuditDetail?${queryJsonToString(data)}`, {
+  return request(`${API}/manager/web/v1/batchModelWeb/modelAuditDetail?${queryJsonToString(data)}`, {
     method: 'GET',
   });
 }
 
 export async function typeApprovalAgree(data) {
-  return request(`/manager/web/v1/batchModelWeb/auditPass?${queryJsonToString(data)}`, {
+  return request(`${API}/manager/web/v1/batchModelWeb/auditPass?${queryJsonToString(data)}`, {
     method: 'GET',
   });
 }
 
 export async function typeApprovalNo(data) {
-  return request(`/manager/web/v1/batchModelWeb/auditNoPass?${queryJsonToString(data)}`, {
+  return request(`${API}/manager/web/v1/batchModelWeb/auditNoPass?${queryJsonToString(data)}`, {
     method: 'GET',
   });
 }
 
 
 export async function typeApprovalModel(data) {
-  return request(`/manager/web/v1/batchModelWeb/getModelListByBatchId?${queryJsonToString(data)}`, {
+  return request(`${API}/manager/web/v1/batchModelWeb/getModelListByBatchId?${queryJsonToString(data)}`, {
     method: 'GET',
   });
 }
 export async function typeApproveAgent() {
-  return request(`/manager/v1.1/DistributePlateNumberRecordController/getAllFirstAgentOutlets`, {
+  return request(`${API}/manager/v1.1/DistributePlateNumberRecordController/getAllFirstAgentOutlets`, {
     method: 'GET',
   });
 }
