@@ -13,7 +13,7 @@ import { PAGESIZE, LOCAL_MEANS_IDS_KEY, RETCODESUCCESS, LOCAL_MEANS_FILTER } fro
 
 const tabCensus = [
   {
-    title: '分配统计',
+    title: '分配统计 ',
     id: 2,
     component: <CardCensusBasic />
   }
