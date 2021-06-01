@@ -35,7 +35,7 @@ class Record extends Component {
         this.getList({ pageIndex, pageSize })
     }
     componentDidMount() {
-        this.getList({ filter: {},pageIndex:1,pageSize:'10' })
+        this.getList({ filter: {},pageIndex:1,pageSize:10 })
     }
 
     render() {

@@ -127,7 +127,8 @@ const List: FC<any> = (props) => {
     getList,
     trafficList,
     getBrigade,
-    login
+    login,
+    loading
   } = props; console.log("infoChangeList: ", infoChangeList)
   const [form] = Form.useForm();
   const tableChange = (pageIndex: number, pageSize: number) => {
@@ -260,21 +261,23 @@ const List: FC<any> = (props) => {
         dataSource={infoChangeList?.content}
         pagination={pagination}
         scroll={{ x: 1500 }}
+        loading={loading}
       />
     </PageHeaderWrapper >
   );
 }
 
-const stateToProps = (state: any) => ({
+const stateToProps = (state: any, ) => ({
   infoChangeList: state.infoChangeList,
   trafficList: state.traffic,
-  login: state.login
+  login: state.login,
+  loading: state.loading.effects['infoChangeList/getList']
 })
 const dispatchToProps = {
   getList: (params) => ({
     type: 'infoChangeList/getList',
     payload: params,
-  }), 
+  }),
   getBrigade: (payload) => ({
     type: 'traffic/getBrigade',
     payload: payload

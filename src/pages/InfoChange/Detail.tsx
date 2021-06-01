@@ -88,11 +88,7 @@ const columns = [
 const { Panel } = Collapse;
 const Detail = (props) => {
   const { match, infoChangeList, getInfo, history } = props;
-
-
   const { info } = infoChangeList;
-
-
   //审核状态 0-待审核 1-审核通过 2审核不通过
   const writeStatus = () => {
     switch (info.auditStatus) {
@@ -452,26 +448,41 @@ const Detail = (props) => {
           {
             isType() != 0 && (
               <Descriptions title='企业信息'>
-                <Descriptions.Item label='企业名称'>
-                  {info?.enterpriseName}
-                </Descriptions.Item>
-                <Descriptions.Item label='统一社会信用代码'>
-                  {info?.organizationCode}
-                </Descriptions.Item>
-                <Descriptions.Item label='法人姓名'>
-                  {info?.legalPersonName}
-                </Descriptions.Item>
-                <Descriptions.Item label='证件类型'>
-                  {typeCertificate(info?.legalCertificateType)}
-                </Descriptions.Item>
-                <Descriptions.Item label='证件号码'>
-                  {info?.legalCertificateNumber}
-                </Descriptions.Item>
                 {
-                  isType() != 1 &&
-                  <Descriptions.Item label="企业地址">
-                    {info?.residentialAddress + ',' + info?.detailAddress}
+                  info?.enterpriseName && <Descriptions.Item label='企业名称'>
+                    {info?.enterpriseName}
                   </Descriptions.Item>
+                }
+
+                {
+                  info?.organizationCode && <Descriptions.Item label='统一社会信用代码'>
+                    {info?.organizationCode}
+                  </Descriptions.Item>
+                }
+                {
+                  info?.legalPersonName && <Descriptions.Item label='法人姓名'>
+                    {info?.legalPersonName}
+                  </Descriptions.Item>
+                }
+                {
+                  info?.legalCertificateType &&
+                  <Descriptions.Item label='证件类型'>
+                    {typeCertificate(info?.legalCertificateType)}
+                  </Descriptions.Item>
+                }
+                {
+                  info?.legalCertificateNumber &&
+                  <Descriptions.Item label='证件号码'>
+                    {info?.legalCertificateNumber}
+                  </Descriptions.Item>
+                }
+                {
+                  isType() == 1 && (
+                    info?.residentialAddress &&
+                    <Descriptions.Item label="企业地址">
+                      {info?.residentialAddress + ',' + info?.detailAddress}
+                    </Descriptions.Item>
+                  )
                 }
 
               </Descriptions>
